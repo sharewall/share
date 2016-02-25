@@ -1,0 +1,18 @@
+  {% extends "header.html" %}
+  {% block title %}{{ view.title }}{% endblock %}
+	{% block content %}
+	<div class="jumbotron">
+    <h1>{{ view.header }}</h1>
+    <hr/>
+    {% for record in view.records %}
+    <h2>{{ record.title }}</h2>
+    <p>{{ record.message }}</p>
+    <strong>{{ record.pub_date }}</strong>
+    <p>
+      <a class="btn btn-lg btn-primary" href="{% url 'about_landing' pk=record.id %}" role="button">about</a>
+    </p>
+    <hr/>
+    {% endfor %}
+  </div>
+	{% endblock %}
+
