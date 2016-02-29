@@ -13,13 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
-from webmaster_area import views as webmaster_area_views
+from django.views.generic import TemplateView
 
+urlpatterns = patterns('',
+    (r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+)
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^share-admin/', admin.site.urls),
     url(r'^buttons-constructor/', include('buttons_constructor.urls')),
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
-    url(r'^webmaster-area/', webmaster_area_views.index, name='webmaster-area-index'),
+    url(r'^webmaster-area/', include('webmaster_area.urls')),
 ]

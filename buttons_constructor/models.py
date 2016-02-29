@@ -5,7 +5,8 @@ from cabinet_webmaster.models import CabinetWebmasterModel
 class SocialNetworks(models.Model):
     shortcut = models.CharField(max_length=2, verbose_name='shortcut for network')
     url = models.URLField(null=False, blank=False, default='', verbose_name='url for network')
-
+    img_square = models.URLField('img_url_square', null=True, blank=False, default='')
+    img_circle = models.URLField('img_url_circle', null=True, blank=False, default='')
     db_table = 'SocialNetworks'
 
     def __str__(self):
@@ -13,7 +14,6 @@ class SocialNetworks(models.Model):
 
 class ButtonsConstructorModel(models.Model):
     cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="buttons_constructor")
-    #uuid = models.UUIDField(default=uuid.uuid4, verbose_name="uuid", editable=False)
     name_constructor = models.CharField(max_length=50, default="name constructor", verbose_name="name_constructor")
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
@@ -52,7 +52,6 @@ class ButtonsConstructorModel(models.Model):
     page_url = models.URLField(blank=True, default='')
     page_title = models.CharField(blank=True, max_length=200, default='')
     page_description = models.TextField(blank=True, default='')
-    
     db_table = 'ButtonsConstructorModel'
 
     def __str__(self):

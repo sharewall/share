@@ -5,11 +5,22 @@ from buttons_constructor.models import ButtonsConstructorModel, SocialNetworks
 class WebmasterAreaModel(models.Model):
     buttons_constructor = models.ForeignKey(ButtonsConstructorModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related buttons_constructor', related_name='webmaster_area')
     name_area = models.CharField(max_length=200, default='name area', verbose_name='name area')
-    url = models.URLField('url', default='')
+    url = models.URLField('url', null=False, blank=False, default='')
     #date(2005, 7, 27)
     date = models.DateField('date', auto_now_add=True)
-    share_today_counter = models.IntegerField('share today counter', default=0)
-    share_total_counter = models.IntegerField('share total counter', default=0)
+    sn_list = SocialNetworks.objects.all()
+    SOCIAL_DEFAULT = ''
+    COUNTER_DEFAULT = ''
+    for s in sn_list:
+        if not s.shortcut in SOCIAL_DEFAULT:
+            SOCIAL_DEFAULT += s.shortcut + ','
+            COUNTER_DEFAULT += '0,'
+    SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+    COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
+    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    total_social_counter = models.CharField("total social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    total_share_counter = models.CharField("total share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     db_table = 'WebmasterAreaModel'
     
     def __str__(self):
@@ -28,12 +39,21 @@ class WebmasterAreaModel(models.Model):
 class PageDetail(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related webmaster_area', related_name='page_detail')
     title = models.CharField(max_length=300, default='', verbose_name='page title')
-    url = models.URLField('page url', default='')
-    page_share_counter = models.IntegerField('page share counter', default=0)
-    page_social_traffic = models.IntegerField('page social network traffic counter', default=0)
-
+    url = models.URLField('page url', null=False, blank=False, default='')
+    sn_list = SocialNetworks.objects.all()
+    SOCIAL_DEFAULT = ''
+    COUNTER_DEFAULT = ''
+    for s in sn_list:
+        if not s.shortcut in SOCIAL_DEFAULT:
+            SOCIAL_DEFAULT += s.shortcut + ','
+            COUNTER_DEFAULT += '0,'
+    SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+    COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
+    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    total_social_counter = models.CharField("total social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    total_share_counter = models.CharField("total share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     db_table = 'PageDetail'
 
     def __str__(self):
         return str(self.title + ' - ') + self.url
-
