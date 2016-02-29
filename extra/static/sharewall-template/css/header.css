@@ -1,0 +1,53 @@
+body{
+    padding: 0!important;
+}
+#header{
+    height: 62px;
+    width: 100%;
+    
+}
+.bd-blue{
+    background-color: #2fabf6;
+}
+/* 4 media point smaller 1145px,965px,781px,659px
+@media only screen and (max-width:965px){ classes … }
+line-height: 160%;
+margin-top: -10px;
+font-size: 100%;
+width: 36%;
+float: right;
+.grid
+clear: both;
+text-aligh: left;
+vertical-align: top;
+display: inline-block;
+margin: 0 0 25px;
+width: 260px; //23% in media //48% in small media
+.galleryitem:nth-child(4n+1) //select the first in
+.sublead
+display: block; //none in media
+font-size: 105%;
+margin-bottom: 20px;
+.imageRotater
+width: 60%; // 100% in media
+.maintext
+font-size: 100%;
+line-height: 160%;
+margin-top: -10px; //15px in media
+width: 36%; //100% in media
+float: right;
+.navigation .navbar
+background-repeat: initial initial;
+background-position: initial initial;
+border-top: 1px dotted rgb(169, 169, 169)
+border-bottom: 1px dotted rgb(169, 169, 169)
+background: rgb(248,248,248)
+float: right;
+color: rgb(119,119,119);
+overflow: visible;
+margin-bottom: 20px;
+position: relative;
+//display: none; in media 
+#mobile-nav //select
+display: none; //block in media
+*/
