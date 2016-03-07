@@ -1,3 +1,5 @@
 share/backup-settings.py
-extra/
+extra/static/admin
+extra/static/bootstrap*
+extra/static/debug*
 share/settings/local*

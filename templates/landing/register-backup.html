@@ -1,0 +1,12 @@
+{% extends "skeleton.html" %}
+{% block title %}{{ view.title }}{% endblock %}
+{% block content %}
+    <div style="height:auto">
+      <form method="post" action="/register/">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          {{ cabinet_webmaster_form.as_p }}
+          <input type="submit" name="submit" value="Register"/>
+      </form> 
+    </div>
+{% endblock %}

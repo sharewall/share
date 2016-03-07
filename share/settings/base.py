@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'buttons_constructor',
     'cabinet_webmaster',
     'webmaster_area',
+    'landing',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -54,7 +55,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'share.urls'
-
+#LOGIN_URL = '/login/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

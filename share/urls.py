@@ -21,6 +21,7 @@ from django.views.generic import TemplateView
     #(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 #)
 urlpatterns = [
+    url(r'^', include('landing.urls')),
     url(r'^share-admin/', admin.site.urls),
     url(r'^buttons-constructor/', include('buttons_constructor.urls')),
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
