@@ -5,7 +5,7 @@ body{background-color:#2fabf6;}
 span:hover{cursor:pointer;} 
 input[type='email']{ display:none; }
 form { font: 400 14.5px Roboto; color: #FFFFFF; }
-.sError { position: relative; color: #FFFFFF; height:auto; display: inline-block; }
+.sError { position: relative; font: 400 14.5px Roboto; color: #FFFFFF; height:auto; display: inline-block; }
 .cmn-toggle {
   position: absolute;
   margin-left: -9999px;
@@ -55,6 +55,7 @@ input.cmn-toggle-round:checked + label:before {
 }
 input.cmn-toggle-round:checked + label:after {
   margin-left: 55px; /*60*/    
+    background-color: #2fabf6;
 }
 input.cmn-toggle-round:checked ~ form > input[type='email']{
     display: inline-block;
@@ -64,21 +65,14 @@ input.cmn-toggle-round:checked ~ form > input[type='email']{
 {% block content %}
 	<div class="sContent-H100 sTextAlign-C" style="padding-top:10%">
       <div class="sError">
-      {% if success %}
-      {{ success }}
-      {% endif %}
-      {% if error %}
-      {{ error }}
-      {% endif %}
       </div>
     <div class="sMargin-Auto sTextAlign-C" style="height:auto; width:300px;">
       <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
       <label for="cmn-toggle-1"></label>
       <form method="post" action=".">
-          {% csrf_token %}
           <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="text" name="username" placeholder="Username" value=""/><br/>
           <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="password" name="password" placeholder="Password" value=""/><br/>
-          <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="email" name="email" placeholder="Email" value="{{ user_form.email.value|default_if_none:"" }}"/><br/>
+          <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="email" name="email" placeholder="Email" value=""/><br/>
           <span onclick="formSubmit()" class="" style=""></span>
       </form> 
     </div>
@@ -86,8 +80,14 @@ input.cmn-toggle-round:checked ~ form > input[type='email']{
   <script>
       function formSubmit(){
         var action = $('input#cmn-toggle-1').prop('checked') == true ? "/register/" : "/login/";
-        $('form').attr('action', action);
-        $('form').submit();
+        $.ajax({url: action, type: "POST", data: $('form').serialize(), success: function(response, status, jqXHR) { 
+          if(response == 'Login success'){
+            (location.search.split('?next=').length > 1 ? window.location = location.search.split('?next=')[1] : window.location = '/');
+          }else{
+            $('.sError').text(response);
+          }
+          }
+        });
       }
       function switchAction(){
           var action = $('input#cmn-toggle-1').prop('checked') == true ? "Registration" : "Login";
@@ -95,5 +95,18 @@ input.cmn-toggle-round:checked ~ form > input[type='email']{
       }
       switchAction();
       $('input#cmn-toggle-1').click(switchAction);
+      function csrfSafeMethod(method) {
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      var csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              $('.sError').text('Please wait...');
+              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              }
+          }
+      });
+
   </script>
 {% endblock %}

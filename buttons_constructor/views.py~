@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 class ButtonsConstructorIndexView(TemplateView):
-    template_name = 'buttons-constructor/index.html'
-    title = 'Landing'
+    template_name = 'buttons_constructor/index.html'
+    title = 'Index'
     header = title
     # records = LandingModel.objects.all()
     # def get_context_data(self, **kwargs):

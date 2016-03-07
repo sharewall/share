@@ -2,7 +2,7 @@
 
   {% block header %}
     <div id="header" class="sBd-BlueH sWidth-100p">
-          <div class="sContainer">
+          <div class="sContainer sMargin-Auto">
           <div class="sHeaderWrapper">
               <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
                   <input type="checkbox" id="sWmInput" class="sInputH">
@@ -14,7 +14,7 @@
                   </div> 
                   <div class="sWmMenu sPos-Rel">
                       <span class="sWmMenuSpace"></span>
-                      <a href="javascript:return false;">Настройки</a>
+                      <a href="/cabinet-webmaster/">Настройки</a>
                       <a href="/logout/">Выйти</a>
                   </div>
               </div>
@@ -45,7 +45,7 @@
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="sharewall.ru" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -63,10 +63,10 @@
 
   {% block footer %}
        <div id="footer" class="sBd-GrayF sWidth-100p">
-          <div class="sContainer">
+          <div class="sContainer sMargin-Auto">
           <div class="sFooterWrapper">
               <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="sharewall.ru" class="sFloat-L">
                       Sharing
                   </a>
               </div>

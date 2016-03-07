@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from landing.forms import UserForm, CabinetWebmasterForm
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.core.urlresolvers import reverse
+#from django.views.decorators.cache import cache_page
 #from django.contrib.auth.models import User
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
@@ -15,7 +16,7 @@ from django.core.urlresolvers import reverse
 class LandingView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'landing/index.html'
-    title = 'Landing title'
+    title = 'Landing'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name,
@@ -28,7 +29,7 @@ def logout(request):
     django_logout(request)
     return HttpResponseRedirect('/login/')
 
-@csrf_exempt
+#@csrf_exempt
 def login(request):
     template_name = 'landing/login.html'
     title = 'Login'
@@ -40,23 +41,29 @@ def login(request):
         if user:
             if user.is_active:
                 django_login(request, user)
-                return HttpResponseRedirect(request_next)
+                return HttpResponse("Login success")
+                #return HttpResponseRedirect(request_next)
             else:
-                return render(request, template_name,
-                {
-                    'error': 'User account disabled'
-                })
+                return HttpResponse("Account disabled")
+                #return render(request, template_name,
+                #{
+                #    'error': 'User account disabled'
+                #})
         else:
-            return render(request, template_name,
-            {
-                'error': 'Invalid authenticate'
-            })
+            return HttpResponse("Invalid authenticate")
+            #return render(request, template_name,
+            #{
+            #    'error': 'Invalid authenticate'
+            #})
     else:
-        return render(request, template_name, {})
+        return render(request, template_name,
+        {
+            "page": { "title": self.title }
+        })
 
-@csrf_exempt
+#@csrf_exempt
 def register(request):
-    template_name = 'landing/register.html'
+    template_name = 'landing/login.html'
     title = 'Register'
     request_next = request.GET.get('next', '/')
     if request.method == 'POST':
@@ -70,23 +77,26 @@ def register(request):
             cabinet_webmaster = cabinet_webmaster_form.save(commit=False)
             cabinet_webmaster.user = user
             cabinet_webmaster.save()
+            answer = 'Register success! You can login now with %s'%user.username
+            return HttpResponse(answer)
             #return HttpResponseRedirect(reverse('landing-login'))#, kwargs={'success':'f'}))
-            return render(request, template_name,
-            {
-                #'success': 'Success registration! You can login with {0}'.format(user.username)
-                'success': 'Registration success'
-            })
+            #return render(request, template_name,
+            #{
+            #    'success': 'Success registration! You can login with {0}'.format(user.username)
+            #    'success': 'Registration success'
+            #})
         else:
             user_form = UserForm(user_form.cleaned_data)
             if cabinet_webmaster_form.is_valid():
                 pass
             cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
-            return render(request, template_name,
-            {
-                'error': 'Registration error',
-                'user_form': user_form,
-                'cabinet_webmaster_form': cabinet_webmaster_form
-            })
+            return HttpResponse('Registration error')
+            #return render(request, template_name,
+            #{
+            #    'error': 'Registration error',
+            #    'user_form': user_form,
+            #    'cabinet_webmaster_form': cabinet_webmaster_form
+            #})
     else:
         return HttpResponseRedirect('/login/')    
         #if not 'user_form' in locals():

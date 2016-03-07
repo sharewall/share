@@ -7,21 +7,22 @@
               <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
                   <input type="checkbox" id="sWmInput" class="sInputH">
                   <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-1"></label>
-                  <div class="sOverHidden-All sTextAlign-R">
-                      <span class="sVAlign-50p sPos-Rel sZi-1">asdfghjk-xcvbns                 
+                  <div class="sOverHidden-All sTextAlign-L">
+                      <span class="sVAlign-50p sPos-Rel sZi-1">
+                          {{ user.username }}
                       </span>
                   </div> 
                   <div class="sWmMenu sPos-Rel">
                       <span class="sWmMenuSpace"></span>
-                      <a href="javascript:return false;">Настройки</a>
-                      <a href="javascript:return false;">Выйти</a>
+                      <a href="/cabinet-webmaster/">Настройки</a>
+                      <a href="/logout/">Выйти</a>
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
                   <div class="sOverHidden-All">
                       <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
                       <span class="sVAlign-50p sPos-Rel">
-                          2 451.25 p.                    
+                          {{ user.cabinet_webmaster.money }} p.                    
                       </span>
                   </div> 
               </div>
@@ -44,7 +45,7 @@
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="/" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -53,20 +54,19 @@
       </div>
   {% endblock %}
 
-  {% block title %}{{ view.title }}{% endblock %}
+  {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
-	<div class="sContent-H100">
-        <!--<h1>{{ view.header }}</h1>-->        
-    </div>
+	<div class="sContent-H100-139">
+  </div>
 	{% endblock %}
 
   {% block footer %}
        <div id="footer" class="sBd-GrayF sWidth-100p">
-          <div class="sContainer">
+          <div class="sContainer sMargin-Auto">
           <div class="sFooterWrapper">
               <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="/" class="sFloat-L">
                       Sharing
                   </a>
               </div>
