@@ -5,14 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from landing.forms import UserForm, CabinetWebmasterForm
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.core.urlresolvers import reverse
 #from django.views.decorators.cache import cache_page
 #from django.contrib.auth.models import User
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
 
-#{% if user.is_authenticated %}
 class LandingView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'landing/index.html'
@@ -30,6 +29,7 @@ def logout(request):
     return HttpResponseRedirect('/login/')
 
 #@csrf_exempt
+@ensure_csrf_cookie
 def login(request):
     template_name = 'landing/login.html'
     title = 'Login'
@@ -58,7 +58,7 @@ def login(request):
     else:
         return render(request, template_name,
         {
-            "page": { "title": self.title }
+            "page": { "title": title }
         })
 
 #@csrf_exempt

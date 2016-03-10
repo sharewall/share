@@ -6,13 +6,13 @@
           <div class="sHeaderWrapper">
               <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
                   <input type="checkbox" id="sWmInput" class="sInputH">
-                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-1"></label>
+                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
                   <div class="sOverHidden-All sTextAlign-L">
-                      <span class="sVAlign-50p sPos-Rel sZi-1">
+                      <span class="sVAlign-50p sPos-Rel sZi-2">
                           {{ user.username }}
                       </span>
                   </div> 
-                  <div class="sWmMenu sPos-Rel">
+                  <div class="sWmMenu sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
                       <a href="/cabinet-webmaster/">Настройки</a>
                       <a href="/logout/">Выйти</a>
@@ -35,8 +35,8 @@
                       <a href="javascript:return false;" class="sVAlign-50p">Рефералы</a>
                       <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
                   </div>                
-                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-1"></label> 
-                  <div class="sMenu-Dd sPos-Rel">
+                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
+                  <div class="sMenu-Dd sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
                       <a href="javascript:return false;">Конструктор</a>
                       <a href="javascript:return false;">Статистика</a>
@@ -45,7 +45,7 @@
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="/" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -57,8 +57,141 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
-	<div class="sContent-H100-139">
-  </div>
+	<div class="sHeight-Auto">
+        <div class="sContainer sMargin-Auto">
+            <div class="sCabinet sCabinet-GlobalSettings">
+                <div class="sSettings-Title">Общие настройки аккаунта</div>
+                <div class="sSettings-Field sSettings-Field-Border">
+                    <span>Логин</span>
+                    <span>{{ user.username }}</span>
+                    <span class="sFloat-R">Удалить аккаунт</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Удалить аккаунт</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="delete_account">Введите "УДАЛИТЬ"</label>
+                        <input id="delete_account" name="delete_account" type="text" placeholder="УДАЛИТЬ" value="" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field sSettings-Field-Border">
+                    <span>ID</span>
+                    <span class="sNotLast">{{ user.pk }}</span>                    
+                </div>
+                <div class="sSettings-Field sSettings-Field-Border">
+                    <span>Имя</span>
+                    <span>{{ user.first_name }}</span>
+                    <span class="sFloat-R">Редактировать</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Имя</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="first_name">Текущее имя</label>
+                        <input id="first_name" name="first_name" type="text" placeholder="Введите имя" value="{{ user.first_name }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field sSettings-Field-Border">
+                    <span>Фамилия</span>
+                    <span>{{ user.last_name }}</span>
+                    <span class="sFloat-R">Редактировать</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Фамилия</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="last_name">Текущяя фамилия</label>
+                        <input id="last_name" name="last_name" type="text" placeholder="Введите фамилию" value="{{ user.last_name }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field">
+                    <span>Адрес электронной почты</span>
+                    <span>{{ user.email }}</span>
+                    <span class="sFloat-R">Редактировать</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Адрес электронной почты</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="email">Текущий адрес электронной почты</label>
+                        <input id="email" name="email" type="email" placeholder="Введите адрес электронной почты" value="{{ user.email }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field">
+                    <span>WMR кошелёк для вывода денег</span>
+                    <span>{{ user.cabinet_webmaster.wmr }}</span>
+                    <span class="sFloat-R">Редактировать</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">WMR кошелёк для вывода денег</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="wmr">Текущий WMR кошелёк</label>
+                        <input id="wmr" name="wmr" type="text" placeholder="Введите WMR кошелёк" value="{{ user.cabinet_webmaster.wmr }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field">
+                    <span>Пароль</span>
+                    <span class="sFloat-R">Редактировать</span>
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Пароль</span>
+                    <div class="sFloat-L">
+                      <form>
+                        <label for="password">Текущий пароль</label>
+                        <input id="password" name="password" type="password" placeholder="Enter password" value="" />
+                        <label for="new_password">Новый пароль</label>
+                        <input id="new_password" name="new_password" type="password" placeholder="Enter password" value="" />
+                      </form>
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+            </div>
+            <div class="sCabinet sCabinet-ContactInfo">
+                <div class="sSettings-Title">Контактная информация</div>
+                <div class="sSettings-Field sSettings-Field-Border">
+                    <span>Мобильный телефон</span>
+                    <span>{{ user.cabinet_webmaster.mobile_phone }}</span>
+                    <span class="sFloat-R">Редактировать</span>   
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Мобильный телефон</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="mobile_phone">Текущий мобильный телефон</label>
+                        <input id="mobile_phone" name="mobile_phone" type="text" placeholder="Введите мобильный телефон" value="{{ user.cabinet_webmaster.mobile_phone }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+                <div class="sSettings-Field">
+                    <span>Скайп</span>
+                    <span>{{ user.cabinet_webmaster.skype }}</span>
+                    <span class="sFloat-R">Редактировать</span>      
+                </div>
+                <div class="sSettings-Field-Edit">
+                    <span class="sFloat-L">Скайп</span>
+                    <div class="sFloat-L">
+                      <form> 
+                        <label for="skype">Текущий скайп</label>
+                        <input id="skype" name="skype" type="text" placeholder="Введите скайп" value="{{ user.cabinet_webmaster.skype }}" />
+                      </form> 
+                    </div>                    
+                    <span class="sFloat-R">Применить</span>
+                </div>
+            </div>
+        </div>
+    </div>
 	{% endblock %}
 
   {% block footer %}
@@ -66,7 +199,7 @@
           <div class="sContainer sMargin-Auto">
           <div class="sFooterWrapper">
               <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
-                  <a href="javascript:return false;" class="sFloat-L">
+                  <a href="/" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -94,4 +227,23 @@
           </div>
            </div>
         </div>
+        <script>
+            $(function(){
+                $('.sSettings-Field > span:last-of-type:not(.sNotLast)').click(function(){
+                     //$('html, body').off('click'); 
+                     $parent = $(this).parent(); 
+                     $parent.next('.sSettings-Field-Edit').slideToggle(200).prev().slideToggle(200);
+                     //setTimeout("$('html, body').click(function(){ $('.sSettings-Field-Edit').slideUp(200); $('.sSettings-Field').slideDown(200); });", 700);
+                });
+                $('.sSettings-Field-Edit > span:last-of-type:not(.sNotLast)').click(function(){
+                     $parent = $(this).parent(); 
+                     $.ajax({url: '/cabinet-webmaster/settings/', headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, type: "POST", data: $parent.find('form').serialize(), beforeSend: function(){ $('html, body').css('cursor','wait');  }, success: function(response, status, jqXHR) { console.log(response);
+          if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
+          else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
+          }, error: function(xhr){ console.log(xhr.statusText + ", " + xhr.responseText); }, complete: function(){ $('html, body').css('cursor','default'); 
+          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
+          } });
+                });
+            });
+        </script>
   {% endblock %}

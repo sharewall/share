@@ -1,8 +1,492 @@
-#header{
-    height: 6.4%;
-    width: 100%;
-    
+@font-face{
+    font-family: Roboto;
+    src: url(../fonts/Roboto-Regular.ttf);
 }
-.bd-blue{
+@font-face{
+    font-family: Roboto-Light;
+    src: url(../fonts/Roboto-Light.ttf);
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(../fonts/PT-Sans.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(../fonts/PT-Sans2.woff2) format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(../fonts/PT-Sans3.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(../fonts/PT-Sans4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+body { margin: 0; }
+a { text-decoration: none!important; }
+.sOverHidden-All{
+    overflow:hidden;
+}
+.sOverHidden-X{
+    overflow-x: hidden;
+}
+.sHeight-100p{
+    height: 100%;
+}
+.sWidth-100p{
+    width: 100%;  
+}
+#header{
+    height: 62px;      
+}
+#footer{
+    height: 77px;
+}
+.sContent-H100{
+    height: 100%;
+}
+.sContent-H100-139{
+    height: -moz-calc(100% - 139px);
+    height: -webkit-calc(100% - 139px);
+    height: calc(100% - 139px);
+}
+.sBd-BlueH{
     background-color: #2fabf6;
 }
+.sBd-GrayF{
+    background-color: #efefef;
+}
+.sBd-W50{
+    background-color: rgba(255,255,255,.5);
+}
+.sBd-B50{
+    background-color: #2fabf6;
+    opacity: .5;
+}
+.sBd-G50{   
+    background-color: rgba(199,199,199,.5);
+}
+.sMargin-Auto{
+     margin: 0 auto;
+}
+.sContainer{
+    width: 1171px;      
+    transition: width 0.5s;
+    -moz-transition: width 0.5s;
+    -webkit-transition: width 0.5s;
+    -o-transition: width 0.5s;
+    -ms-transition: width 0.5s;
+}
+.sContainer > div.sHeaderWrapper > div:last-of-type{
+    border-left: 0px none;
+}
+.sFloat-R{
+    float: right;
+        
+}
+.sFloat-L{
+    float: left;
+}
+.sHeaderBox, .sFooterBox{
+    font: 400 14.5px Roboto;   
+}
+.sFooterBox{
+    color: #68717a;
+    margin-top: 21px; 
+}
+.sHeaderBox{
+    color: #ffffff;
+    border-left: 2px solid #ffffff;
+    height: 41px; 
+    margin-top: 11px;   
+}
+.sHeaderBox-WmMenu{
+     width: 139px;
+}
+.sHeaderBox-Money{
+     width: 169px;
+}
+.sHeaderBox-Menu{
+    width: 629px;
+    transition: width 0.5s;
+    -moz-transition: width 0.5s;
+    -webkit-transition: width 0.5s;
+    -o-transition: width 0.5s;
+    -ms-transition: width 0.5s;
+}
+.sHeaderBox-Logo, .sFooterBox-Logo{
+    /*width: 234px;*/
+}
+.sFooterBox-Sn{
+    width: 200px;
+}
+.sFooterBox-Sn > div > a:not(:first-of-type){
+    margin-left: 12px;
+}
+.sSn{    
+    width: 41px;
+    height: 42px;
+    background: url(../images/btns-sn-template.png); 
+}
+.sSn-Ok{
+    background-position: 41px 0;
+}
+.sSn-Vk{    
+    background-position: 82px 0;
+}
+.sSn-Tw{    
+    background-position: 123px 0;  
+}
+.sSn-Fb{    
+    background-position: 0 0; 
+}
+.sFooterBox-Menu{
+    /*width: 607px;*/
+    width: 439px;
+    margin-right: 168px;
+}
+.sFooterBox-Menu > div > a{
+    color: inherit;
+}
+.sFooterBox-Menu > div > a:not(:last-of-type){
+    margin-right: 112px;
+}
+.sHeaderBox-Logo > a, .sFooterBox-Logo > a{       
+    font: 700 31px PT Sans; /* letter-spacing */
+    line-height: 100%;
+    width: 149px;
+    height: 31px;
+    padding-left: 32px;    
+    margin-top: 4px;
+}
+.sHeaderBox-Logo > a{
+    background: url(../images/logo-white.png) no-repeat 0 100%; 
+    color: #ffffff;
+}
+.sFooterBox-Logo > a{
+    background: url(../images/logo-blue.png) no-repeat 0 100%; 
+    color: #2fabf6;  
+}
+.sHeaderBox-Money > div > span{
+    color: #ffd54e;
+    font-size: 18px;    
+}
+.sHeaderBox-Money > div{
+    height: 41px;
+}
+.sHeaderBox-Money > div > a.sWmMoney{
+    background: url(../images/money.png);
+    height: 29px;
+    width: 27px;
+    margin: 6px 8px 0px 21px;
+}
+.sHeaderBox-Menu > div:first-of-type{
+    height: 41px;
+}
+.sHeaderBox-Menu > div > a{
+    color: inherit;
+    margin-left: 43px;
+    transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+}
+.sHeaderBox > div > span{
+    cursor: default;
+}
+.sHeaderBox-WmMenu > label.sUnderpants, .sHeaderBox-Menu > label.sUnderpants{
+    height: 41px;    
+}
+.sHeaderBox-WmMenu > label.sUnderpants{
+    margin-top: -1px;
+}
+.sHeaderBox-Menu > label.sUnderpants{
+    bottom: 42px;
+    right: 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+}
+.sTextAlign-R{
+    text-align: right;   
+}
+.sTextAlign-C{
+    text-align: center;   
+}
+.sVAlign-50p{
+    vertical-align: -50%;
+}
+.sPos-Rel{
+    position: relative;
+}
+.sZi-2{
+    z-index: 2;
+}
+.sZi-1{
+    z-index: 1;
+}
+.sHeight-Auto{
+    height: auto;
+}
+.sUnderpants{
+    background: url(../images/underpanths.png);
+    width: 10px;
+    margin-left: 4px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: -10px 45%;   
+}
+.sInputH{
+    position: absolute;
+    visibility: hidden;
+    margin-left: -9999px;
+}
+.sHeaderBox-WmMenu > div:first-of-type{
+    padding-left: 16px;
+}
+.sHeaderBox-WmMenu > input.sInputH:checked + label{
+    background-position: 0 45%;   
+}
+.sHeaderBox-WmMenu > input.sInputH:checked ~ div:first-of-type{     
+    transition: color 0.5s linear;
+    -moz-transition: color 0.5s linear;
+    -webkit-transition: color 0.5s linear;
+    -o-transition: color 0.5s linear;
+    -ms-transition: color 0.5s linear;
+    color: #282f3a; 
+}
+.sWmMenu, .sMenu-Dd{
+    top: -36px; /*36px*/
+    left: 4px;
+    height: 41px;    
+    border-radius: 10px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s; /* all,or[and, and] */
+    -moz-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+}
+.sWmMenu{
+    background-color: #ffffff;
+    width: 145px;
+    box-shadow: 0px 12px 20px 0.00px rgba(117, 129, 141, 0.75);
+    margin-top: 13px;
+}
+.sMenu-Dd{
+    background-color: #2fabf6;
+    width: 190px;
+    box-shadow: 0px 10px 10px 0px rgba(117, 129, 141, 0.75);
+}
+.sWmMenu > a, .sMenu-Dd > a{    
+    position: relative;
+    display: inline-block;
+    height: 0px;
+    width: 133px;    
+    color: #555a62;
+    font: 400 15px / 31px Roboto;   
+    opacity: 0;
+    transition: all 0.5s;
+}
+.sWmMenu > a{
+    padding-left: 12px;
+}
+.sWmMenu > a:hover{
+    background-color: #e8e8e8;
+}
+.sWmMenuSpace{
+    height: 47px;
+    display: block;
+}
+input.sInputH:checked ~ .sWmMenu{    
+    visibility: visible;
+    opacity: 1;
+    height: 112px;
+}
+input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
+    height: 33px;
+    opacity: 1;
+}
+.sCabinet{
+    
+}
+.sCabinet-GlobalSettings{
+    /*height: 564px;*/
+    padding-top: 84px;  
+    color: #262d38;
+    font: 400 15px / 40px Roboto;
+}
+.sSettings-Title{
+    color: #636d7a;
+    font: 300 34px / 18px Roboto-Light;
+    border-bottom: #8f8f8f 1px solid;
+    padding-bottom: 19px;
+}
+.sSettings-Field, .sSettings-Field-Edit{    
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 30px;
+    overflow-x: hidden;  
+}
+.sSettings-Field-Border{
+    border-bottom: #ededed 1px solid;
+}
+.sSettings-Field > span:nth-child(1){
+    display: inline-block;
+    width: 350px;
+}
+.sSettings-Field > span:last-of-type:not(.sNotLast){
+    color: #3da3e1;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.sSettings-Field-Edit{
+    background-color: #ededed;
+    padding-right: 15px;
+    padding-bottom: 14px;
+    padding-top: 11px;
+    display: none;
+}
+.sSettings-Field-Edit > span:nth-child(1){
+    display: inline-block;
+    width: 350px;
+}
+.sSettings-Field-Edit > span:last-of-type{
+    color: #ffffff;
+    font: 400 16px Roboto;
+    background-color: #939393;
+    height: 36px;
+    width: 142px;
+    border-radius: 50px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+}
+.sSettings-Field-Edit > div{
+    width: 471px;
+    display: inline-block;
+}
+.sSettings-Field-Edit > div > label, .sSettings-Field-Edit > div > form > label{
+    display: inline-block;
+    width: 180px;
+    padding-right: 19px;
+}
+.sCabinet-ContactInfo{
+    padding-top: 43px;  
+    color: #262d38;
+    font: 400 15px / 40px Roboto;
+    padding-bottom: 93px;
+}
+/* 4 media point smaller 1145px,965px,781px,659px
+a:has(img) { background: none; }
+p:nth-of-type(3n+0)
+p:nth-of-type(2)    
+:nth-of-type() selector to select the element that is the nth child, of a particular type, of its parent.
+p:nth-child(3n+0)
+p:nth-child(2)//The :nth-child(n) selector matches every element that is the nth child, regardless of type, of its parent.n can be a number, a keyword, or a formula.
+nth-of-type(4n+1)
+ul li:not(.year):nth-of-type(4n+2){ clear: both; }
+.menu li > a:after { margin-left: 5px; content: '\25BA'; }
+.menu > li > a:after { margin-left: 5px; content: '\25BC'; }
+.menu li > a:only-child:after { margin-left: 0; content: ''; }
+.menu li:last-of-type { border-right: none; }
+<b class="caret dropdown-toggle"></b>
+<style>
+content: "Look at this orange box.";
+::-moz-selection {
+    color: red;
+    background: yellow;
+}
+
+::selection {
+    color: red;
+    background: yellow;
+}
+h1::before {
+    content: url(smiley.gif);
+}
+h1::after {
+    content: url(smiley.gif);
+}
+.disable {
+    pointer-events: none;
+}
+Combinators: ul li,ul>li,h1+p,h1~p,ul a[title],li#first>a[rel="external"],h1+p.intro,h2.myclass~p[class="intro"]
+Pseudo-Classes: E:link,E:visited,E:active,E:hover,E:focus ,span:target {background: yellow;},E:enabled,E:disabled,E:checked,div:not(.two)
+#alert:target, span:focus ~ .alert,.btn:active .alert,:checked ~ .alert
+transitions: prop, dura, timi func, delay //500ms 1 prop or all shorthand // write in not event, can specify with transition-property: width,..; trans-dur: 1s, trans-tim-func: easy-in-out; 
+#block4 {left: 240px; transition: all 500ms easy-in-out, 500ms;}
+#block3:hover + #block4 { left: 240px; }
+nav a {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  -ms-transition-property: all;
+  transition-property: all;
+}
+position: relative; top,left
+.container>.navbar
+.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}
+#conrainer "min-width: 310px; height: 400px; margin: 0 auto"
+@media only screen and (max-width:965px){ classes … }
+line-height: 160%;
+margin-top: -1px;
+font-size: 100%;
+width: 36%;
+float: right;
+.grid
+clear: both;
+text-aligh: left;
+vertical-align: top;
+display: inline-block;
+margin: 0 0 25px;
+width: 260px; //23% in media //48% in small media
+.galleryitem:nth-child(4n+1) //select the first in
+.sublead
+display: block; //none in media
+font-size: 105%;
+margin-bottom: 20px;
+.imageRotater
+width: 60%; // 100% in media
+.maintext
+font-size: 100%;
+line-height: 160%;
+margin-top: -10px; //15px in media
+width: 36%; //100% in media
+float: right;
+.navigation .navbar
+background-repeat: initial initial;
+background-position: initial initial;
+border-top: 1px dotted rgb(169, 169, 169)
+border-bottom: 1px dotted rgb(169, 169, 169)
+background: rgb(248,248,248)
+float: right;
+color: rgb(119,119,119);
+overflow: visible;
+margin-bottom: 20px;
+position: relative;
+//display: none; in media 
+#mobile-nav //select
+display: none; //block in media
+*/

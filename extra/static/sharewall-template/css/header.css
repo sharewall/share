@@ -2,6 +2,10 @@
     font-family: Roboto;
     src: url(../fonts/Roboto-Regular.ttf);
 }
+@font-face{
+    font-family: Roboto-Light;
+    src: url(../fonts/Roboto-Light.ttf);
+}
 /* cyrillic-ext */
 @font-face {
   font-family: 'PT Sans';
@@ -34,12 +38,16 @@
   src: local('PT Sans'), local('PTSans-Regular'), url(../fonts/PT-Sans4.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
-html { height: 100%; }
-* { height: inherit; }
 body { margin: 0; }
 a { text-decoration: none!important; }
 .sOverHidden-All{
     overflow:hidden;
+}
+.sOverHidden-X{
+    overflow-x: hidden;
+}
+.sHeight-100p{
+    height: 100%;
 }
 .sWidth-100p{
     width: 100%;  
@@ -66,6 +74,10 @@ a { text-decoration: none!important; }
 }
 .sBd-W50{
     background-color: rgba(255,255,255,.5);
+}
+.sBd-B50{
+    background-color: #2fabf6;
+    opacity: .5;
 }
 .sBd-G50{   
     background-color: rgba(199,199,199,.5);
@@ -175,11 +187,17 @@ a { text-decoration: none!important; }
     color: #ffd54e;
     font-size: 18px;    
 }
+.sHeaderBox-Money > div{
+    height: 41px;
+}
 .sHeaderBox-Money > div > a.sWmMoney{
     background: url(../images/money.png);
     height: 29px;
     width: 27px;
     margin: 6px 8px 0px 21px;
+}
+.sHeaderBox-Menu > div:first-of-type{
+    height: 41px;
 }
 .sHeaderBox-Menu > div > a{
     color: inherit;
@@ -192,6 +210,12 @@ a { text-decoration: none!important; }
 }
 .sHeaderBox > div > span{
     cursor: default;
+}
+.sHeaderBox-WmMenu > label.sUnderpants, .sHeaderBox-Menu > label.sUnderpants{
+    height: 41px;    
+}
+.sHeaderBox-WmMenu > label.sUnderpants{
+    margin-top: -1px;
 }
 .sHeaderBox-Menu > label.sUnderpants{
     bottom: 42px;
@@ -215,8 +239,14 @@ a { text-decoration: none!important; }
 .sPos-Rel{
     position: relative;
 }
+.sZi-2{
+    z-index: 2;
+}
 .sZi-1{
     z-index: 1;
+}
+.sHeight-Auto{
+    height: auto;
 }
 .sUnderpants{
     background: url(../images/underpanths.png);
@@ -235,7 +265,7 @@ a { text-decoration: none!important; }
     padding-left: 16px;
 }
 .sHeaderBox-WmMenu > input.sInputH:checked + label{
-    background-position: 0 45%;    
+    background-position: 0 45%;   
 }
 .sHeaderBox-WmMenu > input.sInputH:checked ~ div:first-of-type{     
     transition: color 0.5s linear;
@@ -262,6 +292,7 @@ a { text-decoration: none!important; }
     background-color: #ffffff;
     width: 145px;
     box-shadow: 0px 12px 20px 0.00px rgba(117, 129, 141, 0.75);
+    margin-top: 13px;
 }
 .sMenu-Dd{
     background-color: #2fabf6;
@@ -297,7 +328,76 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: 33px;
     opacity: 1;
 }
-
+.sCabinet{
+    
+}
+.sCabinet-GlobalSettings{
+    /*height: 564px;*/
+    padding-top: 84px;  
+    color: #262d38;
+    font: 400 15px / 40px Roboto;
+}
+.sSettings-Title{
+    color: #636d7a;
+    font: 300 34px / 18px Roboto-Light;
+    border-bottom: #8f8f8f 1px solid;
+    padding-bottom: 19px;
+}
+.sSettings-Field, .sSettings-Field-Edit{    
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 30px;
+    overflow-x: hidden;  
+}
+.sSettings-Field-Border{
+    border-bottom: #ededed 1px solid;
+}
+.sSettings-Field > span:nth-child(1){
+    display: inline-block;
+    width: 350px;
+}
+.sSettings-Field > span:last-of-type:not(.sNotLast){
+    color: #3da3e1;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.sSettings-Field-Edit{
+    background-color: #ededed;
+    padding-right: 15px;
+    padding-bottom: 14px;
+    padding-top: 11px;
+    display: none;
+}
+.sSettings-Field-Edit > span:nth-child(1){
+    display: inline-block;
+    width: 350px;
+}
+.sSettings-Field-Edit > span:last-of-type{
+    color: #ffffff;
+    font: 400 16px Roboto;
+    background-color: #939393;
+    height: 36px;
+    width: 142px;
+    border-radius: 50px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+}
+.sSettings-Field-Edit > div{
+    width: 471px;
+    display: inline-block;
+}
+.sSettings-Field-Edit > div > label, .sSettings-Field-Edit > div > form > label{
+    display: inline-block;
+    width: 180px;
+    padding-right: 19px;
+}
+.sCabinet-ContactInfo{
+    padding-top: 43px;  
+    color: #262d38;
+    font: 400 15px / 40px Roboto;
+    padding-bottom: 93px;
+}
 /* 4 media point smaller 1145px,965px,781px,659px
 a:has(img) { background: none; }
 p:nth-of-type(3n+0)
