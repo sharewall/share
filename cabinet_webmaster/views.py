@@ -31,8 +31,6 @@ def settings(request):
         request_user['password'] = request.user.password
         request_user['first_name'] = request.user.first_name
         request_user['last_name'] = request.user.last_name
-        #request_cabinet_webmaster = {}
-        #request_cabinet_webmaster['wmr'] = request.user.cabinet_webmaster.wmr
         request_post = {}
         request_post['password'] = request.POST.get('password')
         request_post['new_password'] = request.POST.get('new_password')

@@ -6,9 +6,124 @@ from urllib.parse import urlparse
 import datetime
 import json
 import os
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404, render, redirect
+from webmaster_area.forms import WebmasterAreaForm
 
-def index(request):
-    return HttpResponse("webmaster-area")
+class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
+    login_url = '/login/' 
+    template_name = 'webmaster_area/index.html'
+    title = 'Webmaster area'
+    header = 'Список ваших площадок'
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name,
+        {
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            "page": { "title": self.title, 'header': self.header }
+        })
+
+@login_required
+def statistic(request):
+    template_name = 'webmaster_area/statistic.html'
+    title = 'Statistic'
+    header = 'Статистика'
+    return render(request, template_name,
+    {
+        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        'page': { 'title': title, 'header': header }
+    })
+
+@login_required
+def delete(request, pk):
+    try:
+        WebmasterAreaModel.objects.get(pk=pk).delete()
+    except Exception as inst:
+        pass
+    return HttpResponseRedirect('/webmaster-area/')
+
+@login_required
+def update(request, pk):
+    template_name = 'webmaster_area/update.html'
+    title = 'Update webmaster area'
+    request_instance = None
+    try:
+        request_instance = WebmasterAreaModel.objects.get(pk=pk)
+    except Exception as inst:
+        pass
+    if request_instance:
+        request_form_data = {
+            'name_area': request_instance.name_area,
+            'url': request_instance.url,
+            'buttons_constructor': request_instance.buttons_constructor
+        }
+        webmaster_area_form = WebmasterAreaForm(data=request_form_data, user=request.user, instance=request_instance, auto_id=False)
+        header = request_instance.name_area
+        if request.method == 'POST':
+            webmaster_area_form = WebmasterAreaForm(data=request.POST, user=request.user, instance=request_instance)
+            if webmaster_area_form.is_valid():
+                webmaster_area = webmaster_area_form.save(commit=False)
+                webmaster_area.save()
+                return HttpResponseRedirect('/webmaster-area/')
+                #return render(request, template_name,
+                #{
+                    #'success': 'Buttons constructor created'
+                #})
+            else:
+                webmaster_area_form = WebmasterAreaForm(buttons_constructor_form.cleaned_data, user=request.user, auto_id=False)
+                return render(request, template_name,
+                {
+                    'page': { 'title': title, 'header': header },
+                    'error': webmaster_area_form.errors,
+                    'webmaster_area_form': webmaster_area_form
+                })
+        else:
+            #return HttpResponseRedirect('/buttons-constructor/')
+            return render(request, template_name,
+            {
+                'pk': pk,
+                'page': { 'title': title, 'header': header },
+                'webmaster_area_form': webmaster_area_form
+            })
+    else:
+        return HttpResponseRedirect('/webmaster-area/')
+
+@login_required
+def create(request):
+    template_name = 'webmaster_area/create.html'
+    title = 'Create webmaster area'
+    header = 'Создание площадки'
+    if request.method == 'POST':
+        webmaster_area_form = WebmasterAreaForm(data=request.POST, user=request.user, auto_id=False)
+        if webmaster_area_form.is_valid():
+            webmaster_area = webmaster_area_form.save()
+            #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
+            webmaster_area.save()
+            return HttpResponseRedirect('/webmaster-area/')
+            #return render(request, template_name,
+            #{
+                #'success': 'Buttons constructor created'
+            #})
+        else:
+            webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data, user=request.user)
+            return render(request, template_name,
+            {
+                'page': { 'title': title, 'header': header },
+                'error': webmaster_area_form.errors,
+                'webmaster_area_form': webmaster_area_form
+            })
+    else:
+        #return HttpResponseRedirect('/buttons-constructor/')
+        return render(request, template_name,
+        {
+            'page': { 'title': title, 'header': header },
+            'webmaster_area_form': WebmasterAreaForm(request.user)
+        })
 
 def checkconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
@@ -89,6 +204,8 @@ def checkconfig(request):
     return HttpResponse(answer)
 
 def setcounter(request):
+    return HttpResponse('setcounter')
+    '''
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
     wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
@@ -112,6 +229,7 @@ def setcounter(request):
     else:
         answer = 'console.log(bad id!)' 
     return HttpResponse(answer)
+    '''
 
 def getconfig(request):
     request_referer = request.META.get('HTTP_REFERER')

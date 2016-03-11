@@ -46,7 +46,7 @@ class ButtonsConstructorModel(models.Model):
         (SMALL,'Small'),
     )
     size_buttons = models.CharField(max_length=3, choices=SIZE_CHOICES, default=MEDIUM)
-    mobile_view = models.BooleanField(default=True)
+    mobile_view = models.BooleanField(default=False)
     with_background = models.BooleanField(default=False)
     background_color = models.TextField(default='rgb(255, 255, 255)')
     page_url = models.URLField(blank=True, default='')

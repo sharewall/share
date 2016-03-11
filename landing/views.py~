@@ -12,7 +12,6 @@ from django.core.urlresolvers import reverse
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
 
-#{% if user.is_authenticated %}
 class LandingView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'landing/index.html'

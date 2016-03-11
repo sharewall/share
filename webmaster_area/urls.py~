@@ -2,11 +2,12 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='webmaster-area-index'),
+    url(r'^$', views.WebmasterAreaIndexView.as_view(), name='webmaster-area-index'),
+    url(r'^create/$', views.create, name='webmaster-area-create'),
+    url(r'^(?P<pk>[0-9]+)/$', views.update, name='webmaster-area-update'),
+    url(r'^delete/(?P<pk>[0-9]+)/$', views.delete, name='webmaster-area-delete'),
     url(r'^setcounter/$', views.setcounter, name='webmaster-area-setcounter'),
     url(r'^getconfig/$', views.getconfig, name='webmaster-area-getconfig'),
     url(r'^checkconfig/$', views.checkconfig, name='webmaster-area-checkconfig'),
-    #url(r'^getconfig2/(?P<title>.+)/$', views.getconfig2, name='getconfig2'),
-    # url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
 ]
 

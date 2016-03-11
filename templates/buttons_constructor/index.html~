@@ -1,9 +1,127 @@
-  {% extends "header.html" %}
-  {% block title %}{{ view.title }}{% endblock %}
+  {% extends "skeleton.html" %}
+
+  {% block header %}
+    <div id="header" class="sBd-BlueH sWidth-100p">
+          <div class="sContainer sMargin-Auto">
+          <div class="sHeaderWrapper">
+              <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
+                  <input type="checkbox" id="sWmInput" class="sInputH">
+                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
+                  <div class="sOverHidden-All sTextAlign-L">
+                      <span class="sVAlign-50p sPos-Rel sZi-2">
+                          {{ user.username }}
+                      </span>
+                  </div> 
+                  <div class="sWmMenu sPos-Rel sZi-1">
+                      <span class="sWmMenuSpace"></span>
+                      <a href="/cabinet-webmaster/">Настройки</a>
+                      <a href="/logout/">Выйти</a>
+                  </div>
+              </div>
+              <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
+                      <span class="sVAlign-50p sPos-Rel">
+                          {{ user.cabinet_webmaster.money }} p.                    
+                      </span>
+                  </div> 
+              </div>
+              <div class="sHeaderBox sHeaderBox-Menu sFloat-R sPos-Rel">
+                  <input type="checkbox" id="sHeaderMenuInput" class="sInputH">
+                  <div class="sOverHidden-All">
+                      <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
+                      <a href="/buttons-constructor/" class="sVAlign-50p">Конструктор</a>
+                      <a href="/statistic/" class="sVAlign-50p">Статистика</a>
+                      <a href="javascript:return false;" class="sVAlign-50p">Рефералы</a>
+                      <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
+                  </div>                
+                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
+                  <div class="sMenu-Dd sPos-Rel sZi-1">
+                      <span class="sWmMenuSpace"></span>
+                      <a href="javascript:return false;">Конструктор</a>
+                      <a href="javascript:return false;">Статистика</a>
+                      <a href="javascript:return false;">Рефералы</a>
+                      <a href="javascript:return false;">FAQ</a>
+                  </div>
+              </div>
+              <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
+                  <a href="/" class="sFloat-L">
+                      Sharing
+                  </a>
+              </div>
+          </div>
+          </div>
+      </div>
+  {% endblock %}
+
+  {% block title %}{{ page.title }}{% endblock %}
+
 	{% block content %}
-	<div class="jumbotron">
-    <h1>{{ view.header }}</h1>
-    <hr/>
+  <div class="sHeight-Auto">
+      <div class="sContainer sMargin-Auto">
+          <div class="sListConstructors">
+          <h1>{{ page.header }}</h1>
+          <a class="sTextAlign-C" href="/buttons-constructor/create/">Создать конструктор</a>        
+          <div></div>          
+          {% for c in constructors %}
+          <a class="sDisplay-Inline" href="/buttons-constructor/{{ c.pk }}/">{{ c.name_constructor }}</a>
+          <a class="sDisplay-Inline" href="/buttons-constructor/delete/{{ c.pk }}/">&#10007;</a>
+          <br/>
+          {% endfor %}
+      </div>
   </div>
 	{% endblock %}
 
+  {% block footer %}
+       <div id="footer" class="sBd-GrayF sWidth-100p">
+          <div class="sContainer sMargin-Auto">
+          <div class="sFooterWrapper">
+              <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
+                  <a href="/" class="sFloat-L">
+                      Sharing
+                  </a>
+              </div>
+              <div class="sFooterBox sFooterBox-Sn sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Fb">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Tw">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Vk">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Ok">              </a>
+                  </div>
+              </div>
+              <div class="sFooterBox sFooterBox-Menu sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          Вебмастеру
+                      </a>
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          Возможности
+                      </a>
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          FAQ
+                      </a>
+                  </div>
+              </div>
+          </div>
+           </div>
+        </div>
+        <script>
+            $(function(){
+                $('.sSettings-Field > span:last-of-type:not(.sNotLast)').click(function(){
+                     //$('html, body').off('click'); 
+                     $parent = $(this).parent(); 
+                     $parent.next('.sSettings-Field-Edit').slideToggle(200).prev().slideToggle(200);
+                     //setTimeout("$('html, body').click(function(){ $('.sSettings-Field-Edit').slideUp(200); $('.sSettings-Field').slideDown(200); });", 700);
+                });
+                $('.sSettings-Field-Edit > span:last-of-type:not(.sNotLast)').click(function(){
+                     $parent = $(this).parent(); 
+                     $.ajax({url: '/cabinet-webmaster/settings/', headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, type: "POST", data: $parent.find('form').serialize(), beforeSend: function(){ $('html, body').css('cursor','wait');  }, success: function(response, status, jqXHR) { console.log(response);
+          if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
+          else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
+          }, error: function(xhr){ console.log(xhr.statusText + ", " + xhr.responseText); }, complete: function(){ $('html, body').css('cursor','default'); 
+          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
+          } });
+                });
+            });
+        </script>
+  {% endblock %}

@@ -1,0 +1,121 @@
+  {% extends "skeleton.html" %}
+
+  {% block custom_style %}
+  <style>
+      .sError { position: relative; display: none; }
+  </style>
+  {% endblock %}
+  {% block header %}
+    <div id="header" class="sBd-BlueH sWidth-100p">
+          <div class="sContainer sMargin-Auto">
+          <div class="sHeaderWrapper">
+              <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
+                  <input type="checkbox" id="sWmInput" class="sInputH">
+                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
+                  <div class="sOverHidden-All sTextAlign-L">
+                      <span class="sVAlign-50p sPos-Rel sZi-2">
+                          {{ user.username }}
+                      </span>
+                  </div> 
+                  <div class="sWmMenu sPos-Rel sZi-1">
+                      <span class="sWmMenuSpace"></span>
+                      <a href="/cabinet-webmaster/">Настройки</a>
+                      <a href="/logout/">Выйти</a>
+                  </div>
+              </div>
+              <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
+                      <span class="sVAlign-50p sPos-Rel">
+                          {{ user.cabinet_webmaster.money }} p.                    
+                      </span>
+                  </div> 
+              </div>
+              <div class="sHeaderBox sHeaderBox-Menu sFloat-R sPos-Rel">
+                  <input type="checkbox" id="sHeaderMenuInput" class="sInputH">
+                  <div class="sOverHidden-All">
+                      <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
+                      <a href="/buttons-constructor/" class="sVAlign-50p">Конструктор</a>
+                      <a href="/statistic/" class="sVAlign-50p">Статистика</a>
+                      <a href="javascript:return false;" class="sVAlign-50p">Рефералы</a>
+                      <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
+                  </div>                
+                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
+                  <div class="sMenu-Dd sPos-Rel sZi-1">
+                      <span class="sWmMenuSpace"></span>
+                      <a href="javascript:return false;">Конструктор</a>
+                      <a href="javascript:return false;">Статистика</a>
+                      <a href="javascript:return false;">Рефералы</a>
+                      <a href="javascript:return false;">FAQ</a>
+                  </div>
+              </div>
+              <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
+                  <a href="/" class="sFloat-L">
+                      Sharing
+                  </a>
+              </div>
+          </div>
+          </div>
+      </div>
+  {% endblock %}
+
+  {% block title %}{{ page.title }}{% endblock %}
+
+	{% block content %}
+  <div class="sHeight-Auto">
+      <div class="sContainer sMargin-Auto">
+          <div class="sBtnConstructor">
+          <h1>{{ page.header }}</h1>
+          <div></div>
+          <div class="sError">  
+              {% if success %}
+              {{ success }}
+              {% endif %}
+              {% if error %}
+              {{ error }}
+              {% endif %}
+          </div>
+          <form method="post" action="/buttons-constructor/{{ pk }}/">
+              {% csrf_token %}
+              {{ buttons_constructor_form }}
+              <input type="submit" value="Update">
+          </form>
+          </div>
+      </div>
+  </div>
+	{% endblock %}
+
+  {% block footer %}
+       <div id="footer" class="sBd-GrayF sWidth-100p">
+          <div class="sContainer sMargin-Auto">
+          <div class="sFooterWrapper">
+              <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
+                  <a href="/" class="sFloat-L">
+                      Sharing
+                  </a>
+              </div>
+              <div class="sFooterBox sFooterBox-Sn sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Fb">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Tw">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Vk">              </a>
+                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Ok">              </a>
+                  </div>
+              </div>
+              <div class="sFooterBox sFooterBox-Menu sFloat-R sPos-Rel">
+                  <div class="sOverHidden-All">
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          Вебмастеру
+                      </a>
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          Возможности
+                      </a>
+                      <a href="javascript:return false;" class="sVAlign-50p">
+                          FAQ
+                      </a>
+                  </div>
+              </div>
+          </div>
+           </div>
+        </div>
+  {% endblock %}

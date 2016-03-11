@@ -3,7 +3,7 @@ from django.db import models
 from buttons_constructor.models import ButtonsConstructorModel, SocialNetworks
 
 class WebmasterAreaModel(models.Model):
-    buttons_constructor = models.ForeignKey(ButtonsConstructorModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related buttons_constructor', related_name='webmaster_area')
+    buttons_constructor = models.ForeignKey(ButtonsConstructorModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related_buttons_constructor', related_name='webmaster_area')
     name_area = models.CharField(max_length=200, default='name area', verbose_name='name area')
     url = models.URLField('url', null=False, blank=False, default='')
     #date(2005, 7, 27)
