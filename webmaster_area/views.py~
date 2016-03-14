@@ -384,7 +384,7 @@ def getconfig(request):
         answer += ' $("div#sharewallContainer").children().each(\
             function(i,e){\
                 $this = $(e);\
-                if($this.is("a")){\
+                if($this.is("a[data-share-sn]")){\
                     $this.click(\
                         function() {\
                             $this = $(this); \

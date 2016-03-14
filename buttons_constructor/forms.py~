@@ -1,4 +1,4 @@
-from buttons_constructor.models import ButtonsConstructorModel
+from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
 from django import forms
 
 class ButtonsConstructorForm(forms.ModelForm):
@@ -23,6 +23,9 @@ class ButtonsConstructorForm(forms.ModelForm):
     page_url = forms.URLField(required=False)
     page_title = forms.CharField(max_length=200, required=False)
     page_description = forms.CharField(widget=forms.Textarea, required=False)#initial
+    def __init__(self, *args, **kwargs):
+        super(ButtonsConstructorForm, self).__init__(*args, **kwargs)
+        self.fields['btns_images'] = forms.ModelChoiceField(queryset=BtnsImages.objects.all())
     class Meta:
         model = ButtonsConstructorModel
-        fields = ('name_constructor', 'with_counter', 'social_networks', 'location_buttons', 'page_url', 'page_title', 'page_description')
+        fields = ('btns_images', 'name_constructor', 'with_counter', 'social_networks', 'location_buttons', 'page_url', 'page_title', 'page_description')
