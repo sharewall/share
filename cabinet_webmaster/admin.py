@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-
 from cabinet_webmaster.models import CabinetWebmasterModel
 
 # Define an inline admin descriptor for CabinetWebmasterModel model

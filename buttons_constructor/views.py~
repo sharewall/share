@@ -23,6 +23,14 @@ class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
         })
 
 @login_required
+def delete(request, pk):
+    try:
+        ButtonsConstructorModel.objects.get(pk=pk).delete()
+    except Exception as inst:
+        pass
+    return HttpResponseRedirect('/buttons-constructor/')
+
+@login_required
 def update(request, pk):
     template_name = 'buttons_constructor/update.html'
     title = 'Update buttons constructor'

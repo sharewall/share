@@ -1,11 +1,9 @@
+import datetime, json, os
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from webmaster_area.models import WebmasterAreaModel, PageDetail
-from buttons_constructor.models import SocialNetworks
-from urllib.parse import urlparse
-import datetime
-import json
-import os
+from buttons_constructor.models import SocialNetworks, BtnsImages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator

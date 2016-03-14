@@ -1,11 +1,9 @@
+import datetime, json, os
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from webmaster_area.models import WebmasterAreaModel, PageDetail
-from buttons_constructor.models import SocialNetworks
-from urllib.parse import urlparse
-import datetime
-import json
-import os
+from buttons_constructor.models import SocialNetworks, BtnsImages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -238,12 +236,14 @@ def getconfig(request):
     if wma_object:
         list_sn = SocialNetworks.objects.all()
         SOCIAL_DEFAULT = ''
+        list_sn_unic = {}
         for s in list_sn:
             if not s.shortcut in SOCIAL_DEFAULT:
                 SOCIAL_DEFAULT += s.shortcut + ','
+                list_sn_unic[s.shortcut] = s
         SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
-        list_sn_img_square = {sn.shortcut: sn.img_square for sn in list_sn}
-        list_sn_img_circle = {sn.shortcut: sn.img_circle for sn in list_sn}
+        #list_sn_img_square = {sn.shortcut: sn.img_square for sn in list_sn}
+        #list_sn_img_circle = {sn.shortcut: sn.img_circle for sn in list_sn}
         btncr = wma_object.buttons_constructor
         dict_config = {}
         if btncr.with_counter:
@@ -323,7 +323,7 @@ def getconfig(request):
                 )
 
             answer += '$("div#sharewallContainer").append(\'\''
-            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\'><img src="{1}" alt="{0}" title="{0}" align="middle" border="0" height="28" hspace="0" width="28"></a>\''.format(sn, list_sn_img_circle.get(sn) if btncr.form_buttons=='CI' else list_sn_img_square.get(sn))
+            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\'></a>\''.format(sn, btncr.btns_images.path)#list_sn_img_circle.get(sn) if btncr.form_buttons=='CI' else list_sn_img_square.get(sn))#<img src="{1}" alt="{0}" title="{0}" align="middle" border="0" height="28" hspace="0" width="28">
             if btncr.location_buttons == "VE":
                 answer += '+\'<br>\''
             answer += ');'

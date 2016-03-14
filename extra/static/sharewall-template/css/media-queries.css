@@ -260,6 +260,7 @@
     body{
         min-width: 400px;
         overflow: auto!important;
+       
     }
     
 }

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'buttons_constructor',
     'cabinet_webmaster',
-    'webmaster_area',
+    #'webmaster_area',
     'landing',
 ]
 

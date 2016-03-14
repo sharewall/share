@@ -457,6 +457,32 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sCodeHere{
     font: 400 15px Roboto;   
 }
+.sBtnNode-E, .sBtnLogo-E{
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    margin-right: 15px;
+}
+.sBtnNode-E{
+    background: transparent url("../images/btns-sprite-1.png") no-repeat 0px 0px;
+ }
+.sBtnLogo-E{
+    background: transparent url("../images/btns-logo-sharewall-blue.png") no-repeat 0px 0px;
+    background-position: 50% 50%;
+}
+.sBtnCounter-E{
+    margin-left: 3px;
+    height: 39px;
+    width: 64px;
+    display: inline-block;
+    background: transparent url("../images/btns-counter-black.png") no-repeat 0px 0px;
+    background-position: 50% 50%;
+    color: #ffffff;
+    font: 400 14px / 22px Roboto;
+    text-align: center;
+    line-height: 39px;
+    float: right;
+}
 /* 4 media point smaller 1145px,965px,781px,659px
 a:has(img) { background: none; }
 p:nth-of-type(3n+0)

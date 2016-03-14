@@ -2,11 +2,26 @@
 from django.db import models
 from cabinet_webmaster.models import CabinetWebmasterModel
 
+class BtnsImages(models.Model):
+    name = models.CharField('name image', max_length=200)
+    path = models.CharField('path to image', max_length=200)
+    CIRCLE = 'CI'
+    SQUARE = 'SQ'
+    TYPES_IMAGES=(
+        (CIRCLE,'Circle'),
+        (SQUARE,'Square'),
+    )
+    type_image = models.CharField(max_length=2, choices=TYPES_IMAGES, default=CIRCLE)
+    db_table = 'BtnsImages'
+
+    def __str__(self):
+        return str('Name: %s' % self.name + ' type: %s' % self.type_image)
+
 class SocialNetworks(models.Model):
-    shortcut = models.CharField(max_length=2, verbose_name='shortcut for network')
-    url = models.URLField(null=False, blank=False, default='', verbose_name='url for network')
-    img_square = models.URLField('img_url_square', null=True, blank=False, default='')
-    img_circle = models.URLField('img_url_circle', null=True, blank=False, default='')
+    shortcut = models.CharField('shortcut for network', max_length=2)
+    url = models.URLField('url for network', null=False, blank=False, default='')
+    img_bd_pos = models.CharField('img background position', max_length=400)
+    #img_circle_2 = models.URLField('img_url_circle', null=True, blank=False, default='')
     db_table = 'SocialNetworks'
 
     def __str__(self):
@@ -14,7 +29,8 @@ class SocialNetworks(models.Model):
 
 class ButtonsConstructorModel(models.Model):
     cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="buttons_constructor")
-    name_constructor = models.CharField(max_length=50, default="name constructor", verbose_name="name_constructor")
+    btns_images = models.ForeignKey(BtnsImages, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
+    name_constructor = models.CharField("name_constructor", max_length=50, default="name constructor")
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
     for s in sn_list:
