@@ -270,7 +270,8 @@ def getconfig(request):
 
         answer += '    $("div#sharewallContainer").html(\'\''
         if btncr.with_counter:
-            answer += '    +\'<span id="shareCounter" style="padding: 4px 8px; border: 0px none; background-color: rgb(91, 192, 222); border-radius: 4px;  color: white;">0</span>\''
+            #answer += '    +\'<span id="shareCounter" style="padding: 4px 8px; border: 0px none; background-color: rgb(91, 192, 222); border-radius: 4px;  color: white;">0</span>\''
+            answer += ' +\'<span id="shareCounter" style="margin-left:3px; height:39px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:39px; float: right; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png);">0</span>\''
         if btncr.with_counter and btncr.location_buttons == "VE":
             answer += '+\'<br>\''
         answer += ');'
@@ -323,11 +324,12 @@ def getconfig(request):
                 )
 
             answer += '$("div#sharewallContainer").append(\'\''
-            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\'></a>\''.format(sn, btncr.btns_images.path)#list_sn_img_circle.get(sn) if btncr.form_buttons=='CI' else list_sn_img_square.get(sn))#<img src="{1}" alt="{0}" title="{0}" align="middle" border="0" height="28" hspace="0" width="28">
+            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\' style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/{1}); background-repeat: no-repeat; {2}"></a>\''.format(sn, btncr.btns_images.path, list_sn_unic[sn].img_bd_pos)#list_sn_img_circle.get(sn) if btncr.form_buttons=='CI' else list_sn_img_square.get(sn))#<img src="{1}" alt="{0}" title="{0}" align="middle" border="0" height="28" hspace="0" width="28">
             if btncr.location_buttons == "VE":
                 answer += '+\'<br>\''
             answer += ');'
 
+        answer += '$("div#sharewallContainer").append(\'<a href="http://sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png); background-repeat: no-repeat; background-position: 50% 50%;"></a>\');'
         answer += '    $("body").append("<div id=\'sharewallSNC\' style=\'display: none\'></div>");'
         for s in SOCIAL_DEFAULT.split(","):
             answer += '$("body div#sharewallSNC").append("<span data-share-sn-id=\'%s\' data-share-sn-count=\'0\' style=\'display: none;\'></span>");'%s
@@ -382,7 +384,7 @@ def getconfig(request):
         answer += ' $("div#sharewallContainer").children().each(\
             function(i,e){\
                 $this = $(e);\
-                if($this.is("a")){\
+                if($this.is("a[data-share-sn]")){\
                     $this.click(\
                         function() {\
                             $this = $(this); \
