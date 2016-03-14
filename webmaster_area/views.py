@@ -268,7 +268,7 @@ def getconfig(request):
         answer += '    sharewall = { share_config: %s};' %response_config
         answer += '    console.log(sharewall.share_config); '
 
-        answer += '    $("div#sharewallContainer").html(\'\''
+        answer += '    $("div#sharewallContainer").html(\'\');'
         for sn in btncr.social_networks.split(','):
             answer += 'var new_href = "";'
             if sn == 'vk':
@@ -324,7 +324,10 @@ def getconfig(request):
 
         answer += '$("div#sharewallContainer").append(\'<a href="http://sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png); background-repeat: no-repeat; background-position: 50% 50%;"></a>\');'
         if btncr.with_counter:
-            answer += '$("div#sharewallContainer").append(\'<br/><span id="shareCounter" style="margin-left:3px; height:39px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:39px; float: right; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png);">0</span>\');'
+            if btncr.location_buttons == "VE":
+                answer += '$("div#sharewallContainer").css("float","left");'
+                #answer += '$("div#sharewallContainer").append("<br/>");'
+            answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; height:39px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:39px; position:absolute; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png);">0</span>\');'
 
         answer += '    $("body").append("<div id=\'sharewallSNC\' style=\'display: none\'></div>");'
         for s in SOCIAL_DEFAULT.split(","):
