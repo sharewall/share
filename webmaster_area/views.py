@@ -265,6 +265,7 @@ def getconfig(request):
 
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
+        #answer += '    sharewall = { };'
         #answer += '    sharewall = { share_config: %s};' %response_config
         #answer += '    console.log(sharewall.share_config); '
 
@@ -275,19 +276,19 @@ def getconfig(request):
                 answer += 'new_href = "http://vk.com/share.php?url="+{0}+{1}+{2}+{3};'.format(
                         'encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else 'encodeURIComponent(d.URL)',
                     '"&description="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)',
+                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&title="+encodeURIComponent(d.title)',
                     '"&noparse=true"'
                 )
             if sn == "fb":
                 answer += 'new_href = "https://www.facebook.com/sharer/sharer.php?s=100"+{0}+{1}+{2};'.format(
                         '"&p[url]="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&p[url]="+encodeURIComponent(d.URL)',
                     '"&p[summary]="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&p[summary]="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&p[title]="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)'
+                    '"&p[title]="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&p[title]="+encodeURIComponent(d.title)'
                 )
             if sn == "tw":
                 answer += 'new_href = "https://www.twitter.com/share?"+{0}+{1};'.format(
                         '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
-                    '"&text="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)'
+                    '"&text="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&text="+encodeURIComponent(d.title)'
                 )
             if sn == "od":
                 answer += 'new_href = "http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1"+{0}+{1};'.format(
@@ -302,18 +303,18 @@ def getconfig(request):
                 answer += 'new_href = "http://connect.mail.ru/share?"+{0}+{1}+{2};'.format(
                         '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
                     '"&description="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)'
+                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&title="+encodeURIComponent(d.title)'
                 )
             if sn == "li":
                 answer += 'new_href = "http://www.linkedin.com/shareArticle?mini=true"+{0}+{1}+{2};'.format(
                         '"&url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&url="+encodeURIComponent(d.URL)',
                     '"&summary="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&summary="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)'
+                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&title="+encodeURIComponent(d.title)'
                 )
             if sn == "lj":
                 answer += 'new_href = "http://www.livejournal.com/update.bml?"+{0}+{1};'.format(
                     '"event="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "event="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&subject="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)'
+                    '"&subject="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&subject="+encodeURIComponent(d.title)'
                 )
 
             answer += '$("div#sharewallContainer").append(\'\''
@@ -356,12 +357,34 @@ def getconfig(request):
                            console.log("sharewallGetAllSNC: "+snc);\
                            return snc;\
                        }'
-        #answer += '    $.when($.ajax({ url: "http://anyorigin.com/get?callback=?&url=" + encodeURIComponent("https://plusone.google.com/u/0/_/+1/fastbutton?count=true&url=" + d.URL), dataType: "json", success: function(response) { sharewallSetSNC("gp", $(response.contents).find("#aggregateCount").html()); }\
-        #               })\
-        #               ).then(w.setTimeout(function(){\
-        #               console.log("GP init setTimeout=20000");\
-        #               $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
-        #               },20000));'
+        answer += '$.sharewallSharedCount = function(url, fn) {\
+                       url = encodeURIComponent(url || location.href);\
+                       var domain = "//free.sharedcount.com";\
+                       var ak = "e02e2352f161d72d0466e71ee4fc812dfe321e32";\
+                       var arg = {\
+                           data: {\
+                               url: url,\
+                               apikey: ak\
+                           },\
+                           url: domain + "/url",\
+                           cache: true,\
+                           dataType: "json"\
+                       };\
+                       if ("withCredentials" in new XMLHttpRequest) {\
+                           arg.success = fn;\
+                       } else {\
+                           var cb = "sc_" + url.replace(/\W/g, "");\
+                           window[cb] = fn;\
+                           arg.jsonpCallback = cb;\
+                           arg.dataType += "p";\
+                       }\
+                       return $.ajax(arg);\
+                   };'
+        answer += '$.sharewallSharedCount(location.href, function(data){\
+                       if(data.GooglePlusOne){\
+                           sharewallSetSNC("gp", data.GooglePlusOne);\
+                       }\
+                   });'
         answer += '    $.when(\
                            $.ajax({ url: "http://vk.com/share.php?act=count&url="+encodeURIComponent(d.URL), dataType: "jsonp" }),\
                            $.ajax({ url: "https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=" + "\'" +encodeURIComponent(d.URL)+ "\'", dataType: "jsonp", success: function(data, status, jqXHR) {\
@@ -372,7 +395,7 @@ def getconfig(request):
                            }\
                            }}),\
                            $.ajax({ url: "https://connect.ok.ru/dk?st.cmd=extLike&ref="+encodeURIComponent(d.URL), dataType: "jsonp", jsonp: false }),\
-                           $.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(document.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false }),\
+                           $.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(d.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false }),\
                            $.ajax({ url: "https://www.linkedin.com/countserv/count/share?url=" + encodeURIComponent(d.URL), dataType: "jsonp", success: function(response) { sharewallSetSNC("li", response.count); }\
                            })\
                        ).done(w.setTimeout(function(){\
@@ -429,20 +452,22 @@ def getconfig(request):
                        },1000));\
                     }'
         answer += 'if(sn=="ma"){\
-                       $.when($.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(document.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false })\
+                       $.when($.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(d.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false })\
                        ).done(w.setTimeout(function(){\
                        console.log("MA done setTimeout=1000");\
                        $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
                        },1000));\
                     }'
         answer += 'if(sn=="gp"){\
-                       $.when($.ajax({ url: "http://anyorigin.com/get?callback=?&url=" + encodeURIComponent("https://plusone.google.com/u/0/_/+1/fastbutton?count=true&url=" + d.URL), dataType: "json", success: function(response) { sharewallSetSNC("gp", $(response.contents).find("#aggregateCount").html()); }\
-                        })\
-                       ).then(w.setTimeout(function(){\
-                       console.log("GP done setTimeout=20000");\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
-                       },20000));\
-                    }'
+                       $.sharewallSharedCount(location.href, function(data){\
+                           if(data.GooglePlusOne){\
+                               sharewallSetSNC("gp", data.GooglePlusOne);\
+                           }\
+                           w.setTimeout($.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } })\
+                       ,1000);\
+                       console.log("GP done setTimeout=1000");\
+                       });\
+                   }'
         answer += 'if(sn=="li"){\
                        $.when($.ajax({ url: "https://www.linkedin.com/countserv/count/share?url=" + encodeURIComponent(d.URL), dataType: "jsonp", success: function(response) { sharewallSetSNC("li", response.count); }\
                         })\
