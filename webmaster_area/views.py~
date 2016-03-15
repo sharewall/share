@@ -245,74 +245,74 @@ def getconfig(request):
         #list_sn_img_square = {sn.shortcut: sn.img_square for sn in list_sn}
         #list_sn_img_circle = {sn.shortcut: sn.img_circle for sn in list_sn}
         btncr = wma_object.buttons_constructor
-        dict_config = {}
-        if btncr.with_counter:
-            dict_config['counter'] = wma_object.total_share_counter
-        if btncr.with_background:
-            dict_config['background'] = btncr.background_color
-        if btncr.page_url:
-            dict_config['url'] = btncr.page_url
-        if btncr.page_title:
-            dict_config['title'] = btncr.page_title
-        if btncr.page_description:
-            dict_config['description'] = btncr.page_description
-        dict_config['mob-view'] = btncr.mobile_view
-        dict_config['social'] = btncr.social_networks
-        dict_config['form'] = btncr.get_form_buttons_display()
-        dict_config['location'] = btncr.get_location_buttons_display()
-        dict_config['size'] = btncr.get_size_buttons_display()
-        response_config = json.dumps(dict_config, sort_keys=True, indent=0)
+        #dict_config = {}
+        #if btncr.with_counter:
+            #dict_config['counter'] = wma_object.total_share_counter
+        #if btncr.with_background:
+            #dict_config['background'] = btncr.background_color
+        #if btncr.page_url:
+            #dict_config['url'] = btncr.page_url
+        #if btncr.page_title:
+            #dict_config['title'] = btncr.page_title
+        #if btncr.page_description:
+            #dict_config['description'] = btncr.page_description
+        #dict_config['mob-view'] = btncr.mobile_view
+        #dict_config['social'] = btncr.social_networks
+        #dict_config['form'] = btncr.get_form_buttons_display()
+        #dict_config['location'] = btncr.get_location_buttons_display()
+        #dict_config['size'] = btncr.get_size_buttons_display()
+        #response_config = json.dumps(dict_config, sort_keys=True, indent=0)
 
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
-        answer += '    sharewall = { share_config: %s};' %response_config
-        answer += '    console.log(sharewall.share_config); '
+        #answer += '    sharewall = { share_config: %s};' %response_config
+        #answer += '    console.log(sharewall.share_config); '
 
         answer += '    $("div#sharewallContainer").html(\'\');'
         for sn in btncr.social_networks.split(','):
             answer += 'var new_href = "";'
             if sn == 'vk':
                 answer += 'new_href = "http://vk.com/share.php?url="+{0}+{1}+{2}+{3};'.format(
-                        'encodeURIComponent('+str(btncr.page_url)+')' if btncr.page_url else 'encodeURIComponent(d.URL)',
-                    '"&description="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
-                    '"&title="+encodeURIComponent(d.title)',
+                        'encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else 'encodeURIComponent(d.URL)',
+                    '"&description="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
+                    '"&title="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else 'encodeURIComponent(d.title)',
                     '"&noparse=true"'
                 )
             if sn == "fb":
                 answer += 'new_href = "https://www.facebook.com/sharer/sharer.php?s=100"+{0}+{1}+{2};'.format(
-                        '"&p[url]="+encodeURIComponent('+str(btncr.page_url)+')' if btncr.page_url else '"&p[url]="+encodeURIComponent(d.URL)',
-                    '"&p[summary]="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&p[summary]="+encodeURIComponent(d.head.children.Description.content) : "")',
+                        '"&p[url]="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&p[url]="+encodeURIComponent(d.URL)',
+                    '"&p[summary]="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&p[summary]="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&p[title]="+encodeURIComponent(d.title)'
                 )
             if sn == "tw":
                 answer += 'new_href = "https://www.twitter.com/share?"+{0}+{1};'.format(
-                        '"url="+encodeURIComponent('+dict_config["url"]+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
                     '"&text="+encodeURIComponent(d.title)'
                 )
             if sn == "od":
                 answer += 'new_href = "http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1"+{0}+{1};'.format(
-                        '"&st._surl="+encodeURIComponent('+dict_config["url"]+')' if btncr.page_url else '"&st._surl="+encodeURIComponent(d.URL)',
-                    '"&st.comments="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&st.comments="+encodeURIComponent(d.head.children.Description.content) : "")'
+                        '"&st._surl="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&st._surl="+encodeURIComponent(d.URL)',
+                    '"&st.comments="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&st.comments="+encodeURIComponent(d.head.children.Description.content) : "")'
                 )
             if sn == "gp":
                 answer += 'new_href = "https://plus.google.com/share?"+{0};'.format(
-                        '"url="+encodeURIComponent('+dict_config["url"]+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)'
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)'
                 )
             if sn == "ma":
                 answer += 'new_href = "http://connect.mail.ru/share?"+{0}+{1}+{2};'.format(
-                        '"url="+encodeURIComponent('+dict_config["url"]+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
-                    '"&description="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
+                    '"&description="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&title="+encodeURIComponent(d.title)'
                 )
             if sn == "li":
                 answer += 'new_href = "http://www.linkedin.com/shareArticle?mini=true"+{0}+{1}+{2};'.format(
-                        '"&url="+encodeURIComponent('+dict_config["url"]+')' if btncr.page_url else '"&url="+encodeURIComponent(d.URL)',
-                    '"&summary="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&summary="+encodeURIComponent(d.head.children.Description.content) : "")',
+                        '"&url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&url="+encodeURIComponent(d.URL)',
+                    '"&summary="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&summary="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&title="+encodeURIComponent(d.title)'
                 )
             if sn == "lj":
                 answer += 'new_href = "http://www.livejournal.com/update.bml?"+{0}+{1};'.format(
-                    '"event="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "event="+encodeURIComponent(d.head.children.Description.content) : "")',
+                    '"event="+encodeURIComponent("'+btncr.page_description+'")' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "event="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&subject="+encodeURIComponent(d.title)'
                 )
 
