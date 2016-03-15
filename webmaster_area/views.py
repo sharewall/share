@@ -273,40 +273,40 @@ def getconfig(request):
             answer += 'var new_href = "";'
             if sn == 'vk':
                 answer += 'new_href = "http://vk.com/share.php?url="+{0}+{1}+{2}+{3};'.format(
-                    'encodeURIComponent('+btncr.page_url+')' if btncr.page_url else 'encodeURIComponent(d.URL)',
+                        'encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else 'encodeURIComponent(d.URL)',
                     '"&description="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&title="+encodeURIComponent(d.title)',
                     '"&noparse=true"'
                 )
             if sn == "fb":
                 answer += 'new_href = "https://www.facebook.com/sharer/sharer.php?s=100"+{0}+{1}+{2};'.format(
-                    '"&p[url]="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"&p[url]="+encodeURIComponent(d.URL)',
+                        '"&p[url]="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&p[url]="+encodeURIComponent(d.URL)',
                     '"&p[summary]="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&p[summary]="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&p[title]="+encodeURIComponent(d.title)'
                 )
             if sn == "tw":
                 answer += 'new_href = "https://www.twitter.com/share?"+{0}+{1};'.format(
-                    '"url="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
                     '"&text="+encodeURIComponent(d.title)'
                 )
             if sn == "od":
                 answer += 'new_href = "http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1"+{0}+{1};'.format(
-                    '"&st._surl="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"&st._surl="+encodeURIComponent(d.URL)',
+                        '"&st._surl="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&st._surl="+encodeURIComponent(d.URL)',
                     '"&st.comments="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&st.comments="+encodeURIComponent(d.head.children.Description.content) : "")'
                 )
             if sn == "gp":
                 answer += 'new_href = "https://plus.google.com/share?"+{0};'.format(
-                    '"url="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)'
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)'
                 )
             if sn == "ma":
                 answer += 'new_href = "http://connect.mail.ru/share?"+{0}+{1}+{2};'.format(
-                    '"url="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
+                        '"url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"url="+encodeURIComponent(d.URL)',
                     '"&description="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&description="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&title="+encodeURIComponent(d.title)'
                 )
             if sn == "li":
                 answer += 'new_href = "http://www.linkedin.com/shareArticle?mini=true"+{0}+{1}+{2};'.format(
-                    '"&url="+encodeURIComponent('+btncr.page_url+')' if btncr.page_url else '"&url="+encodeURIComponent(d.URL)',
+                        '"&url="+encodeURIComponent("'+btncr.page_url+'")' if btncr.page_url else '"&url="+encodeURIComponent(d.URL)',
                     '"&summary="+encodeURIComponent('+btncr.page_description+')' if btncr.page_description else '(typeof d.head.children.Description != "undefined" ? "&summary="+encodeURIComponent(d.head.children.Description.content) : "")',
                     '"&title="+encodeURIComponent(d.title)'
                 )
