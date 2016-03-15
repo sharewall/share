@@ -422,6 +422,14 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-bottom: 40px;
     margin-top: 32px;
 }
+.sBtnConstructor > div:first-of-type > span{
+    color: #2fabf6;
+    font: 400 14px Roboto;
+    cursor: default;
+    line-height: 58px;
+    padding-left: 20px;
+    margin-right: 12px;
+}
 .sBtnConstructor > span:first-of-type, .sListConstructors > a:first-of-type{
     background-color: #ffae00;
     color: #ffffff;      
@@ -498,16 +506,35 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sBSExample{
     width: 550px;
 }
+.sSNExample > div.sSNTreeWrapper:first-of-type{
+    padding-top: 4px;
+}
+.sSNExample > div.sSNTreeWrapper:not(:first-of-type){
+    padding-top: 11px;
+}
 .sBSExample > div.sBSTreeWrapper{
     height: 50px;       
 }
 .sBSExample > div.sBSTreeWrapper:not(:last-of-type){
     margin-bottom: 6px;
 }
-.sBSTreeWrapper > input{
+.sBSTreeWrapper > input, .sSNTreeWrapper > input{
     display: none;
     opacity: 0;
     margin-left: -999999px;
+}
+.sSNTreeWrapper > input:checked + label{
+   background: url(../images/bs-chekbox-checked.png); 
+}
+.sSNTreeWrapper > label{
+    margin-top: 4px;
+    margin-right: 7px;
+}
+.sSNInput{
+    width: 14px;
+    height: 14px;
+    float: left;
+    background: url(../images/bs-chekbox.png);
 }
 .sBSInput, .sBSInput-Checked{
     width: 14px;
@@ -557,6 +584,28 @@ span[data-sn="li"] {
 }
 span[data-sn="li"] {
     background-position: -287px 0px;
+}
+.sAreaSelectWrapper select{
+    background: transparent;
+    width: 175px;
+    height: 28px;
+    padding: 5px;
+    padding-left: 8px;
+   /*line-height: 1;*/
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none; 
+}
+.sAreaSelectWrapper {
+    width: 155px;
+    height: 28px;
+    overflow: hidden;
+    background: url(../images/select-area-arrow.png) no-repeat right #fff;
+    color: #5d646e;
+    font: 400 14px Roboto;
+    border-right: 6px solid #ffffff;
+    position: relative;
+    top: 16px;
 }
 .sBSTreeWrapper > span[data-logo] {
     width: 41px;

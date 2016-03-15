@@ -36,7 +36,7 @@
                   <div class="sOverHidden-All">
                       <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
                       <a href="/buttons-constructor/" class="sVAlign-50p">Конструктор</a>
-                      <a href="/statistic/" class="sVAlign-50p">Статистика</a>
+                      <a href="/webmaster-area/statistic/" class="sVAlign-50p">Статистика</a>
                       <a href="javascript:return false;" class="sVAlign-50p">Рефералы</a>
                       <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
                   </div>                
@@ -65,23 +65,93 @@
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sBtnConstructor">
-          <h1>{{ page.header }}</h1>
-          <span class="sTextAlign-C">Кнопки</span>
-          <span class="sTextAlign-C">Реклама</span>
-          <div></div>
-          <div class="sError">  
-              {% if success %}
-              {{ success }}
-              {% endif %}
-              {% if error %}
-              {{ error }}
-              {% endif %}
-          </div>
-          <form method="post" action="/buttons-constructor/create/">
-              {% csrf_token %}
-              {{ buttons_constructor_form }}
-              <input type="submit" value="Create">
-          </form>
+              <h1>{{ page.header }}</h1>
+              <span class="sTextAlign-C">Кнопки</span>
+              <span class="sTextAlign-C">Реклама</span>
+              <div>
+                  <span class="sFloat-L">Площадки</span>
+                  <div class="sAreaSelectWrapper">
+                       <select name="webmaster_area">
+                          <option value="all">Любые</option>
+                          <option value="1">Площадка 1</option>
+                       </select>
+                   </div>
+                  <div style="clear:both;"></div>
+              </div>
+              <div class="sStepPad sFloat-L">
+                  <div id="Step-1"><span>Шаг 1</span><span></span>   
+                  </div>
+                  <div id="Step-2"><span>Шаг 2</span><span></span></div>
+                  <div id="Step-3"><span>Шаг 2</span><span></span></div>
+              </div>
+              <div class="sFormPad sFloat-R">
+                  <div class="sFormPad-Wrapper">
+                      <div class="sDescription">
+                          <p>1. Настройте вид и параметры кнопок</p>
+                          <p>2. Скопируйте и установите полученный код в HTML-вёрстку сайте туда, где хотите разместисть кнопки</p>                      
+                      </div>
+                      <div class="sBSExample sFloat-L">
+                          <p>Выберите стиль кнопок</p>
+                          <div class="sBSTreeWrapper">
+                              <input name="btns_images" value="1">
+                              <span class="sBSInput sBSInput-Checked"></span>
+                              <span data-sn="tw" class="sBSNode"></span>
+                              <span data-sn="vk" class="sBSNode"></span>
+                              <span data-sn="od" class="sBSNode"></span>
+                              <span data-sn="fb" class="sBSNode"></span>
+                              <span data-sn="gp" class="sBSNode"></span>
+                              <span data-sn="ma" class="sBSNode"></span>
+                              <span data-sn="li" class="sBSNode"></span>
+                              <span data-sn="lj" class="sBSNode"></span>
+                              <span data-logo="e" class="sBSNode"></span>
+                          </div>
+                          <div class="sBSTreeWrapper">
+                              <input name="" value="2">
+                              <span class="sBSInput"></span>
+                              <span data-sn="tw" class="sBSNode"></span>
+                              <span data-sn="vk" class="sBSNode"></span>
+                              <span data-sn="od" class="sBSNode"></span>
+                              <span data-sn="fb" class="sBSNode"></span>
+                              <span data-sn="gp" class="sBSNode"></span>
+                              <span data-sn="ma" class="sBSNode"></span>
+                              <span data-sn="li" class="sBSNode"></span>
+                              <span data-sn="lj" class="sBSNode"></span>
+                              <span data-logo="e" class="sBSNode"></span>
+                          </div>
+                      </div>
+                      <div class="sSNExample sFloat-R">
+                          <p>Доступны к выбору</p>
+                          <div class="sSNTreeWrapper">            
+                              <input id="sn-tw" type="checkbox" name="sn" value="tw">
+                              <label for="sn-tw" class="sSNInput"></label>
+                              <span>Twitter</span>
+                           </div>
+                          <div class="sSNTreeWrapper">               
+                              <input id="sn-vk" type="checkbox" name="sn" value="vk">
+                              <label for="sn-vk" class="sSNInput"></label>
+                              <span>Вконтакте</span>
+                           </div>
+                      </div>                      
+                      <div style="clear:both;"></div>
+                      <div class="sNext">
+                          <span>Далее</span>
+                      </div>
+                  </div>                      
+              </div>
+              <div style="clear:both;"></div>
+              <div class="sError">  
+                  {% if success %}
+                  {{ success }}
+                  {% endif %}
+                  {% if error %}
+                  {{ error }}
+                  {% endif %}
+              </div>
+              <form style="display:none;" method="post" action="/buttons-constructor/create/">
+                  {% csrf_token %}
+                  {{ buttons_constructor_form }}
+                  <input type="submit" value="Create">
+              </form>
           </div>
       </div>
   </div>
@@ -120,4 +190,12 @@
           </div>
            </div>
         </div>
+        <script>
+        $(function(){
+            $('div.sBSTreeWrapper').click(function(){ $this = $(this); $this.parent().find('div.sBSTreeWrapper span.sBSInput').removeClass('sBSInput-Checked'); $this.find('span.sBSInput').toggleClass('sBSInput-Checked'); $this.parent().find('div.sBSTreeWrapper input').attr('name',''); $this.find('input').attr('name','btns_images'); });
+            $('div.sSNTreeWrapper input').prop('checked','checked');
+            $('div.sSNTreeWrapper span').click(function(){ $this = $(this); var isChecked = $this.parent().find('input').prop('checked'); $this.parent().find('input').prop('checked', !isChecked).change(); });
+            $('div.sSNTreeWrapper input').change(function(){ $this = $(this); var sn = $this.attr('value'); $('div.sBSTreeWrapper span.sBSNode[data-sn='+sn+']').toggle(); });
+        });
+        </script>
   {% endblock %}
