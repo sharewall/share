@@ -431,7 +431,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-right: -5px;
 }
 .sBtnConstructor > div.sStepPad{
-    width: 265px;
+    width: 245px;
 }
 .sStepPad > div{
     width: 225px;
@@ -441,8 +441,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     font: 400 24px / 22px Roboto;
     margin-bottom: 20px;
     line-height: 47px;
-    padding-left: 18px;
     border-radius: 2px;
+}
+.sStepPad > div > span:nth-child(1){
+    padding-left: 18px;
 }
 .sStepPad > div > span:nth-child(2){    
     float: right; 
@@ -471,6 +473,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sFormPad-Wrapper > .sNext{
     height: 75px;
     border-top: 1px solid #fff;
+    margin-top: 43px;
 }
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
@@ -490,9 +493,79 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     line-height: 36px;
     margin: 0 auto;
     margin-top: 20px;
+    cursor: default;
 }
 .sBSExample{
     width: 550px;
+}
+.sBSExample > div.sBSTreeWrapper{
+    height: 50px;       
+}
+.sBSExample > div.sBSTreeWrapper:not(:last-of-type){
+    margin-bottom: 6px;
+}
+.sBSTreeWrapper > input{
+    display: none;
+    opacity: 0;
+    margin-left: -999999px;
+}
+.sBSInput, .sBSInput-Checked{
+    width: 14px;
+    height: 14px;
+    margin-top: 17px;
+    float: left;
+    margin-right: 11px;
+    background: url(../images/bs-chekbox.png);
+    
+}
+.sBSInput-Checked{
+    background: url(../images/bs-chekbox-checked.png);
+}
+.sBSTreeWrapper:hover {
+    background-color: #f1f1f1;
+}
+.sBSTreeWrapper > span[data-sn] {
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    margin-right: 15px;
+    /**/
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png");
+    background-repeat: no-repeat;
+    padding-top: 2px;
+}
+span[data-sn="tw"] {
+    background-position: 0px 0px;
+}
+span[data-sn="vk"] {
+    background-position: -41px 0px;
+}
+span[data-sn="od"] {
+    background-position: -82px 0px;
+}
+span[data-sn="fb"] {
+    background-position: -123px 0px;
+}
+span[data-sn="gp"] {
+    background-position: -164px 0px;
+}
+span[data-sn="ma"] {
+    background-position: -205px 0px;
+}
+span[data-sn="li"] {
+    background-position: -246px 0px;
+}
+span[data-sn="li"] {
+    background-position: -287px 0px;
+}
+.sBSTreeWrapper > span[data-logo] {
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    padding-top: 6px;
 }
 .sSNExample{
     width: 190px;
@@ -520,6 +593,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     font: 400 15px Roboto;   
     line-height: 33px;
     background-color: #e3e3e3;
+    cursor: default;
 }
 .sBtnConstructor > form > *{
      display: block;
