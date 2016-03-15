@@ -430,6 +430,83 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     width: 111px;
     margin-right: -5px;
 }
+.sBtnConstructor > div.sStepPad{
+    width: 265px;
+}
+.sStepPad > div{
+    width: 225px;
+    height: 47px;
+    background-color: #e3e3e3;
+    color: #32353c;
+    font: 400 24px / 22px Roboto;
+    margin-bottom: 20px;
+    line-height: 47px;
+    padding-left: 18px;
+    border-radius: 2px;
+}
+.sStepPad > div > span:nth-child(2){    
+    float: right; 
+    position: relative; 
+    right: -20px; 
+    border-left: 20px solid #e3e3e3;
+    border-top: 24px solid transparent; 
+    border-bottom: 24px solid transparent; 
+    border-radius: 1px;
+}
+.sStepPad > div:first-of-type > span:nth-child(2){    
+    border-left: 20px solid #ffae00;    
+}
+.sStepPad > div:first-of-type{
+    line-height: 47px!important;
+    color: #ffffff;
+    font: 400 24px / 22px Roboto;
+    background-color: #ffae00;
+    
+}
+.sFormPad > .sFormPad-Wrapper{
+    padding-left: 38px;
+    padding-top: 18px;
+    padding-right: 76px;
+}
+.sFormPad-Wrapper > .sNext{
+    height: 75px;
+    border-top: 1px solid #fff;
+}
+.FormPad > div.sDescription > p{
+    font: 400 15px / 22px Roboto;
+}
+.sBSExample, .sSNExample{
+    padding-top: 46px;   
+}
+.sNext > span{
+    background-color: #949494;
+    color: #ffffff;
+    font: 400 16px Roboto;
+    width: 142px;
+    height: 36px;
+    display: block;
+    border-radius: 30px;
+    text-align: center;
+    line-height: 36px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+.sBSExample{
+    width: 550px;
+}
+.sSNExample{
+    width: 190px;
+}
+.sBSExample > p, .sSNExample > p{
+    color: #3d4853;
+    font: 400 20px Roboto;
+}
+.sBtnConstructor > div.sFormPad{
+    width: 905px;
+    background-color: #f6f6f6;
+    font: 400 15px / 22px Roboto;
+    color: #3d4853;
+}
 .sListConstructors > a{
     font: 400 15px Roboto; 
     display: block;

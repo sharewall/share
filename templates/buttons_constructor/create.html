@@ -65,23 +65,48 @@
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sBtnConstructor">
-          <h1>{{ page.header }}</h1>
-          <span class="sTextAlign-C">Кнопки</span>
-          <span class="sTextAlign-C">Реклама</span>
-          <div></div>
-          <div class="sError">  
-              {% if success %}
-              {{ success }}
-              {% endif %}
-              {% if error %}
-              {{ error }}
-              {% endif %}
-          </div>
-          <form method="post" action="/buttons-constructor/create/">
-              {% csrf_token %}
-              {{ buttons_constructor_form }}
-              <input type="submit" value="Create">
-          </form>
+              <h1>{{ page.header }}</h1>
+              <span class="sTextAlign-C">Кнопки</span>
+              <span class="sTextAlign-C">Реклама</span>
+              <div></div>
+              <div class="sStepPad sFloat-L">
+                  <div id="Step-1"><span>Шаг 1</span><span></span>   
+                  </div>
+                  <div id="Step-2"><span>Шаг 2</span><span></span></div>
+                  <div id="Step-3"><span>Шаг 2</span><span></span></div>
+              </div>
+              <div class="sFormPad sFloat-R">
+                  <div class="sFormPad-Wrapper">
+                      <div class="sDescription">
+                          <p>1. Настройте вид и параметры кнопок</p>
+                          <p>2. Скопируйте и установите полученный код в HTML-вёрстку сайте туда, где хотите разместисть кнопки</p>                      
+                      </div>
+                      <div class="sBSExample sFloat-L">
+                          <p>Выберите стиль кнопок</p>
+                      </div>
+                      <div class="sSNExample sFloat-R">
+                          <p>Доступны к выбору</p>
+                      </div>                      
+                      <div style="clear:both;"></div>
+                      <div class="sNext">
+                          <span>Далее</span>
+                      </div>
+                  </div>                      
+              </div>
+              <div style="clear:both;"></div>
+              <div class="sError">  
+                  {% if success %}
+                  {{ success }}
+                  {% endif %}
+                  {% if error %}
+                  {{ error }}
+                  {% endif %}
+              </div>
+              <form style="display:none;" method="post" action="/buttons-constructor/create/">
+                  {% csrf_token %}
+                  {{ buttons_constructor_form }}
+                  <input type="submit" value="Create">
+              </form>
           </div>
       </div>
   </div>

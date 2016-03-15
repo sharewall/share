@@ -47,7 +47,8 @@ def update(request, pk):
             'page_title': request_instance.page_title,
             'page_description': request_instance.page_description,
             'location_buttons': request_instance.location_buttons,
-            'social_networks': request_instance.social_networks.split(',')#('vk','fb')
+            'social_networks': request_instance.social_networks.split(','), #('vk','fb')
+            'btns_images': request_instance.btns_images
         }
         buttons_constructor_form = ButtonsConstructorForm(data=request_form_data, instance=request_instance, auto_id=False)#, initial={'social_networks': ['vk','fb']}
         header = request_instance.name_constructor
