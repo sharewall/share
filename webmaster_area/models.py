@@ -3,11 +3,24 @@ from django.db import models
 from buttons_constructor.models import SocialNetworks, ButtonsConstructorModel
 #ButtonsConstructorModel, SocialNetworks
 
+class AreaCategory(models.Model):
+    name = models.CharField("name", max_length=200)
+    db_table = "AreaCategory"
+
+    def __str__(self):
+        return str("Category name: %s" % self.name)
+
 class WebmasterAreaModel(models.Model):
     buttons_constructor = models.ForeignKey(ButtonsConstructorModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related_buttons_constructor', related_name='webmaster_area')
     name_area = models.CharField(max_length=200, default='name area', verbose_name='name area')
     url = models.URLField('url', null=False, blank=False, default='')
-
+    NORMAL = 'NORM'
+    ADULT = 'ADUL'
+    AD_TYPES_CHOICES=(
+        (NORMAL,'NORMAL'),
+        (ADULT,'ADULT'),
+    )
+    ad_type = models.CharField("ad_type", max_length=4, choices=AD_TYPES_CHOICES, default=NORMAL)
     #date(2005, 7, 27)
     date = models.DateField('date', auto_now_add=True)
     sn_list = SocialNetworks.objects.all()
