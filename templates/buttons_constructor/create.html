@@ -64,11 +64,14 @@
 	{% block content %}
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
-          <div class="sBtnConstructor">
-              <h1>{{ page.header }}</h1>
+          <div class="sBtnConstructor">    
+              <div class="sH1Wrapper">
+                    <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
+                    <div class="sClear-Both"></div>
+              </div>
               <span class="sTextAlign-C">Кнопки</span>
               <span class="sTextAlign-C">Реклама</span>
-              <div>
+              <div class="sTopLine">
                   <span class="sFloat-L">Площадки</span>
                   <div class="sAreaSelectWrapper">
                        <select name="webmaster_area">

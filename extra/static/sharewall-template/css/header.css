@@ -61,7 +61,10 @@ a { text-decoration: none!important; }
 .sContent-H100{
     height: 100%;
 }
-.sContent-H100-139{
+.sClear-Both{
+    clear: both;
+}
+.sContent-H100-HF{
     height: -moz-calc(100% - 139px);
     height: -webkit-calc(100% - 139px);
     height: calc(100% - 139px);
@@ -405,24 +408,181 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-bottom: 93px;
 }
 .sBtnConstructor, .sListConstructors{
-    /*height: calc(100% - 139px);/*1272px .sContent-H100-139*/ 
     padding-bottom: 72px;
 }
-.sBtnConstructor > h1, .sListConstructors > h1{
-    margin: 0;
+.sH1Wrapper{
     padding-top: 85px;
     padding-bottom: 20px;
+}
+.sH1 + .sAdd-Circle{
+    background: url(../images/add-circle-1.png);
+    width: 33px;
+    height: 32px;
+    display: inline-block;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.sH1{
+    margin: 0;    
     color: #636d7a;
     font: 300 34px / 18px Roboto-Light;
+    line-height: 28px;
 }
-.sBtnConstructor > div:first-of-type, .sListConstructors > div:first-of-type{
+.sTableAreas{
+    color: #32353c;
+    font: 400 14px Roboto;
+    background-color: #e7e7e7;
+    /*margin-bottom: 573px; 72 573*/
+}
+.sEmptyCalc {
+    height: -moz-calc(100% - 139px);
+    height: -webkit-calc(100% - 139px);
+    height: calc(100% - 139px);
+}
+.sTableAreas a{
+    color: #008bd4;
+    font: 400 14px Roboto;
+}
+.sTableAreas .sTableAreasFieldName{
+    height: 45px;
+}
+.sTableAreasCell{
+    height: 41px;
+    border-bottom: 1px solid #fff;
+}
+.sTableAreasCell:nth-child(odd){    
+    background-color: #f6f6f6;
+}
+.sTableAreasCell:nth-child(even){
+    background-color: #efefef; 
+}
+.sTableAreasField{
+    float: left;  
+    height: inherit;
+}
+.sTableAreasCell .sTableAreasField .sAreaEdit, .sTableAreasCell .sTableAreasField .sAreaDelete{
+    width: 22px;
+    height: 22px;
+    padding-left: 0px;
+    position: relative;
+    display: block;
+}
+.sTableAreasField .sAreaEdit{
+    background: url(../images/area-edit-1.png) no-repeat;
+    left: 20px;
+    top: 10px;
+}
+.sTableAreasField .sAreaDelete{
+    background: url(../images/area-delete-1.png) no-repeat;
+    left: 47px;
+    bottom: 12px;
+}
+.sTableAreasField:not(:last-of-type){
+    border-right: 1px solid #bfbfbf;
+}
+.sTableAreasFieldName .sTableAreasField *{
+    padding-left: 20px;
+    line-height: 47px;
+}
+.sTableAreasCell .sTableAreasField *{
+    padding-left: 20px;
+    display: block;
+    height: inherit;
+    line-height: 42px;
+}
+.sTableAreas .sTableAreasField:nth-child(1){
+    width: 52px;
+}
+.sTableAreas .sTableAreasField:nth-child(2){
+    width: 152px;
+}
+.sTableAreas .sTableAreasField:nth-child(3){
+    width: 146px;
+}
+.sTableAreas .sTableAreasField:nth-child(4){
+    width: 526px;
+}
+.sTableAreas .sTableAreasField:nth-child(5){
+    width: 188px;
+}
+.sTableAreas .sTableAreasField:nth-child(6){
+    width: 102px;
+}
+.sAddAreaModal{
+    display: none;
+}
+.sAddAreaModal .sH1{
+    margin-top: 72px;
+    margin-bottom: 30px;
+}
+.sAddAreaWrapper{
+    background-color: #efefef;
+    margin-bottom: 88px;
+    color: #32353c;
+    font: 400 14px / 50px Roboto;
+    text-align: right;
+}
+.sAddAreaWrapper > div:not(:last-of-type){
+    padding-top: 58px;
+}
+.sAddAreaWrapper > div input{
+    width: 589px;
+    height: 35px;
+    border: 0px none;
+    border-radius: 7px;
+    margin-left: 17px;
+}
+.sAddAreaWrapper > div > div:nth-child(3),
+.sAddAreaWrapper > div > div:nth-child(4){
+    width: 591px;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    margin-left: 17px;
+    margin-top: 6px;
+}
+.sAddAreaWrapper > div > div:nth-child(4){
+    margin-top: 14px;
+}
+.sAddAreaWrapper > div > div:nth-child(4) > select{
+    padding-left: 5px;
+}
+.sAddAreaWrapper > div > div > select{
+    background: transparent;
+    border: 0;
+    width: 610px;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+.sAddAreaWrapper > div > div > select option{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 7px;
+}
+.sAddAreaWrapper > div:first-of-type{
+    width: 99px;
+    margin-left: 187px;
+}
+.sAddAreaWrapper > div label{
+    display: block;
+}
+.sAddAreaSubmit{
+    background: url(../images/add-submit-2.png) no-repeat;
+    width: 199px;
+    height: 69px;
+    display: block;
+    padding-bottom: 26px;
+    margin-top: 28px;
+}
+.sBtnConstructor > div.sTopLine, 
+.sListConstructors > div.sTopLine{
     background-color: #e8e8e8;
     border-radius: 3px;
     height: 58px;
     margin-bottom: 40px;
     margin-top: 32px;
 }
-.sBtnConstructor > div:first-of-type > span{
+.sBtnConstructor > div.sTopLine > span{
     color: #2fabf6;
     font: 400 14px Roboto;
     cursor: default;

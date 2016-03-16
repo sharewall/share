@@ -16,7 +16,7 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'webmaster_area/index.html'
     title = 'Webmaster area'
-    header = 'Список ваших площадок'
+    header = 'Площадки'
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
