@@ -140,6 +140,8 @@ def checkconfig(request):
         list_parsed_sn = [urlparse(sn.url).netloc for sn in list_sn]
         index_sn = None
         answer += 'console.log("%s");'%history_parsed_referrer
+        return HttpResponse(answer)
+    '''
         if history_referrer != history_rr and history_parsed_referrer in list_parsed_sn:
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
@@ -200,7 +202,7 @@ def checkconfig(request):
     else:
         answer = 'bad id!'
     return HttpResponse(answer)
-
+    '''
 def setcounter(request):
     return HttpResponse('setcounter')
     '''
