@@ -16,11 +16,14 @@ class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect('/buttons-constructor/create/')
+        '''
         return render(request, self.template_name,
         {
             "constructors": ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster),
             "page": { "title": self.title, 'header': self.header }
         })
+        '''
 
 @login_required
 def delete(request, pk):

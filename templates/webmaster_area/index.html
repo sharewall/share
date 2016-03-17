@@ -79,40 +79,29 @@
                   <div class="sTableAreasField"><span>Действия</span>
                   </div>
               </div>
+              {% for a in areas %}
               <div class="sTableAreasCell">
-                  <div class="sTableAreasField"><span>1</span>
+                  <div class="sTableAreasField"><span>{{ a.pk }}</span>
                   </div>
-                  <div class="sTableAreasField"><a>Название 1</a>
+                  <div class="sTableAreasField"><a>{{ a.name_area }}</a>
                   </div>
-                  <div class="sTableAreasField"><a>URL 1</a>
+                  <div class="sTableAreasField"><a href="{{ a.url }}">{{ a.url }}</a>
                   </div>
-                  <div class="sTableAreasField"><span>Категории/Категории, Категории</span>
+                  <div class="sTableAreasField"><span>{{ a.area_category }}</span>
                   </div>
-                  <div class="sTableAreasField"><span>Нормальный</span>
+                  <div class="sTableAreasField"><span>{{ a.get_ad_type_display }}</span>
                   </div>
                   <div class="sTableAreasField">
                       <span class="sAreaEdit"></span>
-                      <a class="sAreaDelete"></a>
+                      <a href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
                   </div>
               </div>
-              <div class="sTableAreasCell">
-                  <div class="sTableAreasField"><span>2</span>
-                  </div>
-                  <div class="sTableAreasField"><a>Название 2</a>
-                  </div>
-                  <div class="sTableAreasField"><a>URL 2</a>
-                  </div>
-                  <div class="sTableAreasField"><span>Категории/Категории, Категории</span>
-                  </div>
-                  <div class="sTableAreasField"><span>Для взрослых</span>
-                  </div>
-                   <div class="sTableAreasField">
-                      <span class="sAreaEdit"></span>
-                      <a class="sAreaDelete"></a>
-                  </div>
-              </div>
+              {% endfor %}
           </div>         
-          
+                        <form id="create_form" style="display:none; opacity:0;" method="post" action="/webmaster-area/create/">
+                            {% csrf_token %}
+                            <input type="submit" />
+                        </form>
           <div class="sAddAreaModal">
               <div class="sH1">Добавление площадки</div>
               <div class="sAddAreaWrapper">  
@@ -124,26 +113,27 @@
                   </div>
                   <div class="sFloat-L">  
                        <div>                       
-                            <input id="add_name_area" type="text" name="name_area" value="">
+                            <input form="create_form" id="add_name_area" type="text" name="name_area" value="" maxlength="200" required>
                         </div> 
                         <div>        
-                            <input id="add_url" type="url" name="url" value="">
+                            <input form="create_form" id="add_url" type="url" name="url" value="" required>
                         </div> 
                         <div>                           
-                            <select id="add_category" name="category" size="2" multiple>
-                                <option value="1">Категория 1</option>
-                                <option value="2">Категория 2</option>
+                          <select form="create_form" id="add_category" name="area_category" size="{{ area_category.count }}" multiple required>
+                                {% for a in area_category %}
+                                <option value="{{ a.pk }}">{{ a.name }}</option>
+                                {% endfor %}
                             </select>
                         </div> 
                         <div>                           
-                            <select id="add_ad_type" name="ad_type">
-                                <option value="1">Нормальный</option>
-                                <option value="2">Для взрослых</option>
+                            <select form="create_form" id="add_ad_type" name="ad_type" required>
+                                <option value="NORM">Нормальный</option>
+                                <option value="ADUL">Для взрослых</option>
                             </select>
                         </div> 
                   </div>                
                   <div class="sClear-Both"></div>
-                  <span class="sAddAreaSubmit sMargin-Auto"></span>
+                  <span onclick="formSubmit()" class="sAddAreaSubmit sMargin-Auto"></span>
               </div>
           </div>
       </div>
@@ -184,6 +174,9 @@
            </div>
         </div>
         <script>
+            function formSubmit(){
+                $('form input[type="submit"]').click();
+            }
             $(function(){
                 $('div.sH1Wrapper span.sAdd-Circle').click(function(){ $('body > div:nth-child(2)').toggleClass('sHeight-Auto').toggleClass('sContent-H100-HF'); $('div.sAddAreaModal').toggle(); });
                 $('.sAddAreaWrapper > div:nth-child(1) > label:nth-child(4)').css('padding-top', $('select#add_category').attr('size') * 30);

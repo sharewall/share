@@ -61,7 +61,10 @@ a { text-decoration: none!important; }
 .sContent-H100{
     height: 100%;
 }
-.sContent-H100-139{
+.sClear-Both{
+    clear: both;
+}
+.sContent-H100-HF{
     height: -moz-calc(100% - 139px);
     height: -webkit-calc(100% - 139px);
     height: calc(100% - 139px);
@@ -405,22 +408,187 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-bottom: 93px;
 }
 .sBtnConstructor, .sListConstructors{
-    /*height: calc(100% - 139px);/*1272px .sContent-H100-139*/ 
     padding-bottom: 72px;
 }
-.sBtnConstructor > h1, .sListConstructors > h1{
-    margin: 0;
+.sH1Wrapper{
     padding-top: 85px;
     padding-bottom: 20px;
+}
+.sH1 + .sAdd-Circle{
+    background: url(../images/add-circle-1.png);
+    width: 33px;
+    height: 32px;
+    display: inline-block;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.sH1{
+    margin: 0;    
     color: #636d7a;
     font: 300 34px / 18px Roboto-Light;
+    line-height: 28px;
 }
-.sBtnConstructor > div:first-of-type, .sListConstructors > div:first-of-type{
+.sTableAreas{
+    color: #32353c;
+    font: 400 14px Roboto;
+    background-color: #e7e7e7;
+    /*margin-bottom: 573px; 72 573*/
+}
+.sEmptyCalc {
+    height: -moz-calc(100% - 139px);
+    height: -webkit-calc(100% - 139px);
+    height: calc(100% - 139px);
+}
+.sTableAreas a{
+    color: #008bd4;
+    font: 400 14px Roboto;
+}
+.sTableAreas .sTableAreasFieldName{
+    height: 45px;
+}
+.sTableAreasCell{
+    height: 41px;
+    border-bottom: 1px solid #fff;
+}
+.sTableAreasCell:nth-child(odd){    
+    background-color: #f6f6f6;
+}
+.sTableAreasCell:nth-child(even){
+    background-color: #efefef; 
+}
+.sTableAreasField{
+    float: left;  
+    height: inherit;
+}
+.sTableAreasCell .sTableAreasField .sAreaEdit, .sTableAreasCell .sTableAreasField .sAreaDelete{
+    width: 22px;
+    height: 22px;
+    padding-left: 0px;
+    position: relative;
+    display: block;
+}
+.sTableAreasField .sAreaEdit{
+    background: url(../images/area-edit-1.png) no-repeat;
+    left: 20px;
+    top: 10px;
+}
+.sTableAreasField .sAreaDelete{
+    background: url(../images/area-delete-1.png) no-repeat;
+    left: 47px;
+    bottom: 12px;
+}
+.sTableAreasField:not(:last-of-type){
+    border-right: 1px solid #bfbfbf;
+}
+.sTableAreasFieldName .sTableAreasField *{
+    padding-left: 20px;
+    line-height: 47px;
+}
+.sTableAreasCell .sTableAreasField *{
+    padding-left: 20px;
+    display: block;
+    height: inherit;
+    line-height: 42px;
+}
+.sTableAreas .sTableAreasField:nth-child(1){
+    width: 52px;
+}
+.sTableAreas .sTableAreasField:nth-child(2){
+    width: 152px;
+}
+.sTableAreas .sTableAreasField:nth-child(3){
+    width: 146px;
+}
+.sTableAreas .sTableAreasField:nth-child(4){
+    width: 526px;
+}
+.sTableAreas .sTableAreasField:nth-child(5){
+    width: 188px;
+}
+.sTableAreas .sTableAreasField:nth-child(6){
+    width: 102px;
+}
+.sAddAreaModal{
+    display: none;
+}
+.sAddAreaModal .sH1{
+    margin-top: 72px;
+    margin-bottom: 30px;
+}
+.sAddAreaWrapper{
+    background-color: #efefef;
+    margin-bottom: 88px;
+    color: #32353c;
+    font: 400 14px / 50px Roboto;
+    text-align: right;
+}
+.sAddAreaWrapper > div:not(:last-of-type){
+    padding-top: 58px;
+}
+.sAddAreaWrapper > div input{
+    width: 589px;
+    height: 35px;
+    border: 0px none;
+    border-radius: 7px;
+    margin-left: 17px;
+}
+.sAddAreaWrapper > div > div:nth-child(3),
+.sAddAreaWrapper > div > div:nth-child(4){
+    width: 591px;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    margin-left: 17px;
+    margin-top: 6px;
+}
+.sAddAreaWrapper > div > div:nth-child(4){
+    margin-top: 14px;
+}
+.sAddAreaWrapper > div > div:nth-child(4) > select{
+    padding-left: 5px;
+}
+.sAddAreaWrapper > div > div > select{
+    background: transparent;
+    border: 0;
+    width: 610px;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+.sAddAreaWrapper > div > div > select option{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 7px;
+}
+.sAddAreaWrapper > div:first-of-type{
+    width: 99px;
+    margin-left: 187px;
+}
+.sAddAreaWrapper > div label{
+    display: block;
+}
+.sAddAreaSubmit{
+    background: url(../images/add-submit-2.png) no-repeat;
+    width: 199px;
+    height: 69px;
+    display: block;
+    padding-bottom: 26px;
+    margin-top: 28px;
+}
+.sBtnConstructor > div.sTopLine, 
+.sListConstructors > div.sTopLine{
     background-color: #e8e8e8;
     border-radius: 3px;
     height: 58px;
     margin-bottom: 40px;
     margin-top: 32px;
+}
+.sBtnConstructor > div.sTopLine > span{
+    color: #2fabf6;
+    font: 400 14px Roboto;
+    cursor: default;
+    line-height: 58px;
+    padding-left: 20px;
+    margin-right: 12px;
 }
 .sBtnConstructor > span:first-of-type, .sListConstructors > a:first-of-type{
     background-color: #ffae00;
@@ -429,6 +597,197 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: 35px;
     width: 111px;
     margin-right: -5px;
+}
+.sBtnConstructor > div.sStepPad{
+    width: 245px;
+}
+.sStepPad > div{
+    width: 225px;
+    height: 47px;
+    background-color: #e3e3e3;
+    color: #32353c;
+    font: 400 24px / 22px Roboto;
+    margin-bottom: 20px;
+    line-height: 47px;
+    border-radius: 2px;
+}
+.sStepPad > div > span:nth-child(1){
+    padding-left: 18px;
+}
+.sStepPad > div > span:nth-child(2){    
+    float: right; 
+    position: relative; 
+    right: -20px; 
+    border-left: 20px solid #e3e3e3;
+    border-top: 24px solid transparent; 
+    border-bottom: 24px solid transparent; 
+    border-radius: 1px;
+}
+.sStepPad > div:first-of-type > span:nth-child(2){    
+    border-left: 20px solid #ffae00;    
+}
+.sStepPad > div:first-of-type{
+    line-height: 47px!important;
+    color: #ffffff;
+    font: 400 24px / 22px Roboto;
+    background-color: #ffae00;
+    
+}
+.sFormPad > .sFormPad-Wrapper{
+    padding-left: 38px;
+    padding-top: 18px;
+    padding-right: 76px;
+}
+.sFormPad-Wrapper > .sNext{
+    height: 75px;
+    border-top: 1px solid #fff;
+    margin-top: 43px;
+}
+.FormPad > div.sDescription > p{
+    font: 400 15px / 22px Roboto;
+}
+.sBSExample, .sSNExample{
+    padding-top: 46px;   
+}
+.sNext > span{
+    background-color: #949494;
+    color: #ffffff;
+    font: 400 16px Roboto;
+    width: 142px;
+    height: 36px;
+    display: block;
+    border-radius: 30px;
+    text-align: center;
+    line-height: 36px;
+    margin: 0 auto;
+    margin-top: 20px;
+    cursor: default;
+}
+.sBSExample{
+    width: 550px;
+}
+.sSNExample > div.sSNTreeWrapper:first-of-type{
+    padding-top: 4px;
+}
+.sSNExample > div.sSNTreeWrapper:not(:first-of-type){
+    padding-top: 11px;
+}
+.sBSExample > div.sBSTreeWrapper{
+    height: 50px;       
+}
+.sBSExample > div.sBSTreeWrapper:not(:last-of-type){
+    margin-bottom: 6px;
+}
+.sBSTreeWrapper > input, .sSNTreeWrapper > input{
+    display: none;
+    opacity: 0;
+    margin-left: -999999px;
+}
+.sSNTreeWrapper > input:checked + label{
+   background: url(../images/bs-chekbox-checked.png); 
+}
+.sSNTreeWrapper > label{
+    margin-top: 4px;
+    margin-right: 7px;
+}
+.sSNInput{
+    width: 14px;
+    height: 14px;
+    float: left;
+    background: url(../images/bs-chekbox.png);
+}
+.sBSInput, .sBSInput-Checked{
+    width: 14px;
+    height: 14px;
+    margin-top: 17px;
+    float: left;
+    margin-right: 11px;
+    background: url(../images/bs-chekbox.png);
+    
+}
+.sBSInput-Checked{
+    background: url(../images/bs-chekbox-checked.png);
+}
+.sBSTreeWrapper:hover {
+    background-color: #f1f1f1;
+}
+.sBSTreeWrapper > span[data-sn] {
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    margin-right: 15px;
+    /**/
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png");
+    background-repeat: no-repeat;
+    padding-top: 2px;
+}
+span[data-sn="tw"] {
+    background-position: 0px 0px;
+}
+span[data-sn="vk"] {
+    background-position: -41px 0px;
+}
+span[data-sn="od"] {
+    background-position: -82px 0px;
+}
+span[data-sn="fb"] {
+    background-position: -123px 0px;
+}
+span[data-sn="gp"] {
+    background-position: -164px 0px;
+}
+span[data-sn="ma"] {
+    background-position: -205px 0px;
+}
+span[data-sn="li"] {
+    background-position: -246px 0px;
+}
+span[data-sn="li"] {
+    background-position: -287px 0px;
+}
+.sAreaSelectWrapper select{
+    background: transparent;
+    width: 175px;
+    height: 28px;
+    padding: 5px;
+    padding-left: 8px;
+   /*line-height: 1;*/
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none; 
+}
+.sAreaSelectWrapper {
+    width: 155px;
+    height: 28px;
+    overflow: hidden;
+    background: url(../images/select-area-arrow.png) no-repeat right #fff;
+    color: #5d646e;
+    font: 400 14px Roboto;
+    border-right: 6px solid #ffffff;
+    position: relative;
+    top: 16px;
+}
+.sBSTreeWrapper > span[data-logo] {
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    padding-top: 6px;
+}
+.sSNExample{
+    width: 190px;
+}
+.sBSExample > p, .sSNExample > p{
+    color: #3d4853;
+    font: 400 20px Roboto;
+}
+.sBtnConstructor > div.sFormPad{
+    width: 905px;
+    background-color: #f6f6f6;
+    font: 400 15px / 22px Roboto;
+    color: #3d4853;
 }
 .sListConstructors > a{
     font: 400 15px Roboto; 
@@ -443,6 +802,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     font: 400 15px Roboto;   
     line-height: 33px;
     background-color: #e3e3e3;
+    cursor: default;
 }
 .sBtnConstructor > form > *{
      display: block;
@@ -479,7 +839,11 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     background-position: 50% 50%;
     color: #ffffff;
     font: 400 14px / 22px Roboto;
+    text-align: center;
+    line-height: 39px;
+    float: right;
 }
+
 /* 4 media point smaller 1145px,965px,781px,659px
 a:has(img) { background: none; }
 p:nth-of-type(3n+0)

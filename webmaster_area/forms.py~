@@ -5,9 +5,17 @@ from django import forms
 class WebmasterAreaForm(forms.ModelForm):
     name_area = forms.CharField(max_length=200)
     url = forms.URLField()
-    def __init__(self, user, *args, **kwargs):
+    NORMAL = 'NORM'
+    ADULT = 'ADUL'
+    AD_TYPES_CHOICES=(
+        (NORMAL,'Нормальный'),
+        (ADULT,'Для взрослых'),
+    )
+    ad_type = forms.ChoiceField(choices=AD_TYPES_CHOICES, required=True, initial=NORMAL)
+    #def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(WebmasterAreaForm, self).__init__(*args, **kwargs)
-        self.fields['buttons_constructor'] = forms.ModelChoiceField(queryset=ButtonsConstructorModel.objects.filter(cabinet_webmaster=user.cabinet_webmaster))
+        #self.fields['buttons_constructor'] = ButtonsConstructorModel.objects.filter(cabinet_webmaster=user.cabinet_webmaster).order_by('-pk')[0]
     class Meta:
         model = WebmasterAreaModel
-        fields = ('name_area', 'url', 'buttons_constructor')
+        fields = ('name_area', 'url', 'ad_type')

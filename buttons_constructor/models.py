@@ -30,7 +30,7 @@ class SocialNetworks(models.Model):
 class ButtonsConstructorModel(models.Model):
     cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="buttons_constructor")
     btns_images = models.ForeignKey(BtnsImages, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
-    name_constructor = models.CharField("name_constructor", max_length=50, default="name constructor")
+    name_constructor = models.CharField("name_constructor", max_length=50, default="Default constructor")
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
     for s in sn_list:

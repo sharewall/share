@@ -17,10 +17,17 @@ class WebmasterAreaModel(models.Model):
     NORMAL = 'NORM'
     ADULT = 'ADUL'
     AD_TYPES_CHOICES=(
-        (NORMAL,'NORMAL'),
-        (ADULT,'ADULT'),
+        (NORMAL,'Нормальный'),
+        (ADULT,'Для взрослых'),
     )
     ad_type = models.CharField("ad_type", max_length=4, choices=AD_TYPES_CHOICES, default=NORMAL)
+    area_cat_list = AreaCategory.objects.all()
+    AREA_CAT_DEFAULT = ''
+    for a in area_cat_list:
+        if not a.name in AREA_CAT_DEFAULT:
+            AREA_CAT_DEFAULT += a.name + ','
+    AREA_CAT_DEFAULT = AREA_CAT_DEFAULT[:-1]
+    area_category = models.CharField('area_category', max_length=600, default=AREA_CAT_DEFAULT)
     #date(2005, 7, 27)
     date = models.DateField('date', auto_now_add=True)
     sn_list = SocialNetworks.objects.all()

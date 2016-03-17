@@ -57,17 +57,85 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
-  <div class="sHeight-Auto">
+  <div class="sContent-H100-HF">
       <div class="sContainer sMargin-Auto">
-          <div class="sListConstructors">
-          <h1>{{ page.header }}</h1>
-          <a class="sTextAlign-C" href="/webmaster-area/create/">Создать площадку</a>        
-          <div></div>          
-          {% for c in areas %}
-          <a class="sDisplay-Inline" href="/webmaster-area/{{ c.pk }}/">{{ c.name_area }}</a>
-          <a class="sDisplay-Inline" href="/webmaster-area/delete/{{ c.pk }}/">&#10007;</a>
-          <br/>
-          {% endfor %}
+          <div class="sH1Wrapper">
+              <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
+              <span class="sAdd-Circle"></span>
+              <div class="sClear-Both"></div>
+          </div>        
+          <div class="sTableAreas">
+              <div class="sTableAreasFieldName">
+                  <div class="sTableAreasField"><span>ID</span>
+                  </div>
+                  <div class="sTableAreasField"><span>Название</span>
+                  </div>
+                  <div class="sTableAreasField"><span>URL</span>
+                  </div>
+                  <div class="sTableAreasField"><span>Категории</span>
+                  </div>
+                  <div class="sTableAreasField"><span>Типы рекламы</span>
+                  </div>
+                  <div class="sTableAreasField"><span>Действия</span>
+                  </div>
+              </div>
+              {% for a in areas %}
+              <div class="sTableAreasCell">
+                  <div class="sTableAreasField"><span>{{ a.pk }}</span>
+                  </div>
+                  <div class="sTableAreasField"><a>{{ a.name_area }}</a>
+                  </div>
+                  <div class="sTableAreasField"><a href="{{ a.url }}">{{ a.url }}</a>
+                  </div>
+                  <div class="sTableAreasField"><span>{{ a.area_category }}</span>
+                  </div>
+                  <div class="sTableAreasField"><span>{{ a.get_ad_type_display }}</span>
+                  </div>
+                  <div class="sTableAreasField">
+                      <span class="sAreaEdit"></span>
+                      <a href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>         
+                        <form id="create_form" style="display:none; opacity:0;" method="post" action="/webmaster-area/create/">
+                            {% csrf_token %}
+                            <input type="submit" />
+                        </form>
+          <div class="sAddAreaModal">
+              <div class="sH1">Добавление площадки</div>
+              <div class="sAddAreaWrapper">  
+                  <div class="sFloat-L">
+                      <label for="add_name_area">Название</label>
+                      <label for="add_url">URL</label> 
+                      <label for="add_category">Категории</label>
+                      <label for="add_ad_type">Типы рекламы</label>
+                  </div>
+                  <div class="sFloat-L">  
+                       <div>                       
+                            <input form="create_form" id="add_name_area" type="text" name="name_area" value="" maxlength="200" required>
+                        </div> 
+                        <div>        
+                            <input form="create_form" id="add_url" type="url" name="url" value="" required>
+                        </div> 
+                        <div>                           
+                          <select form="create_form" id="add_category" name="area_category" size="{{ area_category.count }}" multiple>
+                                {% for a in area_category %}
+                                <option value="{{ a.pk }}">{{ a.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div> 
+                        <div>                           
+                            <select form="create_form" id="add_ad_type" name="ad_type">
+                                <option value="NORM">Нормальный</option>
+                                <option value="ADUL">Для взрослых</option>
+                            </select>
+                        </div> 
+                  </div>                
+                  <div class="sClear-Both"></div>
+                  <span onclick="formSubmit()" class="sAddAreaSubmit sMargin-Auto"></span>
+              </div>
+          </div>
       </div>
   </div>
 	{% endblock %}
@@ -106,22 +174,12 @@
            </div>
         </div>
         <script>
+            function formSubmit(){
+                $('form input[type="submit"]').click();
+            }
             $(function(){
-                $('.sSettings-Field > span:last-of-type:not(.sNotLast)').click(function(){
-                     //$('html, body').off('click'); 
-                     $parent = $(this).parent(); 
-                     $parent.next('.sSettings-Field-Edit').slideToggle(200).prev().slideToggle(200);
-                     //setTimeout("$('html, body').click(function(){ $('.sSettings-Field-Edit').slideUp(200); $('.sSettings-Field').slideDown(200); });", 700);
-                });
-                $('.sSettings-Field-Edit > span:last-of-type:not(.sNotLast)').click(function(){
-                     $parent = $(this).parent(); 
-                     $.ajax({url: '/cabinet-webmaster/settings/', headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, type: "POST", data: $parent.find('form').serialize(), beforeSend: function(){ $('html, body').css('cursor','wait');  }, success: function(response, status, jqXHR) { console.log(response);
-          if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
-          else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
-          }, error: function(xhr){ console.log(xhr.statusText + ", " + xhr.responseText); }, complete: function(){ $('html, body').css('cursor','default'); 
-          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
-          } });
-                });
-            });
+                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ $('body > div:nth-child(2)').toggleClass('sHeight-Auto').toggleClass('sContent-H100-HF'); $('div.sAddAreaModal').toggle(); });
+                $('.sAddAreaWrapper > div:nth-child(1) > label:nth-child(4)').css('padding-top', $('select#add_category').attr('size') * 30);
+            });            
         </script>
   {% endblock %}

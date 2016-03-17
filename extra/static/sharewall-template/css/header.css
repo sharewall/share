@@ -573,6 +573,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     display: block;
     padding-bottom: 26px;
     margin-top: 28px;
+    cursor: pointer;
 }
 .sBtnConstructor > div.sTopLine, 
 .sListConstructors > div.sTopLine{
