@@ -60,7 +60,6 @@
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sListConstructors">
-              <a class="sBtnNode-E"></a>
               <h1>{{ page.header }}</h1>
               <div></div>          
               <div class="sStatistic">

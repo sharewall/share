@@ -107,7 +107,7 @@ def create(request):
         area_category_clear = ''
         for a in area_category_list:
             area_category_clear += AreaCategory.objects.get(pk=a).name + ','
-        area_category_clear = area_category_clear[:1]
+        area_category_clear = area_category_clear[:-1]
         request_post_data = {
             'name_area': request.POST.get('name_area', ''),
             'url': request.POST.get('url', ''),
