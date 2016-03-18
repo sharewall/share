@@ -128,14 +128,14 @@
                               <input form="createConst" value="{{ b.pk }}">
                               <span class="sBSInput"></span>
                               {% endif %}
-                              <span data-sn="tw" class="sBSNode"></span>
-                              <span data-sn="vk" class="sBSNode"></span>
-                              <span data-sn="od" class="sBSNode"></span>
-                              <span data-sn="fb" class="sBSNode"></span>
-                              <span data-sn="gp" class="sBSNode"></span>
-                              <span data-sn="ma" class="sBSNode"></span>
-                              <span data-sn="li" class="sBSNode"></span>
-                              <span data-sn="lj" class="sBSNode"></span>
+                              <span data-sn="tw" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="vk" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="od" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="fb" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="gp" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="ma" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="li" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="lj" class="sBSNode sBSNode-{{ b.pk }}"></span>
                               <span data-logo="e" class="sBSNode"></span>
                           </div>
                           {% endfor %}

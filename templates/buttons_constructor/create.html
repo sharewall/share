@@ -80,9 +80,9 @@
                   <a href="/webmaster-area/" class="sFloat-L">Площадки</a>
                   <div class="sAreaSelectWrapper">
                        {% if areas.count = 0 %} 
-                       <select class="sDisabled" name="webmaster_area">
+                       <select form="createConst" class="sDisabled" name="webmaster_area">
                        {% else %}
-                       <select name="webmaster_area">
+                       <select form="createConst" name="webmaster_area">
                        {% endif %}
                           <option value="all">Любые</option>
                           {% for a in areas %}

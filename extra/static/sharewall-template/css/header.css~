@@ -725,13 +725,13 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     width: 282px;
     height: 395px;
     margin-top: 16px;
-    overflow: hidden;
 }
 .sAdditionalWrapper > input{
     border-radius: 10px;
     border: 1px solid #f3f3f3;
     width: 282px;
     height: 39px;
+    padding-left: 5px;
 }
 .sAdditionalWrapper > textarea{
     resize: vertical;
@@ -739,6 +739,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     border: 1px solid #f3f3f3;
     width: 282px;
     height: 136px;
+    font: 400 15px / 22px Roboto;
+    color: #3d4853;
+    padding-left: 5px;
 }
 .sBSExample{
     width: 550px;
@@ -798,8 +801,14 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     background-repeat: no-repeat;
     padding-top: 2px;
 }
-.sBSNode-2{
+.sBSNode-1{
     background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-1.png")!important;
+}
+.sBSNode-2{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-2.png")!important;
+}
+.sBSNode-3{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
