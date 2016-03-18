@@ -62,29 +62,51 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
-  <div class="sHeight-Auto">
+  <div class="sContent-PB">
       <div class="sContainer sMargin-Auto">
-          <div class="sBtnConstructor">
-              <h1>{{ page.header }}</h1>
+          <div class="sBtnConstructor">    
+              <div class="sH1Wrapper">
+                    <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
+                    <div class="sClear-Both"></div>
+              </div>
+              {% if areas.count = 0 %}
+              <span class="sTextAlign-C sDisabled">Кнопки</span>
+              <span class="sTextAlign-C sDisabled">Реклама</span>
+              {% else %}
               <span class="sTextAlign-C">Кнопки</span>
               <span class="sTextAlign-C">Реклама</span>
-              <div>
-                  <span class="sFloat-L">Площадки</span>
+              {% endif %}
+              <div class="sTopLine">
+                  <a href="/webmaster-area/" class="sFloat-L">Площадки</a>
                   <div class="sAreaSelectWrapper">
+                       {% if areas.count = 0 %}
+                       <select class="sDisabled" name="webmaster_area">
+                       {% else %}
                        <select name="webmaster_area">
+                       {% endif %}
                           <option value="all">Любые</option>
-                          <option value="1">Площадка 1</option>
                        </select>
                    </div>
+                   {% if areas.count = 0 %}
+                   <a style="right: -160px; position: relative; bottom: 28px; color: rgb(255, 174, 0); text-decoration: underline dotted rgb(255, 174, 0) ! important;" class="" href="/webmaster-area/?create">Создать площадку</a>
+                   {% endif %}
                   <div style="clear:both;"></div>
               </div>
+              {% if areas.count = 0 %}
+              <div class="sStepPad sFloat-L sDisabled">
+              {% else %}
               <div class="sStepPad sFloat-L">
+              {% endif %}
                   <div id="Step-1"><span>Шаг 1</span><span></span>   
                   </div>
                   <div id="Step-2"><span>Шаг 2</span><span></span></div>
                   <div id="Step-3"><span>Шаг 2</span><span></span></div>
               </div>
+              {% if areas.count = 0 %}
+              <div class="sFormPad sFloat-R sDisabled">
+              {% else %}
               <div class="sFormPad sFloat-R">
+              {% endif %}
                   <div class="sFormPad-Wrapper">
                       <div class="sDescription">
                           <p>1. Настройте вид и параметры кнопок</p>

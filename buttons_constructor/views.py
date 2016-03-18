@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_
 from django.http import HttpResponse, HttpResponseRedirect
 from buttons_constructor.forms import ButtonsConstructorForm
 from buttons_constructor.models import ButtonsConstructorModel
+from webmaster_area.models import WebmasterAreaModel
 
 class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -124,7 +125,8 @@ def create(request):
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header },
-            'buttons_constructor_form': ButtonsConstructorForm()
+            'buttons_constructor_form': ButtonsConstructorForm(),
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
         })
 
 

@@ -112,12 +112,17 @@ a { text-decoration: none!important; }
     -o-transition: width 0.5s;
     -ms-transition: width 0.5s;
 }
+.sDisabled{
+    pointer-events: none;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.65;
+}
 .sContainer > div.sHeaderWrapper > div:last-of-type{
     border-left: 0px none;
 }
 .sFloat-R{
-    float: right;
-        
+    float: right;       
 }
 .sFloat-L{
     float: left;
@@ -593,10 +598,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-bottom: 40px;
     margin-top: 32px;
 }
-.sBtnConstructor > div.sTopLine > span{
+.sBtnConstructor > div.sTopLine > a{
     color: #2fabf6;
-    font: 400 14px Roboto;
-    cursor: default;
+    font: 400 14px Roboto;    
     line-height: 58px;
     padding-left: 20px;
     margin-right: 12px;

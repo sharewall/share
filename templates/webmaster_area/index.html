@@ -178,8 +178,11 @@
                 $('form input[type="submit"]').click();
             }
             $(function(){
-                $('div.sH1Wrapper span.sAdd-Circle').click(function(){        $('div.sAddAreaModal').toggle(); });
+                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ $('div.sAddAreaModal').toggle(); });
                 $('.sAddAreaWrapper > div:nth-child(1) > label:nth-child(4)').css('padding-top', $('select#add_category').attr('size') * 30);
+                if(location.search.indexOf('?create') != -1){
+                    $('div.sH1Wrapper span.sAdd-Circle').click(); 
+                }
             });            
         </script>
   {% endblock %}
