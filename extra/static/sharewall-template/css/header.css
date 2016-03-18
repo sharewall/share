@@ -57,6 +57,13 @@ a { text-decoration: none!important; }
 }
 #footer{
     height: 77px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+.sWrapper{
+    min-height: 100%;
+    position: relative;
 }
 .sContent-H100{
     height: 100%;
@@ -68,6 +75,9 @@ a { text-decoration: none!important; }
     height: -moz-calc(100% - 139px);
     height: -webkit-calc(100% - 139px);
     height: calc(100% - 139px);
+}
+.sContent-PB{
+    padding-bottom: 77px;
 }
 .sBd-BlueH{
     background-color: #2fabf6;
