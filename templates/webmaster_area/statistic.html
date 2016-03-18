@@ -73,8 +73,6 @@
                   {{ a.total_share_counter }}
               {% endfor %}
               </div>
-              <div class="sCodeHere-H">Код для вставки</div>
-              <div class="sCodeHere" id="sCodeHere"></div>
           </div>
       </div>
   </div>
@@ -113,25 +111,4 @@
           </div>
            </div>
         </div>
-        <script>
-            $(function(){
-                $('.sSettings-Field > span:last-of-type:not(.sNotLast)').click(function(){
-                     //$('html, body').off('click'); 
-                     $parent = $(this).parent(); 
-                     $parent.next('.sSettings-Field-Edit').slideToggle(200).prev().slideToggle(200);
-                     //setTimeout("$('html, body').click(function(){ $('.sSettings-Field-Edit').slideUp(200); $('.sSettings-Field').slideDown(200); });", 700);
-                });
-                $('.sSettings-Field-Edit > span:last-of-type:not(.sNotLast)').click(function(){
-                     $parent = $(this).parent(); 
-                     $.ajax({url: '/cabinet-webmaster/settings/', headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, type: "POST", data: $parent.find('form').serialize(), beforeSend: function(){ $('html, body').css('cursor','wait');  }, success: function(response, status, jqXHR) { console.log(response);
-          if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
-          else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
-          }, error: function(xhr){ console.log(xhr.statusText + ", " + xhr.responseText); }, complete: function(){ $('html, body').css('cursor','default'); 
-          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
-          } });
-                });
-                var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div><script src='//sharewall.ru/webmaster-area/getconfig'>"+"</scrip"+"t>");
-                document.getElementById('sCodeHere').appendChild(codeTextNode);
-            });
-        </script>
   {% endblock %}

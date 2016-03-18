@@ -71,6 +71,16 @@ a { text-decoration: none!important; }
 .sClear-Both{
     clear: both;
 }
+.sFormPad-Wrapper > .sDescription2{
+    width: 395px;
+    display: inline-block;
+}
+.sFormPad-Wrapper > .sDescription2-Short{
+    width: 282px;
+    display: inline-block;
+    text-align: right;
+    margin-left: 5px;
+}
 .sContent-H100-HF{
     height: -moz-calc(100% - 139px);
     height: -webkit-calc(100% - 139px);
@@ -638,10 +648,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     border-bottom: 24px solid transparent; 
     border-radius: 1px;
 }
-.sStepPad > div:first-of-type > span:nth-child(2){    
+.sStepPad > div.sActive > span.sActive{    
     border-left: 20px solid #ffae00;    
 }
-.sStepPad > div:first-of-type{
+.sStepPad > div.sActive{
     line-height: 47px!important;
     color: #ffffff;
     font: 400 24px / 22px Roboto;
@@ -651,18 +661,24 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sFormPad > .sFormPad-Wrapper{
     padding-left: 38px;
     padding-top: 18px;
-    padding-right: 76px;
+    padding-right: 21px;
 }
 .sFormPad-Wrapper > .sNext{
     height: 75px;
     border-top: 1px solid #fff;
     margin-top: 43px;
 }
+.sFormPad-Wrapper > .sNext2{
+    padding-left: 268px;
+}
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
 }
 .sBSExample, .sSNExample{
     padding-top: 46px;   
+}
+.sNext > span:hover{
+    background-color: #b9b9b9;
 }
 .sNext > span{
     background-color: #949494;
@@ -675,8 +691,54 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     text-align: center;
     line-height: 36px;
     margin: 0 auto;
-    margin-top: 20px;
-    cursor: default;
+    margin-top: 20px;    
+    cursor: pointer;
+}
+.sNext2 > span{
+    display: inline-block;
+    margin-right: 9px;
+}
+.sSaveConfig{
+    right: -160px;
+    position: relative;
+    bottom: 28px;
+    color: rgb(47, 171, 246);
+    text-decoration: underline dotted rgb(47, 171, 246) !important;
+    font: 400 14px/58px Roboto;
+    padding-left: 20px;
+    margin-right: 12px;
+    display: none;
+    cursor: pointer;
+}
+.sCopyCodeWrapper{
+    height: 395px;
+    background: url(../images/copy-code-1.png) no-repeat;
+    border-radius: 10px;
+    width: 523px;
+    margin-top: 12px;
+    padding: 10px;
+}
+.sCodeDescription{
+    height: 227px;
+}
+.sAdditionalWrapper{
+    width: 282px;
+    height: 395px;
+    margin-top: 16px;
+    overflow: hidden;
+}
+.sAdditionalWrapper > input{
+    border-radius: 10px;
+    border: 1px solid #f3f3f3;
+    width: 282px;
+    height: 39px;
+}
+.sAdditionalWrapper > textarea{
+    resize: vertical;
+    border-radius: 3px;
+    border: 1px solid #f3f3f3;
+    width: 282px;
+    height: 136px;
 }
 .sBSExample{
     width: 550px;
@@ -736,6 +798,15 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     background-repeat: no-repeat;
     padding-top: 2px;
 }
+.sBSNode-1{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-1.png")!important;
+}
+.sBSNode-2{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-2.png")!important;
+}
+.sBSNode-3{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png")!important;
+}
 span[data-sn="tw"] {
     background-position: 0px 0px;
 }
@@ -793,6 +864,7 @@ span[data-sn="li"] {
 }
 .sSNExample{
     width: 190px;
+    padding-right: 55px;
 }
 .sBSExample > p, .sSNExample > p{
     color: #3d4853;
@@ -857,6 +929,11 @@ span[data-sn="li"] {
     text-align: center;
     line-height: 39px;
     float: right;
+}
+.sHideAndSeek{
+    display: none;
+    opacity: 0;
+    margin-left: -999999px;
 }
 
 /* 4 media point smaller 1145px,965px,781px,659px

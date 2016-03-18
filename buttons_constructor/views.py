@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect
 from buttons_constructor.forms import ButtonsConstructorForm
-from buttons_constructor.models import ButtonsConstructorModel
+from buttons_constructor.models import ButtonsConstructorModel, BtnsImages, SocialNetworks
 from webmaster_area.models import WebmasterAreaModel
 
 class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
@@ -96,37 +96,51 @@ def create(request):
     template_name = 'buttons_constructor/create.html'
     title = 'Create buttons constructor'
     header = 'Конструктор'
+    #all_soc_net_list = SocialNetworks.objects.all()
+    #clear_list_soc = []
+    #SOCIAL_DEFAULT = ''
+    #for s in all_soc_net_list:
+        #if not s.shortcut in SOCIAL_DEFAULT:
+            #SOCIAL_DEFAULT += s.shortcut + ','
+            #clear_list_soc += s
     if request.method == 'POST':
         buttons_constructor_form = ButtonsConstructorForm(data=request.POST)
         if buttons_constructor_form.is_valid():
             buttons_constructor = buttons_constructor_form.save()
             buttons_constructor.cabinet_webmaster = request.user.cabinet_webmaster
             cleaned_social_networks = ''
+            #social_networks
             for s in buttons_constructor_form.cleaned_data.get('social_networks'):
                 cleaned_social_networks += s + ','
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
             buttons_constructor.save()
-            return HttpResponseRedirect('/buttons-constructor/')
+            return HttpResponseRedirect('/webmaster-area/statistic/')
             #return render(request, template_name,
             #{
                 #'success': 'Buttons constructor created'
             #})
         else:
-            buttons_constructor_form = ButtonsConstructorForm(buttons_constructor_form.cleaned_data)
+            ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
+            #buttons_constructor_form = ButtonsConstructorForm(buttons_constructor_form.cleaned_data)
             return render(request, template_name,
             {
                 'page': { 'title': title, 'header': header },
-                'error': buttons_constructor_form.errors,
-                'buttons_constructor_form': buttons_constructor_form
+                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+                'btns_images': BtnsImages.objects.all(),
+                'social_networks': SocialNetworks.objects.all()
+                #'error': buttons_constructor_form.errors,
+                #'buttons_constructor_form': buttons_constructor_form
             })
     else:
         #return HttpResponseRedirect('/buttons-constructor/')
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header },
-            'buttons_constructor_form': ButtonsConstructorForm(),
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+            #'buttons_constructor_form': ButtonsConstructorForm(),
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            'btns_images': BtnsImages.objects.all(),
+            'social_networks': SocialNetworks.objects.all()
         })
 
 

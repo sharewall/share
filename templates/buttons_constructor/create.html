@@ -79,7 +79,7 @@
               <div class="sTopLine">
                   <a href="/webmaster-area/" class="sFloat-L">Площадки</a>
                   <div class="sAreaSelectWrapper">
-                       {% if areas.count = 0 %}
+                       {% if areas.count = 0 %} 
                        <select class="sDisabled" name="webmaster_area">
                        {% else %}
                        <select name="webmaster_area">
@@ -93,6 +93,7 @@
                    {% if areas.count = 0 %}
                    <a style="right: -160px; position: relative; bottom: 28px; color: rgb(255, 174, 0); text-decoration: underline dotted rgb(255, 174, 0) ! important;" class="" href="/webmaster-area/?create">Создать площадку</a>
                    {% endif %}
+                   <span onclick="formSubmit()" id="SaveConfig" class="sSaveConfig" >Сохранить конфигурацию</span>
                   <div style="clear:both;"></div>
               </div>
               {% if areas.count = 0 %}
@@ -100,10 +101,10 @@
               {% else %}
               <div class="sStepPad sFloat-L">
               {% endif %}
-                  <div id="Step-1"><span>Шаг 1</span><span></span>   
+                  <div class="sActive" id="Step-1"><span>Шаг 1</span><span class="sActive"></span>   
                   </div>
-                  <div id="Step-2"><span>Шаг 2</span><span></span></div>
-                  <div id="Step-3"><span>Шаг 2</span><span></span></div>
+                  <div id="Step-2"><span>Шаг 2</span><span data-sneedsubmit="true"></span></div>
+                  <div id="Step-3"><span>Шаг 3</span><span></span></div>
               </div>
               {% if areas.count = 0 %}
               <div class="sFormPad sFloat-R sDisabled">
@@ -115,53 +116,78 @@
                           <p>1. Настройте вид и параметры кнопок</p>
                           <p>2. Скопируйте и установите полученный код в HTML-вёрстку сайте туда, где хотите разместисть кнопки</p>               
                       </div>
+
                       <div class="sBSExample sFloat-L">
                           <p>Выберите стиль кнопок</p>
+                          {% for b in btns_images %}
                           <div class="sBSTreeWrapper">
-                              <input name="btns_images" value="1">
+                              {% if b.pk == 1 %}
+                              <input form="createConst" name="btns_images" value="{{ b.pk }}">
                               <span class="sBSInput sBSInput-Checked"></span>
-                              <span data-sn="tw" class="sBSNode"></span>
-                              <span data-sn="vk" class="sBSNode"></span>
-                              <span data-sn="od" class="sBSNode"></span>
-                              <span data-sn="fb" class="sBSNode"></span>
-                              <span data-sn="gp" class="sBSNode"></span>
-                              <span data-sn="ma" class="sBSNode"></span>
-                              <span data-sn="li" class="sBSNode"></span>
-                              <span data-sn="lj" class="sBSNode"></span>
-                              <span data-logo="e" class="sBSNode"></span>
-                          </div>
-                          <div class="sBSTreeWrapper">
-                              <input name="" value="2">
+                              {% else %}
+                              <input form="createConst" value="{{ b.pk }}">
                               <span class="sBSInput"></span>
-                              <span data-sn="tw" class="sBSNode"></span>
-                              <span data-sn="vk" class="sBSNode"></span>
-                              <span data-sn="od" class="sBSNode"></span>
-                              <span data-sn="fb" class="sBSNode"></span>
-                              <span data-sn="gp" class="sBSNode"></span>
-                              <span data-sn="ma" class="sBSNode"></span>
-                              <span data-sn="li" class="sBSNode"></span>
-                              <span data-sn="lj" class="sBSNode"></span>
+                              {% endif %}
+                              <span data-sn="tw" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="vk" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="od" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="fb" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="gp" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="ma" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="li" class="sBSNode sBSNode-{{ b.pk }}"></span>
+                              <span data-sn="lj" class="sBSNode sBSNode-{{ b.pk }}"></span>
                               <span data-logo="e" class="sBSNode"></span>
                           </div>
+                          {% endfor %}
                       </div>
+
                       <div class="sSNExample sFloat-R">
                           <p>Доступны к выбору</p>
+                          {% for sn in social_networks %}
+                          {% if sn.pk <= 8 %}
                           <div class="sSNTreeWrapper">            
-                              <input id="sn-tw" type="checkbox" name="sn" value="tw">
-                              <label for="sn-tw" class="sSNInput"></label>
-                              <span>Twitter</span>
+                            <input form="createConst" id="sn-{{ sn.shortcut }}" type="checkbox" name="social_networks" value="{{ sn.shortcut }}">
+                            <label for="sn-{{ sn.shortcut }}" class="sSNInput"></label>
+                            <span>{{ sn.shortcut }}</span>
                            </div>
-                          <div class="sSNTreeWrapper">               
-                              <input id="sn-vk" type="checkbox" name="sn" value="vk">
-                              <label for="sn-vk" class="sSNInput"></label>
-                              <span>Вконтакте</span>
-                           </div>
+                          {% endif %}
+                          {% endfor %}
                       </div>                      
+
                       <div style="clear:both;"></div>
                       <div class="sNext">
-                          <span>Далее</span>
+                          <span data-next>Далее</span>
                       </div>
-                  </div>                      
+                  </div>   
+                  
+                  <div class="sFormPad-Wrapper sHideAndSeek">
+                      <div class="sDescription">Предпросмотр        
+                      </div>                                          
+                      <div class="sNext sNext2">
+                          <span data-prev>Назад</span>
+                          <span data-next>Далее</span>
+                      </div>
+                  </div>   
+                  
+                  <div class="sFormPad-Wrapper sHideAndSeek">
+                      <div class="sDescription2">Код для копирования</div>     
+                       <div class="sDescription2 sDescription2-Short">Дополнительно*</div>
+                      <div class="sCopyCodeWrapper sFloat-L">
+                       <p id="sCodeHere" style="padding:40px;"></p>
+                      </div>  
+                      <div class="sAdditionalWrapper sFloat-R">
+                          <label for="page_url">Ссылка на страницу</label>
+                          <input id="page_url" name="page_url" type="url" value="" form="createConst">
+                          <label for="page_title">Название страницы</label>
+                          <input id="page_title" name="page_title" type="text" value="" form="createConst">
+                          <label for="page_description">Краткое описание</label>
+                          <textarea id="page_description" name="page_description" form="createConst"></textarea>
+                      </div> 
+                      <div class="sClear-Both"></div>
+                      <div class="sCodeDescription">
+                      
+                      </div>
+                  </div>  
               </div>
               <div style="clear:both;"></div>
               <div class="sError">  
@@ -172,10 +198,11 @@
                   {{ error }}
                   {% endif %}
               </div>
-              <form style="display:none;" method="post" action="/buttons-constructor/create/">
+              <form id="createConst" style="display:none; opacity:0; margin-left:-99999px;" method="post" action="/buttons-constructor/create/">
                   {% csrf_token %}
-                  {{ buttons_constructor_form }}
                   <input type="submit" value="Create">
+                  <input type="text" name="location_buttons" value="HO">
+
               </form>
           </div>
       </div>
@@ -221,6 +248,23 @@
             $('div.sSNTreeWrapper input').prop('checked','checked');
             $('div.sSNTreeWrapper span').click(function(){ $this = $(this); var isChecked = $this.parent().find('input').prop('checked'); $this.parent().find('input').prop('checked', !isChecked).change(); });
             $('div.sSNTreeWrapper input').change(function(){ $this = $(this); var sn = $this.attr('value'); $('div.sBSTreeWrapper span.sBSNode[data-sn='+sn+']').toggle(); });
+            $('div.sNext > span[data-next]').click(function(){ $cStep = $('.sStepPad > div.sActive').next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
+            $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').next('div').toggleClass('sHideAndSeek').prev('div').toggleClass('sHideAndSeek'); 
+            StepForward($cStep);
+            });  
+            $('div.sNext > span[data-prev]').click(function(){ $cStep = $('.sStepPad > div.sActive').prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
+            $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').prev('div').toggleClass('sHideAndSeek').next('div').toggleClass('sHideAndSeek');       
+            });  
+            var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div><script src='//sharewall.ru/webmaster-area/getconfig'>"+"</scrip"+"t>");
+                document.getElementById('sCodeHere').appendChild(codeTextNode);
+            var StepForward = function(e){                
+                if($(e).data("sneedsubmit")){
+                    $('#SaveConfig').show();
+                }
+            }
         });
+        function formSubmit(){
+            $('form input[type="submit"]').click();
+        }
         </script>
   {% endblock %}

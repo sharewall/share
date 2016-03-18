@@ -2,7 +2,7 @@ from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
 from django import forms
 
 class ButtonsConstructorForm(forms.ModelForm):
-    name_constructor = forms.CharField(max_length=50)
+    #name_constructor = forms.CharField(max_length=50)
     with_counter = forms.BooleanField(required=False)
     LOCATION_CHOICES=(
         ('HO', 'Horizontal'),
@@ -28,4 +28,4 @@ class ButtonsConstructorForm(forms.ModelForm):
         self.fields['btns_images'] = forms.ModelChoiceField(queryset=BtnsImages.objects.all())
     class Meta:
         model = ButtonsConstructorModel
-        fields = ('btns_images', 'name_constructor', 'with_counter', 'social_networks', 'location_buttons', 'page_url', 'page_title', 'page_description')
+        fields = ('btns_images', 'with_counter', 'social_networks', 'location_buttons', 'page_url', 'page_title', 'page_description')
