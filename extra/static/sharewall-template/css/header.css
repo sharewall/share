@@ -813,6 +813,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sBSNode-3{
     background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png")!important;
 }
+.sBSNode-4{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-4.png")!important;
+}
 span[data-sn="tw"] {
     background-position: 0px 0px;
 }
@@ -904,6 +907,8 @@ span[data-sn="li"] {
     background-color: #8f8f8f;
     width: 100%;
     height: 1px;
+    
+    
 }
 .sBtnConstructor > form > *{
      display: block;
