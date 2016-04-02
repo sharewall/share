@@ -149,11 +149,20 @@ def create(request):
             })
     else:
         #return HttpResponseRedirect('/buttons-constructor/')
+        list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
+        list_distinct, list_distinct_keys = [], []
+
+        for area in list_all_user_areas:
+            if area.name_area not in list_distinct_keys:
+                list_distinct_keys.append(area.name_area)
+                list_distinct.append(area) 
+        
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header },
             #'buttons_constructor_form': ButtonsConstructorForm(),
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            'areas': list_distinct,
             'btns_images': BtnsImages.objects.all(),
             'social_networks': SocialNetworks.objects.all()
         })
