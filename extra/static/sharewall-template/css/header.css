@@ -816,6 +816,18 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sBSNode-4{
     background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-4.png")!important;
 }
+.sBSNode-5{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-5.png")!important;
+}
+.sBSNode-6{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-6.png")!important;
+}
+.sBSNode-7{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-7.png")!important;
+}
+.sBSNode-8{
+    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-8.png")!important;
+}
 span[data-sn="tw"] {
     background-position: 0px 0px;
 }
