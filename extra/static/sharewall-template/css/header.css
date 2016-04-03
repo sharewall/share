@@ -681,6 +681,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: 262px;
     width: 828px;
     text-align: center;
+    overflow: auto;
 }
 .sShowBtns > #sharewallContainer{
     padding-top: 110px;

@@ -345,6 +345,17 @@
             $this = $(e);
             $parent = $this.parent();            $parent.find('span').removeClass('sActive').parent().find('input[name="location_buttons"]').attr("value", $this.data("location"));
             $this.addClass("sActive");
+            if($this.data("location") != lastLocation){
+                if($this.data("location") == "VE"){ 
+                    $("<br />").insertAfter("#sharewallContainer > a"); 
+                    $("#sharewallContainer").css("padding-top", "0px");
+                }
+                else{
+                    $("#sharewallContainer > br").remove();
+                    $("#sharewallContainer").css("padding-top", "110px");
+                }
+            }
+            lastLocation = $this.data("location");
         }
         function setCounter(e){
             $this = $(e);
@@ -357,6 +368,6 @@
             $parent = $this.parent();            $parent.find('span').removeClass('sActive').parent().find('input[name="with_background"]').prop("checked", $this.data("background"));
             $this.addClass("sActive");
         }
-            
+        var lastLocation = "HO";    
         </script>
   {% endblock %}

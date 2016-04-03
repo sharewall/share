@@ -363,8 +363,7 @@ def getconfig(request):
         answer += '$("div#sharewallContainer").append(\'<a target="_blank" href="//sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png); background-repeat: no-repeat; background-position: 50% 50%;"></a>\');'
         if btncr.with_counter:
             if btncr.location_buttons == "VE":
-                answer += '$("div#sharewallContainer").css("float","left");'
-                #answer += '$("div#sharewallContainer").append("<br/>");'
+                answer += '$("div#sharewallContainer").append("<br/>");'
             answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; height:41px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:41px; vertical-align: top; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png); background-repeat: no-repeat; background-position: 50% 60%;">0</span>\');'
 
         answer += '    $("body").append("<div id=\'sharewallSNC\' style=\'display: none\'></div>");'
