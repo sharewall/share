@@ -162,7 +162,7 @@ def create(request):
             'page': { 'title': title, 'header': header },
             #'buttons_constructor_form': ButtonsConstructorForm(),
             #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-            'area': list_distinct,
+            'areas': list_distinct,
             'btns_images': BtnsImages.objects.all(),
             'social_networks': SocialNetworks.objects.all()
         })

@@ -680,6 +680,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     background: url(../images/showbtns-bg.png);
     height: 262px;
     width: 828px;
+    text-align: center;
+}
+.sShowBtns > #sharewallContainer{
+    padding-top: 110px;
 }
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
@@ -914,33 +918,33 @@ div.sDescription > p.Step-2{
     display: inline-block;
     margin-right: 15px;
     /**/
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png");
+    background-image: url("../images/btns-sprite-3.png");
     background-repeat: no-repeat;
     padding-top: 2px;
 }
 .sBSNode-1{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-1.png")!important;
+    background-image: url("../images/btns-sprite-1.png")!important;
 }
 .sBSNode-2{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-2.png")!important;
+    background-image: url("../images/btns-sprite-2.png")!important;
 }
 .sBSNode-3{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png")!important;
+    background-image: url("../images/btns-sprite-3.png")!important;
 }
 .sBSNode-4{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-4.png")!important;
+    background-image: url("../images/btns-sprite-4.png")!important;
 }
 .sBSNode-5{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-5.png")!important;
+    background-image: url("../images/btns-sprite-5.png")!important;
 }
 .sBSNode-6{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-6.png")!important;
+    background-image: url("../images/btns-sprite-6.png")!important;
 }
 .sBSNode-7{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-7.png")!important;
+    background-image: url("../images/btns-sprite-7.png")!important;
 }
 .sBSNode-8{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-8.png")!important;
+    background-image: url("../images/btns-sprite-8.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -992,7 +996,7 @@ span[data-sn="li"] {
     width: 41px;
     height: 41px;
     display: inline-block;
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png");
+    background-image: url("../images/btns-logo-sharewall-blue.png");
     background-repeat: no-repeat;
     background-position: 50% 50%;
     padding-top: 6px;

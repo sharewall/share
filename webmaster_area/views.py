@@ -305,6 +305,8 @@ def getconfig(request):
         #answer += '    console.log(sharewall.share_config); '
 
         answer += '    $("div#sharewallContainer").html(\'\');'
+        if btncr.location_buttons == "VE":
+            answer += '$("div#sharewallContainer").css("float","left");'
         for sn in btncr.social_networks.split(','):
             answer += 'var new_href = "";'
             if sn == 'vk':

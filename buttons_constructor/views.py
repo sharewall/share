@@ -114,7 +114,7 @@ def create(request):
                 cleaned_social_networks += s + ','
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
-            buttons_constructor.with_counter = True
+            #buttons_constructor.with_counter = True
             buttons_constructor.save()
             wm_area_pk_post = request.POST.get('webmaster_area','')
             if wm_area_pk_post:
