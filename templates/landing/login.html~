@@ -61,7 +61,7 @@ input.cmn-toggle-round:checked ~ form > input[type='email']{
     display: inline-block;
 }
 </style>{% endblock %}   
-{% block title %}{{ view.title }}{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 {% block content %}
 	<div class="sContent-H100 sTextAlign-C" style="padding-top:10%">
       <div class="sError">
