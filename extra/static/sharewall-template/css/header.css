@@ -619,7 +619,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-left: 20px;
     margin-right: 12px;
 }
-.sBtnConstructor > span:first-of-type, .sListConstructors > a:first-of-type{
+.sBtnConstructor > span:first-of-type,
+.sListConstructors > span:first-of-type,
+.sListConstructors > a:first-of-type{
     background-color: #ffae00;
     color: #ffffff;      
     line-height: 33px;
@@ -643,6 +645,30 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sStepPad > div > span:nth-child(1){
     padding-left: 18px;
+}
+.sAreaChoices-Line{
+    background-color: #e8e8e8;
+    width: 1170px;
+    height: 58px;
+    margin-top: 26px;
+}
+.sAreaChoices-Line > span{
+    color: #32353c;
+    font: 400 14px Roboto;
+    display: inline-block;
+    height: 58px;
+    width: 80px;
+    text-align: center;
+    line-height: 58px;
+    cursor: pointer;
+}
+.sAreaChoices-Line > span.sActive{
+    color: #1693d5;
+}
+h2.sH2{
+    color: #636d7a;
+    font: 300 34px / 18px Roboto-Light;
+    margin-top: 85px;
 }
 .sStepPad > div > span:nth-child(2){    
     float: right; 
@@ -1021,7 +1047,8 @@ span[data-sn="li"] {
     display: block;
     color: #45474d;
 }
-.sBtnConstructor > span{
+.sBtnConstructor > span,
+.sListConstructors > span{
     display: inline-block;
     height: 35px;
     width: 111px;

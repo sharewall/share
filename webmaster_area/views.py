@@ -44,9 +44,29 @@ def statistic(request):
     template_name = 'webmaster_area/statistic.html'
     title = 'Statistic'
     header = 'Статистика'
+    list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
+    list_distinct, list_distinct_keys = [], []
+
+    for area in list_all_user_areas:
+        if area.name_area not in list_distinct_keys:
+            list_distinct_keys.append(area.name_area)
+            list_distinct.append(area) 
+
     return render(request, template_name,
     {
-        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        "areas" : list_distinct,
+        'page': { 'title': title, 'header': header }
+    })
+
+@login_required
+def detail(request, name):
+    template_name = 'webmaster_area/detail.html'
+    title = name
+    header = name
+    return render(request, template_name,
+    {
+        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name),
         'page': { 'title': title, 'header': header }
     })
 
