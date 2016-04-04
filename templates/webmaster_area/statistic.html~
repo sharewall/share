@@ -69,8 +69,9 @@
               <span class="sTextAlign-C">Кнопки</span>
               <div class="sGLine"></div>
               <div class="sAreaChoices-Line">
-                  <span onclick="showDetail(this)" class="sActive">Ffss</span>
-                  <span onclick="showDetail(this)">Aaf22</span>
+                  {% for a in areas %}
+                  <span onclick="showDetail(this)">{{ a.name_area }}</span>
+                  {% endfor %}
               </div>
               
           
@@ -116,7 +117,7 @@
         </div>
         <script>
             $(function(){
-                $('.sAreaChoices-Line > span:first-of-type()').click();
+                $('.sAreaChoices-Line > span:first-of-type()').click().addClass('sActive');
             });
             function showDetail(e){
               $this = $(e);

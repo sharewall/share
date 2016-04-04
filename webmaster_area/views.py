@@ -64,10 +64,43 @@ def detail(request, name):
     template_name = 'webmaster_area/detail.html'
     title = name
     header = name
+    
+    dates = []
+    todayVK = []
+    todayFB = []
+    todayTW = []
+    todayOD = []
+    todayGP = []
+    todayMA = []
+    todayLI = []
+    todayLJ = []
+
+    areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+
+    for a in areas:
+        dates.append(a.date.strftime("%d.%m"))
+        todayVK.append(int(a.today_share_counter.split(',')[0]))
+        todayFB.append(int(a.today_share_counter.split(',')[1]))
+        todayTW.append(int(a.today_share_counter.split(',')[2]))
+        todayOD.append(int(a.today_share_counter.split(',')[3]))
+        todayGP.append(int(a.today_share_counter.split(',')[4]))
+        todayMA.append(int(a.today_share_counter.split(',')[5]))
+        todayLI.append(int(a.today_share_counter.split(',')[6]))
+        todayLJ.append(int(a.today_share_counter.split(',')[7]))
+
     return render(request, template_name,
     {
-        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name),
-        'page': { 'title': title, 'header': header }
+        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name),
+        'page': { 'title': title, 'header': header },
+        'dates': dates,
+        'todayVK': todayVK,
+        'todayFB': todayFB,
+        'todayTW': todayTW,
+        'todayOD': todayOD,
+        'todayGP': todayGP,
+        'todayMA': todayMA,
+        'todayLI': todayLI,
+        'todayLJ': todayLJ
     })
 
 @login_required
