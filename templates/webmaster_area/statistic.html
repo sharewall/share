@@ -121,7 +121,7 @@
             });
             function showDetail(e){
               $this = $(e);
-              $('.sAreaChoices-Line > span').removeClass('sActive');
+                $('.sAreaChoices-Line > span').removeClass('sActive');
                 $('iframe').remove();
                 $('<iframe src="/webmaster-area/detail/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic');
               $this.addClass('sActive');

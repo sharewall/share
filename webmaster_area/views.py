@@ -2,7 +2,7 @@ import datetime, json, os
 from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
-from webmaster_area.models import WebmasterAreaModel, PageDetail
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
 from buttons_constructor.models import SocialNetworks, BtnsImages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -21,18 +21,18 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
-        list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
-        list_distinct, list_distinct_keys = [], []
+        #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
+        #list_distinct, list_distinct_keys = [], []
 
-        for area in list_all_user_areas:
-            if area.name_area not in list_distinct_keys:
-                list_distinct_keys.append(area.name_area)
-                list_distinct.append(area) 
+        #for area in list_all_user_areas:
+        #    if area.name_area not in list_distinct_keys:
+        #        list_distinct_keys.append(area.name_area)
+        #        list_distinct.append(area) 
 
         return render(request, self.template_name,
         {
-            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-            "areas" : list_distinct,
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+            #"areas" : list_distinct,
             "page": { "title": self.title, 'header': self.header },
             "ad_type": "Нормальный,Для взрослых",
             "area_category": AreaCategory.objects.all()
@@ -42,20 +42,21 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
 @login_required
 def statistic(request):
     template_name = 'webmaster_area/statistic.html'
-    title = 'Statistic'
+    title = 'Статистика'
     header = 'Статистика'
-    list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
-    list_distinct, list_distinct_keys = [], []
 
-    for area in list_all_user_areas:
-        if area.name_area not in list_distinct_keys:
-            list_distinct_keys.append(area.name_area)
-            list_distinct.append(area) 
+    #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)#.order_by('-date')
+    #list_distinct, list_distinct_keys = [], []
+
+    #for area in list_all_user_areas:
+    #    if area.name_area not in list_distinct_keys:
+    #        list_distinct_keys.append(area.name_area)
+    #        list_distinct.append(area) 
 
     return render(request, template_name,
     {
-        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-        "areas" : list_distinct,
+        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        #"areas" : list_distinct,
         'page': { 'title': title, 'header': header }
     })
 
@@ -75,33 +76,37 @@ def detail(request, name):
     todayLI = []
     todayLJ = []
 
-    areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    
+    if area:
+        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
-    for a in areas:
-        dates.append(a.date.strftime("%d.%m"))
-        todayVK.append(int(a.today_share_counter.split(',')[0]))
-        todayFB.append(int(a.today_share_counter.split(',')[1]))
-        todayTW.append(int(a.today_share_counter.split(',')[2]))
-        todayOD.append(int(a.today_share_counter.split(',')[3]))
-        todayGP.append(int(a.today_share_counter.split(',')[4]))
-        todayMA.append(int(a.today_share_counter.split(',')[5]))
-        todayLI.append(int(a.today_share_counter.split(',')[6]))
-        todayLJ.append(int(a.today_share_counter.split(',')[7]))
+        for a in area_per_day_list:
+            dates.append(a.date.strftime("%d.%m"))
+            todayVK.append(int(a.today_share_counter.split(',')[0]))
+            todayFB.append(int(a.today_share_counter.split(',')[1]))
+            todayTW.append(int(a.today_share_counter.split(',')[2]))
+            todayOD.append(int(a.today_share_counter.split(',')[3]))
+            todayGP.append(int(a.today_share_counter.split(',')[4]))
+            todayMA.append(int(a.today_share_counter.split(',')[5]))
+            todayLI.append(int(a.today_share_counter.split(',')[6]))
+            todayLJ.append(int(a.today_share_counter.split(',')[7]))
 
-    return render(request, template_name,
-    {
-        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name),
-        'page': { 'title': title, 'header': header },
-        'dates': dates,
-        'todayVK': todayVK,
-        'todayFB': todayFB,
-        'todayTW': todayTW,
-        'todayOD': todayOD,
-        'todayGP': todayGP,
-        'todayMA': todayMA,
-        'todayLI': todayLI,
-        'todayLJ': todayLJ
-    })
+        return render(request, template_name,
+        {
+            'page': { 'title': title, 'header': header },
+            'dates': dates,
+            'todayVK': todayVK,
+            'todayFB': todayFB,
+            'todayTW': todayTW,
+            'todayOD': todayOD,
+            'todayGP': todayGP,
+            'todayMA': todayMA,
+            'todayLI': todayLI,
+            'todayLJ': todayLJ
+        })
+    else:
+        return HttpResponseRedirect('/webmaster-area/statistic/')
 
 @login_required
 def delete(request, pk):
@@ -159,9 +164,12 @@ def update(request, pk):
 
 @login_required
 def create(request):
-    template_name = 'webmaster_area/create.html'
-    title = 'Create webmaster area'
-    header = 'Создание площадки'
+    #template_name = 'webmaster_area/create.html'
+    #title = 'Create webmaster area'
+    #header = 'Создание площадки'
+    template_name = 'webmaster_area/index.html'
+    title = 'Webmaster area'
+    header = 'Площадки'
     if request.method == 'POST':
         #webmaster_area_form = WebmasterAreaForm(data=request.POST, user=request.user, auto_id=False)
         area_category_list = request.POST.getlist('area_category','')
@@ -177,7 +185,14 @@ def create(request):
             'area_category': area_category_clear
         }
         webmaster_area_form = WebmasterAreaForm(data=request_post_data, auto_id=False)
-        if webmaster_area_form.is_valid():
+
+        user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+        user_wma_names_list = []
+        for area in user_wma_list:
+            user_wma_names_list.append(area.name_area)
+        isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
+
+        if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False:
             webmaster_area = webmaster_area_form.save()
             #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
             try:
@@ -192,19 +207,25 @@ def create(request):
             #})
         else:
             #webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data, user=request.user)
-            webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data)
+            #webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data)
             return render(request, template_name,
             {
+                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
                 'page': { 'title': title, 'header': header },
-                'error': webmaster_area_form.errors,
-                'webmaster_area_form': webmaster_area_form
+                "ad_type": "Нормальный,Для взрослых",
+                "area_category": AreaCategory.objects.all()
+                #'error': webmaster_area_form.errors,
+                #'webmaster_area_form': webmaster_area_form
             })
     else:
         #return HttpResponseRedirect('/buttons-constructor/')
         return render(request, template_name,
         {
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
             'page': { 'title': title, 'header': header },
-            'webmaster_area_form': WebmasterAreaForm()
+            "ad_type": "Нормальный,Для взрослых",
+            "area_category": AreaCategory.objects.all()
+            #'webmaster_area_form': WebmasterAreaForm()
             #'webmaster_area_form': WebmasterAreaForm(request.user)
         })
 
@@ -228,7 +249,9 @@ def checkconfig(request):
         if history_referrer != history_rr and history_parsed_referrer in list_parsed_sn:
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
+
         #wma!
+        '''
         difference_share_counter = ''
         for s,s2 in zip(snc.split(','), wma_object.total_share_counter.split(',')):
             difference_share_counter += str(int(s) - int(s2)) + ','
@@ -242,10 +265,15 @@ def checkconfig(request):
         new_today_share_counter = new_today_share_counter[:-1]
         new_total_social_counter = wma_object.total_social_counter
         update_today_social_counter = wma_object.today_social_counter
+        '''
+
         if index_sn is not None:
             short_sn = list_sn[index_sn].shortcut
             list_sn_shortcuts = [sn.shortcut for sn in list_sn]
             index_sn = list_sn_shortcuts.index(short_sn)
+
+
+            '''
             temp_li_today_sn = [int(s) for s in new_today_social_counter.split(',')]
             temp_li_total_sn = [int(s) for s in new_total_social_counter.split(',')]
             temp_li_update_today_sn = [int(s) for s in update_today_social_counter.split(',')]
@@ -264,7 +292,9 @@ def checkconfig(request):
             new_today_social_counter = new_today_social_counter[:-1]
             new_total_social_counter = new_total_social_counter[:-1]
             update_today_social_counter = update_today_social_counter[:-1]
+            '''
 
+        '''
         if wma_object.date == datetime.date.today():
             wma_object.today_share_counter = new_today_share_counter
             wma_object.total_share_counter = snc
@@ -275,6 +305,7 @@ def checkconfig(request):
         else:
             wma_object = WebmasterAreaModel.objects.create(buttons_constructor = wma_object.buttons_constructor, name_area = wma_object.name_area, url=wma_object.url, today_social_counter=new_today_social_counter, total_social_counter=new_total_social_counter, today_share_counter=difference_share_counter, total_share_counter=snc)
             answer += 'console.log("'+str(wma_object) + ' created!");' 
+        '''
         #page_detail, created = PageDetail.objects.get_or_create(webmaster_area=wma_object, url=request_url, defaults={'': 1, 'title': request_title})
         #if not created:
             #page_detail.page_social_traffic += 1

@@ -74,9 +74,11 @@ a { text-decoration: none!important; }
 .sFormPad-Wrapper > .sDescription2{
     width: 395px;
     display: inline-block;
+    color: #616d79;
+    font: 400 20px / 22px Roboto;
 }
 .sFormPad-Wrapper > .sDescription2-Short{
-    width: 282px;
+    width: 310px;
     display: inline-block;
     text-align: right;
     margin-left: 5px;
@@ -556,6 +558,8 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     border: 0px none;
     border-radius: 7px;
     margin-left: 17px;
+    padding-left: 5px;
+    
 }
 .sAddAreaWrapper > div > div:nth-child(3),
 .sAddAreaWrapper > div > div:nth-child(4){
@@ -615,13 +619,16 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-left: 20px;
     margin-right: 12px;
 }
-.sBtnConstructor > span:first-of-type, .sListConstructors > a:first-of-type{
+.sBtnConstructor > span:first-of-type,
+.sListConstructors > span:first-of-type,
+.sListConstructors > a:first-of-type{
     background-color: #ffae00;
     color: #ffffff;      
     line-height: 33px;
     height: 35px;
     width: 111px;
     margin-right: -5px;
+    margin-left: 0;
 }
 .sBtnConstructor > div.sStepPad{
     width: 245px;
@@ -638,6 +645,30 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sStepPad > div > span:nth-child(1){
     padding-left: 18px;
+}
+.sAreaChoices-Line{
+    background-color: #e8e8e8;
+    width: 1170px;
+    height: 58px;
+    margin-top: 26px;
+}
+.sAreaChoices-Line > span{
+    color: #32353c;
+    font: 400 14px Roboto;
+    display: inline-block;
+    height: 58px;
+    width: 80px;
+    text-align: center;
+    line-height: 58px;
+    cursor: pointer;
+}
+.sAreaChoices-Line > span.sActive{
+    color: #1693d5;
+}
+h2.sH2{
+    color: #636d7a;
+    font: 300 34px / 18px Roboto-Light;
+    margin-top: 85px;
 }
 .sStepPad > div > span:nth-child(2){    
     float: right; 
@@ -671,8 +702,91 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sFormPad-Wrapper > .sNext2{
     padding-left: 268px;
 }
+.sFormPad-Wrapper > .sShowBtns{
+    background: url(../images/showbtns-bg.png);
+    height: 262px;
+    width: 828px;
+    text-align: center;
+    overflow: auto;
+}
+.sShowBtns > #sharewallContainer{
+    padding-top: 110px;
+}
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
+}
+.sToolsBar{
+    padding: 0px 87px 0px 87px;
+    margin-top: 33px;
+}
+.sLocationChoices-Wrapper{
+    margin-top: 22px; 
+} 
+.sCounterChoices-Wrapper{
+    margin-top: 20px;   
+}
+.sToolsBar > .sLocationChoices-Wrapper, 
+.sToolsBar > .sCounterChoices-Wrapper{
+    width: 652px;
+    height: 46px;
+    text-align: center;
+}
+.sToolsBar > .sLocationChoices-Wrapper > div:not(.sClear-Both),
+.sToolsBar > .sCounterChoices-Wrapper > div:not(.sClear-Both){
+    background: url(../images/location-choices.png);
+    width: 315px;
+    height: 46px;
+}
+.sLocationChoices-Wrapper > div > span.sActive,
+.sCounterChoices-Wrapper > div > span.sActive{
+    background: url(../images/location-choices-active.png);
+    color: #ffffff;
+}
+.sLocationChoices-Wrapper > div > span.sActive:nth-of-type(2),
+.sCounterChoices-Wrapper > div > span.sActive:nth-of-type(2){
+    background: url(../images/location-choices-active-right.png);
+}
+.sLocationChoices-Wrapper > div > span,
+.sCounterChoices-Wrapper > div > span{
+    color: #32353c;
+    font: 400 18px / 22px Roboto;
+    line-height: 46px;
+    height: 46px;
+    cursor: pointer;
+    display: inline-block;
+    width: 155px;
+}
+.sToolsBar > .sSizeChoices-Wrapper{
+    width: 652px;
+    height: 46px;
+    background: url(../images/size-choices-wrapper.png);
+    text-align: center;
+}
+.sSizeChoices-Wrapper > span{
+    color: #32353c;
+    font: 400 18px / 22px Roboto;
+    width: 216px;
+    height: 46px;
+    display: inline-block;
+    line-height: 46px;
+    cursor: pointer;
+}
+.sSizeChoices-Wrapper > span:nth-child(3){
+    width: 210px;
+}
+.sSizeChoices-Wrapper > span.sActive:nth-child(3){
+    background: url(../images/size-choices-active-mid.png)no-repeat;
+}
+.sSizeChoices-Wrapper > span.sActive:nth-child(4){
+    background: url(../images/size-choices-active-right.png)no-repeat;
+}
+.sSizeChoices-Wrapper > span.sActive{
+    background: url(../images/size-choices-active.png)no-repeat;
+    color: #ffffff;
+}
+div.sDescription > p.Step-2{
+    color: #616d79;
+    font: 400 20px / 22px Roboto;
 }
 .sBSExample, .sSNExample{
     padding-top: 46px;   
@@ -720,6 +834,27 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sCodeDescription{
     height: 227px;
+    text-align: center;
+}
+.sCodeDescription > p:first-of-type{
+    padding:0px 160px 0px 160px;
+}
+.sCodeDescription > p.sNote{
+    color: #616d79;
+    font: 400 13px Roboto;
+    margin-top: 0px;
+}
+.sCodeDescription > .sSaveConfig-Big{
+    width: 286px;
+    height: 76px;
+    background: url(../images/copy-code-button-big-yellow.png);
+    display: inline-block;
+    cursor: pointer;
+}
+.sCodeDescription > p.sNote > a{
+    color: rgb(47, 171, 246);
+    text-decoration: underline dotted rgb(47, 171, 246) !important;
+    font: 400 14px/58px Roboto;
 }
 .sAdditionalWrapper{
     width: 282px;
@@ -728,20 +863,29 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sAdditionalWrapper > input{
     border-radius: 10px;
-    border: 1px solid #f3f3f3;
+    border: 1px solid #ccc; /*#f3f3f3;*/
     width: 282px;
     height: 39px;
     padding-left: 5px;
+    margin-bottom: 16px;
 }
 .sAdditionalWrapper > textarea{
     resize: vertical;
     border-radius: 3px;
-    border: 1px solid #f3f3f3;
+    border: 1px solid #ccc;
     width: 282px;
     height: 136px;
     font: 400 15px / 22px Roboto;
     color: #3d4853;
     padding-left: 5px;
+}
+.sAdditionalWrapper > label{
+    color: #616d79;
+    font: 400 15px / 22px Roboto;
+}
+.sAdditionalWrapper > p{
+    color: #616d79;
+    font: 400 13px Roboto;
 }
 .sBSExample{
     width: 550px;
@@ -758,10 +902,14 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sBSExample > div.sBSTreeWrapper:not(:last-of-type){
     margin-bottom: 6px;
 }
-.sBSTreeWrapper > input, .sSNTreeWrapper > input{
+.sBSTreeWrapper > input, 
+.sSNTreeWrapper > input{
     display: none;
     opacity: 0;
     margin-left: -999999px;
+}
+.sSNTreeWrapper > span{
+    cursor: pointer;
 }
 .sSNTreeWrapper > input:checked + label{
    background: url(../images/bs-chekbox-checked.png); 
@@ -797,18 +945,33 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     display: inline-block;
     margin-right: 15px;
     /**/
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png");
+    background-image: url("../images/btns-sprite-3.png");
     background-repeat: no-repeat;
     padding-top: 2px;
 }
 .sBSNode-1{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-1.png")!important;
+    background-image: url("../images/btns-sprite-1.png")!important;
 }
 .sBSNode-2{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-2.png")!important;
+    background-image: url("../images/btns-sprite-2.png")!important;
 }
 .sBSNode-3{
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-sprite-3.png")!important;
+    background-image: url("../images/btns-sprite-3.png")!important;
+}
+.sBSNode-4{
+    background-image: url("../images/btns-sprite-4.png")!important;
+}
+.sBSNode-5{
+    background-image: url("../images/btns-sprite-5.png")!important;
+}
+.sBSNode-6{
+    background-image: url("../images/btns-sprite-6.png")!important;
+}
+.sBSNode-7{
+    background-image: url("../images/btns-sprite-7.png")!important;
+}
+.sBSNode-8{
+    background-image: url("../images/btns-sprite-8.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -860,7 +1023,7 @@ span[data-sn="li"] {
     width: 41px;
     height: 41px;
     display: inline-block;
-    background-image: url("http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png");
+    background-image: url("../images/btns-logo-sharewall-blue.png");
     background-repeat: no-repeat;
     background-position: 50% 50%;
     padding-top: 6px;
@@ -884,7 +1047,8 @@ span[data-sn="li"] {
     display: block;
     color: #45474d;
 }
-.sBtnConstructor > span{
+.sBtnConstructor > span,
+.sListConstructors > span{
     display: inline-block;
     height: 35px;
     width: 111px;
@@ -893,6 +1057,16 @@ span[data-sn="li"] {
     line-height: 33px;
     background-color: #e3e3e3;
     cursor: default;
+    margin-left: 1px;
+    border-radius: 4px 4px 0 0;
+}
+.sGLine{
+    margin-top: 1px;
+    background-color: #8f8f8f;
+    width: 100%;
+    height: 1px;
+    
+    
 }
 .sBtnConstructor > form > *{
      display: block;

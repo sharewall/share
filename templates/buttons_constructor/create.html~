@@ -305,7 +305,7 @@
             $('div.sSNTreeWrapper input').prop('checked','checked');
             $('div.sSNTreeWrapper span').click(function(){ $this = $(this); var isChecked = $this.parent().find('input').prop('checked'); $this.parent().find('input').prop('checked', !isChecked).change(); });
             $('div.sSNTreeWrapper input').change(function(){ $this = $(this); var sn = $this.attr('value'); $('div.sBSTreeWrapper span.sBSNode[data-sn='+sn+']').toggle(); 
-            //$("#sharewallContainer").find('a[data-share-sn='+sn+']').toggle(); 
+            $("#sharewallContainer").find('a[data-share-sn='+sn+']').toggle(); 
             });
             $('div.sNext > span[data-next]').click(function(){ $cStep = $('.sStepPad > div.sActive').next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').next('div').toggleClass('sHideAndSeek').prev('div').toggleClass('sHideAndSeek'); 

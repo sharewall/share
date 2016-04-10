@@ -657,7 +657,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     font: 400 14px Roboto;
     display: inline-block;
     height: 58px;
-    width: 80px;
+    margin-left:15px;
     text-align: center;
     line-height: 58px;
     cursor: pointer;

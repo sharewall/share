@@ -96,6 +96,7 @@ def create(request):
     template_name = 'buttons_constructor/create.html'
     title = 'Create buttons constructor'
     header = 'Конструктор'
+    
     #all_soc_net_list = SocialNetworks.objects.all()
     #clear_list_soc = []
     #SOCIAL_DEFAULT = ''
@@ -103,6 +104,7 @@ def create(request):
         #if not s.shortcut in SOCIAL_DEFAULT:
             #SOCIAL_DEFAULT += s.shortcut + ','
             #clear_list_soc += s
+
     if request.method == 'POST':
         buttons_constructor_form = ButtonsConstructorForm(data=request.POST)
         if buttons_constructor_form.is_valid():
@@ -114,22 +116,37 @@ def create(request):
                 cleaned_social_networks += s + ','
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
-            buttons_constructor.with_counter = True
+            #buttons_constructor.with_counter = True
             buttons_constructor.save()
             wm_area_pk_post = request.POST.get('webmaster_area','')
             if wm_area_pk_post:
                 if wm_area_pk_post != 'all':
+
                     try:
-                        wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post)
+                        wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
+                        old_btn_const_pk = wm_area.buttons_constructor.pk
                         wm_area.buttons_constructor = buttons_constructor
                         wm_area.save()
+
+                        ButtonsConstructorModel.objects.get(pk=old_btn_const_pk).delete()
                     except:
                         pass
                 else:
                     wm_area_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
-                    for w in wm_area_list:
-                        w.buttons_constructor = buttons_constructor
-                        w.save()
+                    old_btns_pk_list = []
+
+                    try:
+                        for w in wm_area_list:
+                            if w.buttons_constructor.pk not in old_btns_pk_list:
+                                old_btns_pk_list.append(w.buttons_constructor.pk)
+
+                            w.buttons_constructor = buttons_constructor
+                            w.save()
+
+                        for pk in old_btns_pk_list:
+                            ButtonsConstructorModel.objects.get(pk=pk).delete()
+                    except:
+                        pass
             return HttpResponseRedirect('/webmaster-area/statistic/')
             #return render(request, template_name,
             #{
@@ -141,7 +158,8 @@ def create(request):
             return render(request, template_name,
             {
                 'page': { 'title': title, 'header': header },
-                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+                #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
                 'btns_images': BtnsImages.objects.all(),
                 'social_networks': SocialNetworks.objects.all()
                 #'error': buttons_constructor_form.errors,
@@ -149,20 +167,20 @@ def create(request):
             })
     else:
         #return HttpResponseRedirect('/buttons-constructor/')
-        list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
-        list_distinct, list_distinct_keys = [], []
+        #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
+        #list_distinct, list_distinct_keys = [], []
 
-        for area in list_all_user_areas:
-            if area.name_area not in list_distinct_keys:
-                list_distinct_keys.append(area.name_area)
-                list_distinct.append(area) 
+        #for area in list_all_user_areas:
+        #    if area.name_area not in list_distinct_keys:
+        #        list_distinct_keys.append(area.name_area)
+        #        list_distinct.append(area) 
         
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header },
             #'buttons_constructor_form': ButtonsConstructorForm(),
-            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-            'areas': list_distinct,
+            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+            #'areas': list_distinct,
             'btns_images': BtnsImages.objects.all(),
             'social_networks': SocialNetworks.objects.all()
         })
