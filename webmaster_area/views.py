@@ -274,12 +274,12 @@ def checkconfig(request):
                 short_sn = list_sn[index_sn].shortcut
                 list_sn_shortcuts = [sn.shortcut for sn in list_sn]
                 index_sn = list_sn_shortcuts.index(short_sn)
-            temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-            temp_social_counter[index_sn] += 1
-            wma_today.today_social_counter = ''
-            for i in temp_social_counter:
-                wma_today.today_social_counter += str(i) + ','
-            wma_today.today_social_counter = wma_today.today_social_counter[:-1]
+                temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
+                temp_social_counter[index_sn] += 1
+                wma_today.today_social_counter = ''
+                for i in temp_social_counter:
+                    wma_today.today_social_counter += str(i) + ','
+                wma_today.today_social_counter = wma_today.today_social_counter[:-1]
 
             wma_today.save()
             answer += 'console.log("'+str(wma_today) + ' updated!");' 
@@ -290,13 +290,13 @@ def checkconfig(request):
                 short_sn = list_sn[index_sn].shortcut
                 list_sn_shortcuts = [sn.shortcut for sn in list_sn]
                 index_sn = list_sn_shortcuts.index(short_sn)
-            temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-            temp_social_counter[index_sn] += 1
-            wma_today.today_social_counter = ''
-            for i in temp_social_counter:
-                wma_today.today_social_counter += str(i) + ','
-            wma_today.today_social_counter = wma_today.today_social_counter[:-1]
-            wma_today.save()
+                temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
+                temp_social_counter[index_sn] += 1
+                wma_today.today_social_counter = ''
+                for i in temp_social_counter:
+                    wma_today.today_social_counter += str(i) + ','
+                wma_today.today_social_counter = wma_today.today_social_counter[:-1]
+                wma_today.save()
 
             answer += 'console.log("'+str(wma_today) + ' created!");' 
 
