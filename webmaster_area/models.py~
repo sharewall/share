@@ -78,8 +78,8 @@ class AreaToday(models.Model):
         return str("Area name: %s" % self.webmaster_area.name_area + ", area url: %s" % self.webmaster_area.url + " <<== %s" % self.webmaster_area)
 
     def save(self, *args, **kwargs):
-        self.webmaster_area.total_share_counter = self.today_share_counter
-        self.webmaster_area.save()
+        #self.webmaster_area.total_share_counter = self.today_share_counter
+        #self.webmaster_area.save()
         super(AreaToday, self).save(*args, **kwargs)
 
 class PageDetail(models.Model):

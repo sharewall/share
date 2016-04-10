@@ -249,7 +249,9 @@ def checkconfig(request):
         if history_referrer != history_rr and history_parsed_referrer in list_parsed_sn:
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
+
         #wma!
+        '''
         difference_share_counter = ''
         for s,s2 in zip(snc.split(','), wma_object.total_share_counter.split(',')):
             difference_share_counter += str(int(s) - int(s2)) + ','
@@ -263,10 +265,14 @@ def checkconfig(request):
         new_today_share_counter = new_today_share_counter[:-1]
         new_total_social_counter = wma_object.total_social_counter
         update_today_social_counter = wma_object.today_social_counter
+        '''
+
         if index_sn is not None:
             short_sn = list_sn[index_sn].shortcut
             list_sn_shortcuts = [sn.shortcut for sn in list_sn]
             index_sn = list_sn_shortcuts.index(short_sn)
+
+            '''
             temp_li_today_sn = [int(s) for s in new_today_social_counter.split(',')]
             temp_li_total_sn = [int(s) for s in new_total_social_counter.split(',')]
             temp_li_update_today_sn = [int(s) for s in update_today_social_counter.split(',')]
@@ -285,7 +291,9 @@ def checkconfig(request):
             new_today_social_counter = new_today_social_counter[:-1]
             new_total_social_counter = new_total_social_counter[:-1]
             update_today_social_counter = update_today_social_counter[:-1]
+            '''
 
+        '''
         if wma_object.date == datetime.date.today():
             wma_object.today_share_counter = new_today_share_counter
             wma_object.total_share_counter = snc
@@ -296,6 +304,7 @@ def checkconfig(request):
         else:
             wma_object = WebmasterAreaModel.objects.create(buttons_constructor = wma_object.buttons_constructor, name_area = wma_object.name_area, url=wma_object.url, today_social_counter=new_today_social_counter, total_social_counter=new_total_social_counter, today_share_counter=difference_share_counter, total_share_counter=snc)
             answer += 'console.log("'+str(wma_object) + ' created!");' 
+        '''
         #page_detail, created = PageDetail.objects.get_or_create(webmaster_area=wma_object, url=request_url, defaults={'': 1, 'title': request_title})
         #if not created:
             #page_detail.page_social_traffic += 1

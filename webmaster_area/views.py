@@ -266,12 +266,19 @@ def checkconfig(request):
         new_total_social_counter = wma_object.total_social_counter
         update_today_social_counter = wma_object.today_social_counter
         '''
+        wma_today = AreaToday.objects.get(webmaster_area=wma_object,date=datetime.date.today())
+        if wma_today:
+            wma_today.today_share_counter = snc
+            wma_today.save()
+            answer += 'console.log("'+str(wma_today) + ' updated!");' 
+        else:
+            wma_today = AreaToday.objects.create(webmaster_area=wma_object,date=datetime.date.today(),today_share_counter=snc)
+            answer += 'console.log("'+str(wma_today) + ' created!");' 
 
         if index_sn is not None:
             short_sn = list_sn[index_sn].shortcut
             list_sn_shortcuts = [sn.shortcut for sn in list_sn]
             index_sn = list_sn_shortcuts.index(short_sn)
-
 
             '''
             temp_li_today_sn = [int(s) for s in new_today_social_counter.split(',')]
