@@ -14,8 +14,9 @@ from django.core.urlresolvers import reverse
 
 class LandingView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
-    template_name = 'landing/index.html'
-    title = 'Landing'
+    #template_name = 'landing/index.html'
+    template_name = 'webmaster_area/statistic-main.html'
+    title = 'Главная'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name,

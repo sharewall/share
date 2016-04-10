@@ -61,6 +61,40 @@ def statistic(request):
     })
 
 @login_required
+def detailmain(request):
+    template_name = 'webmaster_area/detail-main.html'
+    
+    dates = []
+    shows = []
+    shares = []
+    socials = []
+    clicks = []
+    money = []
+
+    areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+    
+    for area in areas:
+        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
+        for a in area_per_day_list:
+            dates.append(a.date.strftime("%d.%m"))
+            shares.append(
+                    int(a.today_share_counter.split(',')[0])+
+                    int(a.today_share_counter.split(',')[1])+
+                    int(a.today_share_counter.split(',')[2])
+                    )
+
+    return render(request, template_name,
+    {
+        'dates': dates,
+        'shows': shows,
+        'shares': shares,
+        'socials': socials,
+        'clicks': clicks,
+        'money': money
+    })
+
+@login_required
 def detail(request, name):
     template_name = 'webmaster_area/detail.html'
     title = name
