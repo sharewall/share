@@ -622,12 +622,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sBtnConstructor > span:first-of-type,
 .sListConstructors > span:first-of-type,
 .sListConstructors > a:first-of-type{
-    background-color: #ffae00;
-    color: #ffffff;      
     line-height: 33px;
     height: 35px;
-    width: 111px;
-    margin-right: -5px;
+    /*width: 111px;*/
     margin-left: 0;
 }
 .sBtnConstructor > div.sStepPad{
@@ -1046,12 +1043,63 @@ span[data-sn="li"] {
     font: 400 15px Roboto; 
     display: block;
     color: #45474d;
+    /*background: url(../images/calendar.png);*/
+}
+.sDatePicker{
+    color: #32353c;
+    font: 400 14px Roboto;
+    margin-top: 65px;
+    margin-bottom: 27px;    
+}
+.sDatePicker > label{
+    padding-left: 9px;
+}
+.sDatePicker .sInputDateWrapper{
+    width: 229px;
+    height: 37px;
+    /*overflow: hidden;*/
+    display: inline-block;   
+}
+.sDatePicker .sFilterShow{
+    border-radius: 10px;
+    width: 155px;
+    height: 50px;
+    display: block;
+    background: url(../images/filter-show.png);
+    color: #ffffff;
+    font: 400 16px Roboto;
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.sInputDateWrapper > span.sCalendarIcon{
+    background: url(../images/calendar.png) no-repeat;
+    width: 26px;
+    height: 30px;
+    display: block;
+    position: relative;
+    bottom: 100%;
+    left: 87%;
+    cursor: pointer;
+}
+.sDatePicker .inputDate{
+    background: url(../images/inputdate.png) no-repeat;
+    width: 231px;
+    height: 39px;
+    margin-left: 9px;
+    border: none;
+    padding-left: 10px;
+    color: #262d38;
+    font: 400 14px Roboto;
 }
 .sBtnConstructor > span,
 .sListConstructors > span{
     display: inline-block;
     height: 35px;
-    width: 111px;
+    /*width: 111px;*/
+    padding: 0 17px 0 17px;
     color: #45474d;
     font: 400 15px Roboto;   
     line-height: 33px;
@@ -1059,14 +1107,20 @@ span[data-sn="li"] {
     cursor: default;
     margin-left: 1px;
     border-radius: 4px 4px 0 0;
+    margin-right: -4px;
+}
+.sListConstructors > span{
+    cursor:pointer;
+}
+.sListConstructors > span.sActive{
+    background-color: #ffae00;
+    color: #ffffff;      
 }
 .sGLine{
     margin-top: 1px;
     background-color: #8f8f8f;
     width: 100%;
     height: 1px;
-    
-    
 }
 .sBtnConstructor > form > *{
      display: block;

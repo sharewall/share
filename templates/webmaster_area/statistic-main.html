@@ -3,6 +3,11 @@
 
   {% block custom_style %}
       <link rel="stylesheet" type="text/css" href="{% static "sharewall-template/css/highslide.css" %}"/>
+      <link rel="stylesheet" media="screen" type="text/css" href="{% static "sharewall-template/css/datepicker.css" %}"/>
+      <script type="text/javascript" src="{% static "sharewall-template/js/datepicker.js" %}"></script>
+      <script type="text/javascript" src="{% static "sharewall-template/js/eye.js" %}"></script>
+      <script type="text/javascript" src="{% static "sharewall-template/js/utils.js" %}"></script>
+
   {% endblock %}   
   {% block header %}
     <div id="header" class="sBd-BlueH sWidth-100p">
@@ -64,6 +69,16 @@
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sListConstructors">
+              <div class="sDatePicker">
+                    <label for="inputDate">Период: </label>
+                    <div class="sInputDateWrapper"> 
+                      <input class="inputDate" id="inputDate" value="">
+                        <span class="sCalendarIcon" onclick="showDatePicker()"></span>
+                    </div>
+                    <span class="sFilterShow" onclick="filterDateShow()">Показать</span>
+                    <p id="date2"></p>
+              </div>
+              
               <div class="sStatistic">
                 <iframe src="/webmaster-area/detail-main/" style="width: 100%; min-height: 450px;" scrolling="no" id="detail" frameborder="0"></iframe>
               </div>
@@ -105,4 +120,36 @@
           </div>
            </div>
         </div>
+<script>
+$(function(){
+    //var now = new Date();
+    //now.setDate(now.getDate()-10);
+    //var now2 = new Date();
+    //now2.setDate(now.getDate()-5);
+    //now2.setHours(0,0,0,0);
+
+    $('#date2').DatePicker({
+        flat: true,
+        format: 'd.m.Y',
+        date: ['11.04.2016','12.04.2016'],
+        current: '11.04.2016',
+        calendars: 3,
+        mode: 'range',
+        starts: 1,
+        onChange: function(formated, dates){
+		$('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
+            //if ($('#closeOnSelect input').attr('checked')) {
+            //    $('#inputDate').DatePickerHide();
+            //}
+	    }
+    }).hide();
+    
+});
+function showDatePicker(){
+    $('#date2').slideToggle(400);
+}
+function filterDateShow(){
+    console.log($('#inputDate').val());
+}
+</script>
   {% endblock %}

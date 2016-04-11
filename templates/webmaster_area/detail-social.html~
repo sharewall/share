@@ -56,33 +56,48 @@
                         color: '#808080'
                     }]
                 },
+                //tooltip: {
+                //    valueSuffix: ' просмотров'
+                //},
                 legend: {
                     layout: 'horizontal',
                     //align: 'top',
-                    x: -20,
-                    verticalAlign: 'bottom',
-                    borderWidth: 0
+                    x: -40,
+                    verticalAlign: 'top',
+                    borderWidth: 10
                 },
                 series: [
                 {
-                    name: 'Показы',
-                    data: {{ shows }}
+                    name: 'Вконтакте',
+                    data: {{ todayVK }}
                 },
                 {
-                    name: 'Расшарили',
-                    data: {{ shares }}
+                    name: 'Facebook',
+                    data: {{ todayFB }}
                 }, 
                 {
-                    name: 'Социальный трафик',
-                    data: {{ socials }}
+                    name: 'Twitter',
+                    data: {{ todayTW }}
                 },
                 {
-                    name: 'Клики',
-                    data: {{ clicks }}
+                    name: 'Одноклассники',
+                    data: {{ todayOD }}
                 },
                 {
-                    name: 'Заработок',
-                    data: {{ money }}
+                    name: 'Google+',
+                    data: {{ todayGP }}
+                },
+                {
+                    name: 'МойМир@Mail.ru',
+                    data: {{ todayMA }}
+                },
+                {
+                    name: 'LinkedIn',
+                    data: {{ todayLI }}
+                },
+                {
+                    name: 'LiveJournal',
+                    data: {{ todayLJ }}
                 }
                 ]
             });

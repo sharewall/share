@@ -3,7 +3,12 @@
 
   {% block custom_style %}
       <link rel="stylesheet" type="text/css" href="{% static "sharewall-template/css/highslide.css" %}"/>
-  {% endblock %}   
+      <link rel="stylesheet" media="screen" type="text/css" href="{% static "sharewall-template/css/datepicker.css" %}"/>
+      <script type="text/javascript" src="{% static "sharewall-template/js/datepicker.js" %}"></script>
+      <script type="text/javascript" src="{% static "sharewall-template/js/eye.js" %}"></script>
+      <script type="text/javascript" src="{% static "sharewall-template/js/utils.js" %}"></script>
+
+  {% endblock %}    
   {% block header %}
     <div id="header" class="sBd-BlueH sWidth-100p">
           <div class="sContainer sMargin-Auto">
@@ -66,14 +71,24 @@
           <div class="sListConstructors">
               
               <h2 class="sH2">Статистика</h2>
-              <span class="sTextAlign-C">Кнопки</span>
+              <span class="sTextAlign-C sTabs" data-tabs="1">Площадки</span>
+              <span class="sTextAlign-C sTabs" data-tabs="2">Социальный трафик</span>
+              <span class="sTextAlign-C sTabs" data-tabs="3">Заработок</span>
               <div class="sGLine"></div>
+              <div class="sDatePicker" style="margin-top:26px;">
+                    <label for="inputDate">Период: </label>
+                    <div class="sInputDateWrapper"> 
+                      <input class="inputDate" id="inputDate" value="">
+                        <span class="sCalendarIcon" onclick="showDatePicker()"></span>
+                    </div>
+                    <span class="sFilterShow" onclick="filterDateShow()">Показать</span>
+                    <p id="date2"></p>
+              </div>
               <div class="sAreaChoices-Line">
                   {% for a in areas %}
                   <span onclick="showDetail(this)">{{ a.name_area }}</span>
                   {% endfor %}
               </div>
-              
           
               <div class="sStatistic">
               </div>
@@ -117,14 +132,37 @@
         </div>
         <script>
             $(function(){
+                $('.sListConstructors > span.sTabs').click(function(){$this = $(this); $this.parent().find('span.sTabs').removeClass('sActive'); $this.addClass('sActive'); var tabNumber = $this.data('tabs'); $('iframe').hide();  $('iframe:nth-child('+tabNumber+')').show(); });
                 $('.sAreaChoices-Line > span:first-of-type()').click().addClass('sActive');
+                $('.sListConstructors > span:first-of-type()').click();
+
+                $('#date2').DatePicker({
+                    flat: true,
+                    format: 'd.m.Y',
+                    date: ['11.04.2016','12.04.2016'],
+                    current: '11.04.2016',
+                    calendars: 3,
+                    mode: 'range',
+                    starts: 1,
+                    onChange: function(formated, dates){
+                    $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
+
+                    }
+                }).hide();
             });
             function showDetail(e){
               $this = $(e);
-              $('.sAreaChoices-Line > span').removeClass('sActive');
+                $('.sAreaChoices-Line > span').removeClass('sActive');
                 $('iframe').remove();
                 $('<iframe src="/webmaster-area/detail/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic');
+                $('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic');
               $this.addClass('sActive');
+            }
+            function showDatePicker(){
+                $('#date2').slideToggle(400);
+            }
+            function filterDateShow(){
+                console.log($('#inputDate').val());
             }
         </script>
   {% endblock %}

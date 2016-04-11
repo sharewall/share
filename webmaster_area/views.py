@@ -81,7 +81,22 @@ def detailmain(request):
             shares.append(
                     int(a.today_share_counter.split(',')[0])+
                     int(a.today_share_counter.split(',')[1])+
-                    int(a.today_share_counter.split(',')[2])
+                    int(a.today_share_counter.split(',')[2])+
+                    int(a.today_share_counter.split(',')[3])+
+                    int(a.today_share_counter.split(',')[4])+
+                    int(a.today_share_counter.split(',')[5])+
+                    int(a.today_share_counter.split(',')[6])+
+                    int(a.today_share_counter.split(',')[7])
+                    )
+            socials.append(
+                    int(a.today_social_counter.split(',')[0])+
+                    int(a.today_social_counter.split(',')[1])+
+                    int(a.today_social_counter.split(',')[2])+
+                    int(a.today_social_counter.split(',')[3])+
+                    int(a.today_social_counter.split(',')[4])+
+                    int(a.today_social_counter.split(',')[5])+
+                    int(a.today_social_counter.split(',')[6])+
+                    int(a.today_social_counter.split(',')[7])
                     )
 
     return render(request, template_name,
@@ -93,6 +108,54 @@ def detailmain(request):
         'clicks': clicks,
         'money': money
     })
+
+@login_required
+def detailsocial(request, name):
+    template_name = 'webmaster_area/detail-social.html'
+    title = name
+    header = name
+    
+    dates = []
+    todayVK = []
+    todayFB = []
+    todayTW = []
+    todayOD = []
+    todayGP = []
+    todayMA = []
+    todayLI = []
+    todayLJ = []
+
+    area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    
+    if area:
+        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
+        for a in area_per_day_list:
+            dates.append(a.date.strftime("%d.%m"))
+            todayVK.append(int(a.today_social_counter.split(',')[0]))
+            todayFB.append(int(a.today_social_counter.split(',')[1]))
+            todayTW.append(int(a.today_social_counter.split(',')[2]))
+            todayOD.append(int(a.today_social_counter.split(',')[3]))
+            todayGP.append(int(a.today_social_counter.split(',')[4]))
+            todayMA.append(int(a.today_social_counter.split(',')[5]))
+            todayLI.append(int(a.today_social_counter.split(',')[6]))
+            todayLJ.append(int(a.today_social_counter.split(',')[7]))
+
+        return render(request, template_name,
+        {
+            'page': { 'title': title, 'header': header },
+            'dates': dates,
+            'todayVK': todayVK,
+            'todayFB': todayFB,
+            'todayTW': todayTW,
+            'todayOD': todayOD,
+            'todayGP': todayGP,
+            'todayMA': todayMA,
+            'todayLI': todayLI,
+            'todayLJ': todayLJ
+        })
+    else:
+        return HttpResponseRedirect('/webmaster-area/statistic/')
 
 @login_required
 def detail(request, name):
