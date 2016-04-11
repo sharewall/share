@@ -22,7 +22,7 @@
         <div class="sHeight-Auto">
             <div class="sContainer sMargin-Auto" style="width:100%;">
                 <div class="sListConstructors">
-                    <div id="highCharts" style="padding-bottom: 100px; min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    <div id="highChartsSocial" style="padding-bottom: 100px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
     <script src="{% static "sharewall-template/js/highslide.config.js" %}" charset="utf-8"></script>
     <script>
         $(function () {
-            $('#highCharts').highcharts({
+            $('#highChartsSocial').highcharts({
                 title: {
                     text: '',
                     x: -20 
@@ -62,7 +62,7 @@
                 legend: {
                     layout: 'horizontal',
                     //align: 'top',
-                    x: 0,
+                    x: -20,
                     verticalAlign: 'top',
                     borderWidth: 0
                 },
