@@ -20,7 +20,7 @@
   <body class="sWidth-100p sHeight-100p sOverHidden-X">
     <div class="sWrapper">
         <div class="sHeight-Auto">
-            <div class="sContainer sMargin-Auto">
+            <div class="sContainer sMargin-Auto" style="width:100%;">
                 <div class="sListConstructors">
                     <div id="highCharts" style="padding-bottom: 100px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
@@ -34,6 +34,8 @@
     <script src="{% static "sharewall-template/js/highslide.config.js" %}" charset="utf-8"></script>
     <script>
         $(function () {
+          try{
+            window.parent.$('div.sBusyOverlay').show();
             $('#highCharts').highcharts({
                 title: {
                     text: '',
@@ -60,7 +62,7 @@
                     layout: 'horizontal',
                     //align: 'top',
                     x: -20,
-                    verticalAlign: 'top',
+                    verticalAlign: 'bottom',
                     borderWidth: 0
                 },
                 series: [
@@ -88,6 +90,12 @@
             });
             $('.highcharts-button').hide();
             $('svg > text:last-of-type').hide();
+            window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
+            window.parent.setDatePicker("{{ dates_range_start|safe }}", "{{ dates_range_end|safe }}");
+            }
+            finally{
+              window.parent.$('div.sBusyOverlay').hide();
+            }
         });
     </script>
   </body>

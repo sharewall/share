@@ -66,6 +66,7 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
+  <div class="sBusyOverlay">Загрузка...</div>
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sListConstructors">
@@ -81,7 +82,7 @@
                       <input class="inputDate" id="inputDate" value="">
                         <span class="sCalendarIcon" onclick="showDatePicker()"></span>
                     </div>
-                    <span class="sFilterShow" onclick="filterDateShow()">Показать</span>
+                    <span class="sFilterShow" onclick="filterDateShow()">Фильтровать</span>
                     <p id="date2"></p>
               </div>
               <div class="sAreaChoices-Line">
@@ -91,6 +92,8 @@
               </div>
           
               <div class="sStatistic">
+                <div data-tabs="1"></div>
+                <div data-tabs="2"></div>
               </div>
           </div>
       </div>
@@ -134,19 +137,23 @@
             $(function(){
                 $('.sListConstructors > span.sTabs').click(function(){
                   $this = $(this); $this.parent().find('span.sTabs').removeClass('sActive'); $this.addClass('sActive'); 
-                  //var tabNumber = $this.data('tabs'); 
+                  var tabNumber = $this.data('tabs'); 
+                  $('.sStatistic > div').hide();
+                  $('.sStatistic > div[data-tabs="'+tabNumber+'"]').show();
                   //$('iframe').hide();  
                   //$('iframe:nth-child('+tabNumber+')').show(); 
-                  $('iframe').remove();
-                  $('.sAreaChoices-Line > span').removeClass('sActive');
+                  //$('iframe').remove();
+                  //$('.sAreaChoices-Line > span').removeClass('sActive');
                 });
+                $('<iframe  style="width: 100%; " frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="1"]');
+                $('<iframe  style="width: 100%; " frameborder="0" scrolling="no" id="detail-social"></iframe>').appendTo('.sStatistic > div[data-tabs="2"]');
                 $('.sListConstructors > span:first-of-type()').click();
                 $('.sAreaChoices-Line > span:first-of-type()').click();
 
                 $('#date2').DatePicker({
                     flat: true,
                     format: 'd.m.Y',
-                    date: ['11.04.2016','12.04.2016'],
+                    date: ['10.04.2016','30.04.2016'],
                     current: '11.04.2016',
                     calendars: 3,
                     mode: 'range',
@@ -158,23 +165,50 @@
                 }).hide();
             });
             function showDetail(e){
+              try{
+              $('div.sBusyOverlay').show();
               $this = $(e);
               $('.sAreaChoices-Line > span').removeClass('sActive');
-              $('iframe').remove();
-              var tabNumber = $('.sListConstructors > span.sTabs.sActive').data('tabs');
-              if(tabNumber == 1){
-              $('<iframe src="/webmaster-area/detail/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic');
-              }
-              else if(tabNumber == 2){
-              $('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detailSocial"></iframe>').appendTo('.sStatistic');
-              }
+              //$('iframe').remove();
+              //var tabNumber = $('.sListConstructors > span.sTabs.sActive').data('tabs');
+              //if(tabNumber == 1){
+              //$('<iframe src="/webmaster-area/detail/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="1"]');
+              //$('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="2"]');
+              //}
+              //else if(tabNumber == 2){
+              //$('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detailSocial"></iframe>').appendTo('.sStatistic');
+              //}
+              $('.sStatistic > div').show();
+              $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+$this.text()).css('min-height','450px');
+              setTimeout(function(){
+                $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+$this.text()).css('min-height','450px');
+              }, 500);
+              //$('.sListConstructors > span.sTabs.sActive').click();
               $this.addClass('sActive');
+              }
+              catch(e){
+              $('div.sBusyOverlay').hide();
+              }
+            }
+            function setDatePicker(start, end){
+                $('#date2').DatePickerSetDate([start, end], true);
             }
             function showDatePicker(){
                 $('#date2').slideToggle(400);
             }
             function filterDateShow(){
-                console.log($('#inputDate').val());
+                try{
+                  $('div.sBusyOverlay').show();
+                  $this = $('.sAreaChoices-Line > span.sActive');
+                  $('.sStatistic > div').show();
+                  $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+$this.text()+'/?daterange='+$('#inputDate').val()).css('min-height','450px');
+                  setTimeout(function(){
+                    $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+$this.text()+'/?daterange='+$('#inputDate').val()).css('min-height','450px');
+                  }, 500);
+                }
+                catch(e){
+                  $('div.sBusyOverlay').hide();
+                }
             }
         </script>
   {% endblock %}

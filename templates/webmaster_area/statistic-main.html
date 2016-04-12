@@ -66,6 +66,7 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
+  <div class="sBusyOverlay">Загрузка...</div>
   <div class="sHeight-Auto">
       <div class="sContainer sMargin-Auto">
           <div class="sListConstructors">
@@ -75,7 +76,7 @@
                       <input class="inputDate" id="inputDate" value="">
                         <span class="sCalendarIcon" onclick="showDatePicker()"></span>
                     </div>
-                    <span class="sFilterShow" onclick="filterDateShow()">Показать</span>
+                    <span class="sFilterShow" onclick="filterDateShow()">Фильтровать</span>
                     <p id="date2"></p>
               </div>
               
@@ -127,29 +128,52 @@ $(function(){
     //var now2 = new Date();
     //now2.setDate(now.getDate()-5);
     //now2.setHours(0,0,0,0);
+    $('div.sBusyOverlay').show();
 
     $('#date2').DatePicker({
         flat: true,
         format: 'd.m.Y',
-        date: ['11.04.2016','12.04.2016'],
+        date: ['10.04.2016','30.04.2016'],
         current: '11.04.2016',
         calendars: 3,
         mode: 'range',
         starts: 1,
         onChange: function(formated, dates){
-		$('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
-            //if ($('#closeOnSelect input').attr('checked')) {
-            //    $('#inputDate').DatePickerHide();
-            //}
-	    }
+          $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
+                  //if ($('#closeOnSelect input').attr('checked')) {
+                  //    $('#inputDate').DatePickerHide();
+                  //}
+        }
     }).hide();
     
 });
+function setDatePicker(start, end){
+    $('#date2').DatePickerSetDate([start, end], true);
+    //$('#date2').DatePicker({
+    //    flat: true,
+    //    format: 'd.m.Y',
+    //    date: ['11.04.2016','12.04.2016'],
+    //    current: '11.04.2016',
+    //    calendars: 3,
+    //    mode: 'range',
+    //    starts: 1,
+    //    onChange: function(formated, dates){
+    //      $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
+    //    }
+    //}).hide();
+}
 function showDatePicker(){
     $('#date2').slideToggle(400);
 }
 function filterDateShow(){
-    console.log($('#inputDate').val());
+    //console.log($('#inputDate').val());
+    try{
+      $('div.sBusyOverlay').show();
+      $('iframe').attr('src','/webmaster-area/detail-main/?daterange='+$('#inputDate').val());
+    }
+    catch(e){
+      $('div.sBusyOverlay').hide();
+    }
 }
 </script>
   {% endblock %}

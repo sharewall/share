@@ -103,6 +103,7 @@
             });
             $('.highcharts-button').hide();
             $('svg > text:last-of-type').hide();
+            window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
         });
     </script>
   </body>
