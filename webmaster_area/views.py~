@@ -216,6 +216,17 @@ def detail(request, name):
     todayLJ = []
     dates_range_start = None
     dates_range_end = None
+    statistic = {
+        'vk': 0,        
+        'fb': 0,        
+        'tw': 0,        
+        'od': 0,        
+        'gp': 0,        
+        'ma': 0,        
+        'li': 0,        
+        'lj': 0,
+        'all': 0
+    }
 
     area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
     
@@ -237,17 +248,60 @@ def detail(request, name):
 
         for a in area_per_day_list:
             dates.append(a.date.strftime("%d.%m"))
-            todayVK.append(int(a.today_share_counter.split(',')[0]))
-            todayFB.append(int(a.today_share_counter.split(',')[1]))
-            todayTW.append(int(a.today_share_counter.split(',')[2]))
-            todayOD.append(int(a.today_share_counter.split(',')[3]))
-            todayGP.append(int(a.today_share_counter.split(',')[4]))
-            todayMA.append(int(a.today_share_counter.split(',')[5]))
-            todayLI.append(int(a.today_share_counter.split(',')[6]))
-            todayLJ.append(int(a.today_share_counter.split(',')[7]))
 
+            temp = int(a.today_share_counter.split(',')[0])
+            todayVK.append(temp)
+            if temp > statistic['vk']:
+                statistic['vk'] = temp
+            #statistic['vk'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[1])
+            todayFB.append(temp)
+            if temp > statistic['fb']:
+                statistic['fb'] = temp
+            #statistic['fb'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[2])
+            todayTW.append(temp)
+            if temp > statistic['tw']:
+                statistic['tw'] = temp
+            #statistic['tw'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[3])
+            todayOD.append(temp)
+            if temp > statistic['od']:
+                statistic['od'] = temp
+            #statistic['od'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[4])
+            todayGP.append(temp)
+            if temp > statistic['gp']:
+                statistic['gp'] = temp
+            #statistic['gp'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[5])
+            todayMA.append(temp)
+            if temp > statistic['ma']:
+                statistic['ma'] = temp
+            #statistic['ma'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[6])
+            todayLI.append(temp)
+            if temp > statistic['li']:
+                statistic['li'] = temp
+            #statistic['li'] += temp
+            #statistic['all'] += temp
+            temp = int(a.today_share_counter.split(',')[7])
+            todayLJ.append(temp)
+            if temp > statistic['lj']:
+                statistic['lj'] = temp
+            #statistic['lj'] += temp
+            #statistic['all'] += temp
+
+        statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
         return render(request, template_name,
         {
+            'statistic': statistic,
             'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
             'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
             'page': { 'title': title, 'header': header },

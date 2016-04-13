@@ -21,8 +21,55 @@
     <div class="sWrapper">
         <div class="sHeight-Auto">
             <div class="sContainer sMargin-Auto" style="width:100%;">
-                <div class="sListConstructors">
-                    <div id="highCharts" style="padding-bottom: 100px; min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <div class="sListConstructors" style="padding-bottom:0px">
+                    <div id="highCharts" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="sTableAreas">
+                    <div class="sTableAreasFieldName">
+                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Вконтакте</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">Facebook</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">Twitter</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">Одноклассники</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">Google+</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">LiveJournal</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">Всего</span>
+                        </div>
+                    </div>
+                      
+                    <div class="sTableAreasCell">
+                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Шаринг за период</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.vk }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.fb }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.tw }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.od }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.gp }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.ma }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.li }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.lj }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.all }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,6 +148,7 @@
                 }
                 ]
             });
+            //console.log({{ statistic|safe }});
             $('.highcharts-button').hide();
             $('svg > text:last-of-type').hide();
             window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
