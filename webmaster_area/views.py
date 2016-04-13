@@ -72,6 +72,7 @@ def detailmain(request):
     money = []
     dates_range_start = None
     dates_range_end = None
+    isEmpty = True
 
     areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
     
@@ -80,11 +81,16 @@ def detailmain(request):
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
     except Exception as inst:
-        temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
-        temp_areaToday = temp_areaTodayList.first()
-        dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
-        temp_areaToday = temp_areaTodayList.last()
-        dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
+        if areas.first():
+            isEmpty = False
+            temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
+            temp_areaToday = temp_areaTodayList.first()
+            dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
+            temp_areaToday = temp_areaTodayList.last()
+            dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
+        else:
+            dates_range_start = datetime.datetime.now().date()
+            dates_range_end = datetime.datetime.now().date()
 
     for area in areas:
         if dates_range_start and dates_range_end:
@@ -117,6 +123,7 @@ def detailmain(request):
 
     return render(request, template_name,
     {
+        'isEmpty': isEmpty,
         'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
         'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
         'dates': dates,

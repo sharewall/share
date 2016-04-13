@@ -18,6 +18,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
   </head>
   <body class="sWidth-100p sHeight-100p sOverHidden-X">
+    <div class="sBusyOverlay2" id="isEmpty">
+      Необходимо cоздать площадку!
+      <!--<a href="/webmaster-area/?create" style="color:rgb(255, 174, 0);">Необходимо cоздать площадку!</a>-->
+    </div>
     <div class="sWrapper">
         <div class="sHeight-Auto">
             <div class="sContainer sMargin-Auto" style="width:100%;">
@@ -36,60 +40,65 @@
         $(function () {
           try{
             window.parent.$('div.sBusyOverlay').show();
-            $('#highCharts').highcharts({
-                title: {
-                    text: '',
-                    x: -20 
-                },
-                subtitle: {
-                    text: '',
-                    x: -20
-                },
-                xAxis: {
-                  categories: {{ dates|safe }}
-                },
-                yAxis: {
-                    title: {
-                        text: ''
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }]
-                },
-                legend: {
-                    layout: 'horizontal',
-                    //align: 'top',
-                    x: -20,
-                    verticalAlign: 'bottom',
-                    borderWidth: 0
-                },
-                series: [
-                {
-                    name: 'Показы',
-                    data: {{ shows }}
-                },
-                {
-                    name: 'Расшарили',
-                    data: {{ shares }}
-                }, 
-                {
-                    name: 'Социальный трафик',
-                    data: {{ socials }}
-                },
-                {
-                    name: 'Клики',
-                    data: {{ clicks }}
-                },
-                {
-                    name: 'Заработок',
-                    data: {{ money }}
-                }
-                ]
-            });
-            $('.highcharts-button').hide();
-            $('svg > text:last-of-type').hide();
+            {% if isEmpty %}
+             $('div.sBusyOverlay2#isEmpty').show();
+            {% else %}
+             $('div.sBusyOverlay2#isEmpty').hide();
+              $('#highCharts').highcharts({
+                  title: {
+                      text: '',
+                      x: -20 
+                  },
+                  subtitle: {
+                      text: '',
+                      x: -20
+                  },
+                  xAxis: {
+                    categories: {{ dates|safe }}
+                  },
+                  yAxis: {
+                      title: {
+                          text: ''
+                      },
+                      plotLines: [{
+                          value: 0,
+                          width: 1,
+                          color: '#808080'
+                      }]
+                  },
+                  legend: {
+                      layout: 'horizontal',
+                      //align: 'top',
+                      x: -20,
+                      verticalAlign: 'bottom',
+                      borderWidth: 0
+                  },
+                  series: [
+                  {
+                      name: 'Показы',
+                      data: {{ shows }}
+                  },
+                  {
+                      name: 'Расшарили',
+                      data: {{ shares }}
+                  }, 
+                  {
+                      name: 'Социальный трафик',
+                      data: {{ socials }}
+                  },
+                  {
+                      name: 'Клики',
+                      data: {{ clicks }}
+                  },
+                  {
+                      name: 'Заработок',
+                      data: {{ money }}
+                  }
+                  ]
+              });
+              $('.highcharts-button').hide();
+              $('svg > text:last-of-type').hide();
+            {% endif %}
             window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
             window.parent.setDatePicker("{{ dates_range_start|safe }}", "{{ dates_range_end|safe }}");
             }
