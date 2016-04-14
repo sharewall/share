@@ -517,6 +517,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: inherit;
     line-height: 42px;
 }
+.sTableAreas .sTableAreasField{
+    overflow:hidden;
+}
 .sTableAreas .sTableAreasField:nth-child(1){
     width: 52px;
 }

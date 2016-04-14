@@ -162,10 +162,14 @@ def detailsocial(request, name):
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
         except Exception as inst:
-            temp_areaToday = area_per_day_list.first()
-            dates_range_start = temp_areaToday.date
-            temp_areaToday = area_per_day_list.last()
-            dates_range_end = temp_areaToday.date
+            if area_per_day_list.first():
+                temp_areaToday = area_per_day_list.first()
+                dates_range_start = temp_areaToday.date
+                temp_areaToday = area_per_day_list.last()
+                dates_range_end = temp_areaToday.date
+            else:
+                dates_range_start = datetime.datetime.now().date()
+                dates_range_end = datetime.datetime.now().date()
 
         if dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))
@@ -238,10 +242,14 @@ def detail(request, name):
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
         except Exception as inst:
-            temp_areaToday = area_per_day_list.first()
-            dates_range_start = temp_areaToday.date
-            temp_areaToday = area_per_day_list.last()
-            dates_range_end = temp_areaToday.date
+            if area_per_day_list.first():
+                temp_areaToday = area_per_day_list.first()
+                dates_range_start = temp_areaToday.date
+                temp_areaToday = area_per_day_list.last()
+                dates_range_end = temp_areaToday.date
+            else:
+                dates_range_start = datetime.datetime.now().date()
+                dates_range_end = datetime.datetime.now().date()
 
         if dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))
