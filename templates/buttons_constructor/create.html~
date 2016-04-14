@@ -73,8 +73,8 @@
               <span class="sTextAlign-C sDisabled">Кнопки</span>
               <span class="sTextAlign-C sDisabled">Реклама</span>
               {% else %}
-              <span class="sTextAlign-C">Кнопки</span>
-              <span class="sTextAlign-C">Реклама</span>
+              <span class="sTextAlign-C sTab sActive">Кнопки</span>
+              <span class="sTextAlign-C sTab">Реклама</span>
               {% endif %}
               <div class="sGLine"></div>
               <div class="sTopLine">
@@ -92,7 +92,7 @@
                        </select>
                    </div>
                    {% if areas.count = 0 %}
-                   <a style="right: -160px; position: relative; bottom: 28px; color: rgb(255, 174, 0); text-decoration: underline dotted rgb(255, 174, 0) ! important;" class="" href="/webmaster-area/?create">Создать площадку</a>
+                   <a style="right: -160px; position: relative; bottom: 28px; color: rgb(255, 174, 0); text-decoration: underline dotted rgb(255, 174, 0) ! important;" class="" href="/webmaster-area/?create">Необходимо cоздать площадку!</a>
                    {% endif %}
                    <span onclick="formSubmit()" id="SaveConfig" class="sSaveConfig" >Сохранить конфигурацию</span>
                   <div style="clear:both;"></div>

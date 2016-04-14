@@ -76,13 +76,15 @@ def detailmain(request):
 
     areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
     
+    if areas.first():
+        isEmpty = False
+
     try:
         request_dateRange = request.GET.get('daterange').split(' - ')
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
     except Exception as inst:
-        if areas.first():
-            isEmpty = False
+        if not isEmpty:
             temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
             temp_areaToday = temp_areaTodayList.first()
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
@@ -99,8 +101,9 @@ def detailmain(request):
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
         for a in area_per_day_list:
-            dates.append(a.date.strftime("%d.%m"))
-            shares.append(
+            temp_areaPDay_date = a.date.strftime("%d.%m")
+            if temp_areaPDay_date in dates:
+                shares[dates.index(temp_areaPDay_date)]+=(
                     int(a.today_share_counter.split(',')[0])+
                     int(a.today_share_counter.split(',')[1])+
                     int(a.today_share_counter.split(',')[2])+
@@ -109,8 +112,8 @@ def detailmain(request):
                     int(a.today_share_counter.split(',')[5])+
                     int(a.today_share_counter.split(',')[6])+
                     int(a.today_share_counter.split(',')[7])
-                    )
-            socials.append(
+                )
+                socials[dates.index(temp_areaPDay_date)]+=(
                     int(a.today_social_counter.split(',')[0])+
                     int(a.today_social_counter.split(',')[1])+
                     int(a.today_social_counter.split(',')[2])+
@@ -119,7 +122,29 @@ def detailmain(request):
                     int(a.today_social_counter.split(',')[5])+
                     int(a.today_social_counter.split(',')[6])+
                     int(a.today_social_counter.split(',')[7])
-                    )
+                )
+            else:
+                dates.append(temp_areaPDay_date)
+                shares.append(
+                        int(a.today_share_counter.split(',')[0])+
+                        int(a.today_share_counter.split(',')[1])+
+                        int(a.today_share_counter.split(',')[2])+
+                        int(a.today_share_counter.split(',')[3])+
+                        int(a.today_share_counter.split(',')[4])+
+                        int(a.today_share_counter.split(',')[5])+
+                        int(a.today_share_counter.split(',')[6])+
+                        int(a.today_share_counter.split(',')[7])
+                        )
+                socials.append(
+                        int(a.today_social_counter.split(',')[0])+
+                        int(a.today_social_counter.split(',')[1])+
+                        int(a.today_social_counter.split(',')[2])+
+                        int(a.today_social_counter.split(',')[3])+
+                        int(a.today_social_counter.split(',')[4])+
+                        int(a.today_social_counter.split(',')[5])+
+                        int(a.today_social_counter.split(',')[6])+
+                        int(a.today_social_counter.split(',')[7])
+                        )
 
     return render(request, template_name,
     {
@@ -162,10 +187,14 @@ def detailsocial(request, name):
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
         except Exception as inst:
-            temp_areaToday = area_per_day_list.first()
-            dates_range_start = temp_areaToday.date
-            temp_areaToday = area_per_day_list.last()
-            dates_range_end = temp_areaToday.date
+            if area_per_day_list.first():
+                temp_areaToday = area_per_day_list.first()
+                dates_range_start = temp_areaToday.date
+                temp_areaToday = area_per_day_list.last()
+                dates_range_end = temp_areaToday.date
+            else:
+                dates_range_start = datetime.datetime.now().date()
+                dates_range_end = datetime.datetime.now().date()
 
         if dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))

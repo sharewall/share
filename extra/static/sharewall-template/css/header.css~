@@ -517,6 +517,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: inherit;
     line-height: 42px;
 }
+.sTableAreas .sTableAreasField{
+    overflow:hidden;
+}
 .sTableAreas .sTableAreasField:nth-child(1){
     width: 52px;
 }
@@ -619,6 +622,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-left: 20px;
     margin-right: 12px;
 }
+.sBtnConstructor > span.sTab.sActive{
+    color:#FFF;
+    background-color: #ffae00;
+ }
 .sBtnConstructor > span:first-of-type,
 .sListConstructors > span:first-of-type,
 .sListConstructors > a:first-of-type{
