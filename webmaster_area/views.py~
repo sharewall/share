@@ -86,8 +86,11 @@ def detailmain(request):
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
     except Exception as inst:
+        temp_areaTodayList = None
         if not isEmpty:
             temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
+
+        if temp_areaTodayList is not None and temp_areaTodayList.first():
             temp_areaToday = temp_areaTodayList.first()
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
             temp_areaToday = temp_areaTodayList.last()
@@ -97,13 +100,55 @@ def detailmain(request):
             dates_range_end = datetime.datetime.now().date()
 
     for area in areas:
+
         if dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])
         else:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
+        #!
+        if area_per_day_list.last():
+            last_day = area_per_day_list.last()
+
+            if datetime.datetime.now().date() == last_day.date:
+                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+
+                last_day.today_social_counter = ''
+                temp_all_social_counters = [0,0,0,0,0,0,0,0]
+
+                last_day.today_share_counter = ''
+                temp_all_share_counters = [0,0,0,0,0,0,0,0]
+
+                for pd in page_detail_list:
+                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
+                    index=0
+
+                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
+                    index2=0
+
+                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
+                        temp_all_social_counters[index]=(i+i2)
+                        index+=1
+
+                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
+                        temp_all_share_counters[index2]=(i+i2)
+                        index2+=1
+
+                for i in temp_all_social_counters:
+                    last_day.today_social_counter += str(i) + ','
+
+                for i in temp_all_share_counters:
+                    last_day.today_share_counter += str(i) + ','
+
+                last_day.today_social_counter = last_day.today_social_counter[:-1]
+
+                last_day.today_share_counter = last_day.today_share_counter[:-1]
+
+                last_day.save()
+
         for a in area_per_day_list:
             temp_areaPDay_date = a.date.strftime("%d.%m")
+
             if temp_areaPDay_date in dates:
                 shares[dates.index(temp_areaPDay_date)]+=(
                     int(a.today_share_counter.split(',')[0])+
@@ -475,13 +520,23 @@ def create(request):
         }
         webmaster_area_form = WebmasterAreaForm(data=request_post_data, auto_id=False)
 
-        user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+        #user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+        all_wma_list = WebmasterAreaModel.objects.select_related("buttons_constructor__cabinet_webmaster__user").all()
         user_wma_names_list = []
-        for area in user_wma_list:
-            user_wma_names_list.append(area.name_area)
-        isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
+        all_wma_urls_list = []
 
-        if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False:
+        #for area in user_wma_list:
+        #    user_wma_names_list.append(area.name_area)
+        for area in all_wma_list:
+            if area.buttons_constructor.cabinet_webmaster.user == request.user:
+                user_wma_names_list.append(area.name_area)
+            all_wma_urls_list.append(area.url)
+
+        isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
+        isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
+
+        #if webmaster_area_form.is_valid():
+        if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False and isUrlAreaAlreadyExist == False:
             webmaster_area = webmaster_area_form.save()
             #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
             try:

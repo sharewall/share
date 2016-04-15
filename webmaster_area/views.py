@@ -86,8 +86,11 @@ def detailmain(request):
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
     except Exception as inst:
+        temp_areaTodayList = None
         if not isEmpty:
             temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
+
+        if temp_areaTodayList is not None and temp_areaTodayList.first():
             temp_areaToday = temp_areaTodayList.first()
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
             temp_areaToday = temp_areaTodayList.last()
@@ -517,13 +520,23 @@ def create(request):
         }
         webmaster_area_form = WebmasterAreaForm(data=request_post_data, auto_id=False)
 
-        user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+        #user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+        all_wma_list = WebmasterAreaModel.objects.select_related("buttons_constructor__cabinet_webmaster__user").all()
         user_wma_names_list = []
-        for area in user_wma_list:
-            user_wma_names_list.append(area.name_area)
-        isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
+        all_wma_urls_list = []
 
-        if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False:
+        #for area in user_wma_list:
+        #    user_wma_names_list.append(area.name_area)
+        for area in all_wma_list:
+            if area.buttons_constructor.cabinet_webmaster.user == request.user:
+                user_wma_names_list.append(area.name_area)
+            all_wma_urls_list.append(area.url)
+
+        isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
+        isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
+
+        #if webmaster_area_form.is_valid():
+        if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False and isUrlAreaAlreadyExist == False:
             webmaster_area = webmaster_area_form.save()
             #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
             try:
@@ -607,6 +620,44 @@ def checkconfig(request):
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
             
+            #wma today!
+            try:
+                wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
+
+                #if wma_today:
+                    #wma_today.today_share_counter = snc
+
+                    #if index_sn is not None:
+                        #short_sn = list_sn[index_sn].shortcut
+                        #list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+                        #index_sn = list_sn_shortcuts.index(short_sn)
+                        #temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
+                        #temp_social_counter[index_sn] += 1
+                        #wma_today.today_social_counter = ''
+                        #for i in temp_social_counter:
+                            #wma_today.today_social_counter += str(i) + ','
+                        #wma_today.today_social_counter = wma_today.today_social_counter[:-1]
+
+                    #wma_today.save()
+                    #answer += 'console.log("'+str(wma_today) + ' updated!");' 
+            except:
+                wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
+
+                #if wma_today:
+                #    if index_sn is not None:
+                #        short_sn = list_sn[index_sn].shortcut
+                #        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+                #        index_sn = list_sn_shortcuts.index(short_sn)
+                #        temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
+                #        temp_social_counter[index_sn] += 1
+                #        wma_today.today_social_counter = ''
+                #        for i in temp_social_counter:
+                #            wma_today.today_social_counter += str(i) + ','
+                #        wma_today.today_social_counter = wma_today.today_social_counter[:-1]
+                #        wma_today.save()
+
+                #    answer += 'console.log("'+str(wma_today) + ' created!");' 
+
             try:
                 page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
                 
