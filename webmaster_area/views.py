@@ -511,8 +511,8 @@ def checkconfig(request):
         update_today_social_counter = wma_object.today_social_counter
         '''
 
-        if parsed_referer == urlparse(request_url).netloc and urllib.urlopen(request_url).status == 200:
-            pass
+        if parsed_referer == urlparse(request_url).netloc:# and urllib.urlopen(request_url).status == 200:
+            answer += 'console.log("url ok");'
             '''
             try:
 
