@@ -184,6 +184,28 @@ def detailsocial(request, name):
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
+        if area_per_day_list.last():
+            last_day = area_per_day_list.last()
+
+            if datetime.datetime.now().date() == last_day.date:
+                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+                last_day.today_social_counter = ''
+                temp_all_social_counters = [0,0,0,0,0,0,0,0]
+
+                for pd in page_detail_list:
+                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
+                    index=0
+
+                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
+                        temp_all_social_counters[index]=(i+i2)
+                        index+=1
+
+                for i in temp_all_social_counters:
+                    last_day.today_social_counter += str(i) + ','
+
+                last_day.today_social_counter = last_day.today_social_counter[:-1]
+                last_day.save()
+
         try:
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
@@ -263,6 +285,28 @@ def detail(request, name):
     
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
+        if area_per_day_list.last():
+            last_day = area_per_day_list.last()
+
+            if datetime.datetime.now().date() == last_day.date:
+                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+                last_day.today_share_counter = ''
+                temp_all_share_counters = [0,0,0,0,0,0,0,0]
+
+                for pd in page_detail_list:
+                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
+                    index=0
+
+                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
+                        temp_all_share_counters[index]=(i+i2)
+                        index+=1
+
+                for i in temp_all_share_counters:
+                    last_day.today_share_counter += str(i) + ','
+
+                last_day.today_share_counter = last_day.today_share_counter[:-1]
+                last_day.save()
 
         try:
             request_dateRange = request.GET.get('daterange').split(' - ')
@@ -513,7 +557,10 @@ def checkconfig(request):
         '''
 
         #page detail
+        #Disable page_today
+        #Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
         request_url_html = urllib.request.urlopen(request_url)
+        soup = BeautifulSoup(request_url_html)
 
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
@@ -522,7 +569,6 @@ def checkconfig(request):
                 page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
                 
                 if page_detail:
-                    soup = BeautifulSoup(request_url_html)
                     page_detail.title = soup.title.string
                     page_detail.total_share_counter = snc
 
