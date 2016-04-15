@@ -13,6 +13,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404, render, redirect
 from webmaster_area.forms import WebmasterAreaForm, AreaCategory
 from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
+from bs4 import BeautifulSoup
 
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -511,54 +512,56 @@ def checkconfig(request):
         update_today_social_counter = wma_object.today_social_counter
         '''
 
+        #page detail
         request_url_html = urllib.request.urlopen(request_url)
+
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
-            '''
+            
             try:
+                page_detail = PageDetail.objects.get(webmaster_area=wma_object)
+                
+                if page_detail:
+                    soup = BeautifulSoup(request_url_html)
+                    page_detail.title = soup.title.string
+                    page_detail.total_share_counter = snc
 
+                    if index_sn is not None:
+                        short_sn = list_sn[index_sn].shortcut
+                        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+                        index_sn = list_sn_shortcuts.index(short_sn)
+                        temp_social_counter = [int(s) for s in page_detail.total_social_counter.split(',')]
+                        temp_social_counter[index_sn] += 1
+                        page_detail.total_social_counter = ''
+                        for i in temp_social_counter:
+                            page_detail.total_social_counter += str(i) + ','
+                        page_detail.total_social_counter = page_detail.total_social_counter[:-1]
+
+                    page_detail.save()
+                    answer += 'console.log("'+str(page_detail) + ' updated!");' 
             except:
-            '''
+                page_detail = PageDetail.objects.create(webmaster_area=wma_object, total_share_counter=snc)
+
+                if page_detail:
+                    if index_sn is not None:
+                        short_sn = list_sn[index_sn].shortcut
+                        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+                        index_sn = list_sn_shortcuts.index(short_sn)
+                        temp_social_counter = [int(s) for s in page_detail.total_social_counter.split(',')]
+                        temp_social_counter[index_sn] += 1
+                        page_detail.total_social_counter = ''
+                        for i in temp_social_counter:
+                            page_detail.total_social_counter += str(i) + ','
+                        page_detail.total_social_counter = page_detail.total_social_counter[:-1]
+                        page_detail.save()
+
+                    answer += 'console.log("'+str(page_detail) + ' created!");' 
         else:
             answer = "bad id!"
             return HttpResponse(answer)
 
-        try:
-            wma_today = AreaToday.objects.get(webmaster_area=wma_object,date=datetime.date.today())
+        #wma today!
 
-            if wma_today:
-                wma_today.today_share_counter = snc
-
-                if index_sn is not None:
-                    short_sn = list_sn[index_sn].shortcut
-                    list_sn_shortcuts = [sn.shortcut for sn in list_sn]
-                    index_sn = list_sn_shortcuts.index(short_sn)
-                    temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-                    temp_social_counter[index_sn] += 1
-                    wma_today.today_social_counter = ''
-                    for i in temp_social_counter:
-                        wma_today.today_social_counter += str(i) + ','
-                    wma_today.today_social_counter = wma_today.today_social_counter[:-1]
-
-                wma_today.save()
-                answer += 'console.log("'+str(wma_today) + ' updated!");' 
-        except:
-            wma_today = AreaToday.objects.create(webmaster_area=wma_object,date=datetime.date.today(),today_share_counter=snc)
-
-            if wma_today:
-                if index_sn is not None:
-                    short_sn = list_sn[index_sn].shortcut
-                    list_sn_shortcuts = [sn.shortcut for sn in list_sn]
-                    index_sn = list_sn_shortcuts.index(short_sn)
-                    temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-                    temp_social_counter[index_sn] += 1
-                    wma_today.today_social_counter = ''
-                    for i in temp_social_counter:
-                        wma_today.today_social_counter += str(i) + ','
-                    wma_today.today_social_counter = wma_today.today_social_counter[:-1]
-                    wma_today.save()
-
-                answer += 'console.log("'+str(wma_today) + ' created!");' 
 
         #if index_sn is not None:
             #short_sn = list_sn[index_sn].shortcut
