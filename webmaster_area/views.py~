@@ -540,8 +540,22 @@ def checkconfig(request):
                     page_detail.save()
                     answer += 'console.log("'+str(page_detail) + ' updated!");' 
             except:
-                pass
-            
+                page_detail = PageDetail.objects.create(webmaster_area=wma_object, total_share_counter=snc)
+
+                if page_detail:
+                    if index_sn is not None:
+                        short_sn = list_sn[index_sn].shortcut
+                        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+                        index_sn = list_sn_shortcuts.index(short_sn)
+                        temp_social_counter = [int(s) for s in page_detail.total_social_counter.split(',')]
+                        temp_social_counter[index_sn] += 1
+                        page_detail.total_social_counter = ''
+                        for i in temp_social_counter:
+                            page_detail.total_social_counter += str(i) + ','
+                        page_detail.total_social_counter = page_detail.total_social_counter[:-1]
+                        page_detail.save()
+
+                    answer += 'console.log("'+str(page_detail) + ' created!");' 
         else:
             answer = "bad id!"
             return HttpResponse(answer)
