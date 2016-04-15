@@ -881,9 +881,9 @@ def getconfig(request):
                     ); \
                 }}\
                 );\
-        })(jQuery, document, window)'
+        })(window.jQuery, document, window)'
         answer += '}'
-        answer += 'if(jQuery){\
+        answer += 'if(window.jQuery){\
                        sharewallWrapper();\
                    }else{\
                        var headTag = document.getElementsByTagName("head")[0];\
