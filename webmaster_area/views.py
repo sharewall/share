@@ -514,6 +514,7 @@ def checkconfig(request):
 
         #page detail
         request_url_html = urllib.request.urlopen(request_url)
+        soup = BeautifulSoup(request_url_html)
 
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
@@ -522,7 +523,6 @@ def checkconfig(request):
                 page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
                 
                 if page_detail:
-                    soup = BeautifulSoup(request_url_html)
                     page_detail.title = soup.title.string
                     page_detail.total_share_counter = snc
 

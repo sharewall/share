@@ -519,7 +519,7 @@ def checkconfig(request):
             answer += 'console.log("url ok");'
             
             try:
-                page_detail = PageDetail.objects.get(webmaster_area=wma_object)
+                page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
                 
                 if page_detail:
                     soup = BeautifulSoup(request_url_html)
@@ -540,7 +540,7 @@ def checkconfig(request):
                     page_detail.save()
                     answer += 'console.log("'+str(page_detail) + ' updated!");' 
             except:
-                page_detail = PageDetail.objects.create(webmaster_area=wma_object, total_share_counter=snc)
+                page_detail = PageDetail.objects.create(webmaster_area=wma_object, total_share_counter=snc, url=request_url, title=soup.title.string)
 
                 if page_detail:
                     if index_sn is not None:
