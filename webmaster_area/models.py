@@ -87,7 +87,7 @@ class AreaToday(models.Model):
 
 class PageDetail(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related webmaster_area', related_name='page_detail')
-    title = models.CharField(max_length=300, default='', verbose_name='page title')
+    title = models.CharField(max_length=512, default='', verbose_name='page title')
     url = models.URLField('page url', null=False, blank=False, default='')
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''

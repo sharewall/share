@@ -75,7 +75,10 @@ class AreaToday(models.Model):
     db_table = 'AreaToday'
     
     def __str__(self):
-        return str("Area name: %s" % self.webmaster_area.name_area + ", area url: %s" % self.webmaster_area.url + " <<== %s" % self.webmaster_area)
+        if self.webmaster_area:
+            return str("Area name: %s" % self.webmaster_area.name_area + ", area url: %s" % self.webmaster_area.url + " <<== %s" % self.webmaster_area)
+        else:
+            return str("Without webmaster_area")
 
     def save(self, *args, **kwargs):
         #self.webmaster_area.total_share_counter = self.today_share_counter

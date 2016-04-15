@@ -1,5 +1,6 @@
 import datetime, json, os
 from urllib.parse import urlparse
+import urllib.request
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
@@ -509,6 +510,18 @@ def checkconfig(request):
         new_total_social_counter = wma_object.total_social_counter
         update_today_social_counter = wma_object.today_social_counter
         '''
+
+        if parsed_referer == urlparse(request_url).netloc and urllib.urlopen(request_url).status == 200:
+            pass
+            '''
+            try:
+
+            except:
+            '''
+        else:
+            answer = "bad id!"
+            return HttpResponse(answer)
+
         try:
             wma_today = AreaToday.objects.get(webmaster_area=wma_object,date=datetime.date.today())
 
@@ -599,7 +612,9 @@ def checkconfig(request):
     return HttpResponse(answer)
 
 def setcounter(request):
-    return HttpResponse('setcounter')
+    answer = 'setcounter() = '
+    answer += str(urllib.request.urlopen("http://sharewall.ru/buttons-constructor").status)
+    return HttpResponse(answer)
     '''
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
