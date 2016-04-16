@@ -1,4 +1,5 @@
 import datetime, json, os
+import re
 from urllib.parse import urlparse
 import urllib.request
 from django.conf import settings
@@ -556,6 +557,8 @@ def checkconfig(request):
 
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
+            #TODO: snc from server
+            snc = setCounterPrivate(request_url)
             
             #wma today!
             try:
@@ -612,50 +615,108 @@ def checkconfig(request):
         answer = 'bad id!'
     return HttpResponse(answer)
 
+def setCounterPrivate(url):
+
+    snc = ''
+    #url = request.GET.get("url")
+    #answer += str(urllib.request.urlopen(url).status)
+    if url:
+        answer += 'url=' + url + '; '
+
+        share_count_methods = [
+            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
+            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
+            {'tw': 'twitter'},
+            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
+            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
+            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
+            {'lj': 'lj'}
+        ]
+
+        for d in share_count_methods:
+            for u,m in d.items():
+                try:
+                    html = urllib.request.urlopen(u)
+                    response = html.read()
+                    response = response.decode('utf8')
+                    answer += 'response=' + response + '; '
+
+                    re_result = re.findall(m, response)
+                    if len(re_result) > 0:
+                        snc += re_result[0] + ','
+                    else:
+                        snc += '0,'
+                except:
+                    snc += '0,'
+
+        snc = snc[:-1]
+
+    return snc
+
 def setcounter(request):
     answer = 'setcounter() = '
-    answer += str(urllib.request.urlopen("http://sharewall.ru/buttons-constructor").status)
-    return HttpResponse(answer)
+    snc = ''
+    url = request.GET.get("url")
+    #answer += str(urllib.request.urlopen(url).status)
+    if url:
+        answer += 'url=' + url + '; '
+
+        share_count_methods = [
+            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
+            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
+            {'tw': 'twitter'},
+            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
+            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
+            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
+            {'lj': 'lj'}
+        ]
+
+        for d in share_count_methods:
+            for u,m in d.items():
+                try:
+                    html = urllib.request.urlopen(u)
+                    response = html.read()
+                    response = response.decode('utf8')
+                    answer += 'response=' + response + '; '
+
+                    re_result = re.findall(m, response)
+                    if len(re_result) > 0:
+                        snc += re_result[0] + ','
+                    else:
+                        snc += '0,'
+                except:
+                    snc += '0,'
+
+        snc = snc[:-1]
+
+    answer += 'snc=' + snc
+    return HttpResponse(snc)
+    #return HttpResponse(answer)
 
 def getconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
+
     wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
     if wma_object:
+
         list_sn = SocialNetworks.objects.all()
+
         SOCIAL_DEFAULT = ''
         list_sn_unic = {}
+
         for s in list_sn:
             if not s.shortcut in SOCIAL_DEFAULT:
                 SOCIAL_DEFAULT += s.shortcut + ','
                 list_sn_unic[s.shortcut] = s
+
         SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
-        #list_sn_img_square = {sn.shortcut: sn.img_square for sn in list_sn}
-        #list_sn_img_circle = {sn.shortcut: sn.img_circle for sn in list_sn}
         btncr = wma_object.buttons_constructor
-        #dict_config = {}
-        #if btncr.with_counter:
-            #dict_config['counter'] = wma_object.total_share_counter
-        #if btncr.with_background:
-            #dict_config['background'] = btncr.background_color
-        #if btncr.page_url:
-            #dict_config['url'] = btncr.page_url
-        #if btncr.page_title:
-            #dict_config['title'] = btncr.page_title
-        #if btncr.page_description:
-            #dict_config['description'] = btncr.page_description
-        #dict_config['mob-view'] = btncr.mobile_view
-        #dict_config['social'] = btncr.social_networks
-        #dict_config['form'] = btncr.get_form_buttons_display()
-        #dict_config['location'] = btncr.get_location_buttons_display()
-        #dict_config['size'] = btncr.get_size_buttons_display()
-        #response_config = json.dumps(dict_config, sort_keys=True, indent=0)
 
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
-        #answer += '    sharewall = { };'
-        #answer += '    sharewall = { share_config: %s};' %response_config
-        #answer += '    console.log(sharewall.share_config); '
 
         answer += '    $("div#sharewallContainer").html(\'\');'
         if btncr.location_buttons == "VE":
