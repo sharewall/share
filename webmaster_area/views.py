@@ -603,8 +603,8 @@ def checkconfig(request):
                 snc = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc+'");'
             except:
-                #answer += 'console.log("'+sys.exc_info()[0]+'");'
-                pass
+                answer += 'console.log("'+sys.exc_info()[0]+'");'
+                #pass
             
             #wma today!
             try:

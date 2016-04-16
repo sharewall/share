@@ -1,5 +1,6 @@
 import datetime, json, os
 import re
+import sys
 from urllib.parse import urlparse
 import urllib.request
 from django.conf import settings
@@ -601,9 +602,9 @@ def checkconfig(request):
             try:
                 snc = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc+'");'
-            except Exception as e:
+            except:
+                #answer += 'console.log("'+sys.exc_info()[0]+'");'
                 pass
-                #answer += 'console.log("'+print(e)+'");'
             
             #wma today!
             try:
