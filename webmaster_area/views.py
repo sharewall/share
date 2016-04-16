@@ -525,6 +525,45 @@ def create(request):
         "area_category": AreaCategory.objects.all()
     })
 
+def setCounterPrivate(url):
+
+    snc = ''
+    #url = request.GET.get("url")
+    #answer += str(urllib.request.urlopen(url).status)
+    if url:
+        answer += 'url=' + url + '; '
+
+        share_count_methods = [
+            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
+            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
+            {'tw': 'twitter'},
+            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
+            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
+            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
+            {'lj': 'lj'}
+        ]
+
+        for d in share_count_methods:
+            for u,m in d.items():
+                try:
+                    html = urllib.request.urlopen(u)
+                    response = html.read()
+                    response = response.decode('utf8')
+                    answer += 'response=' + response + '; '
+
+                    re_result = re.findall(m, response)
+                    if len(re_result) > 0:
+                        snc += re_result[0] + ','
+                    else:
+                        snc += '0,'
+                except:
+                    snc += '0,'
+
+        snc = snc[:-1]
+
+    return snc
+
 def checkconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
@@ -558,7 +597,8 @@ def checkconfig(request):
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
             #TODO: snc from server
-            #snc = setCounterPrivate(request_url)
+            answer += 'console.log("snc from client: '+snc+'");'
+            snc = setCounterPrivate(request_url)
             answer += 'console.log("snc from server: '+snc+'");'
             
             #wma today!
@@ -616,44 +656,6 @@ def checkconfig(request):
         answer = 'bad id!'
     return HttpResponse(answer)
 
-def setCounterPrivate(url):
-
-    snc = ''
-    #url = request.GET.get("url")
-    #answer += str(urllib.request.urlopen(url).status)
-    if url:
-        answer += 'url=' + url + '; '
-
-        share_count_methods = [
-            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
-            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
-            {'tw': 'twitter'},
-            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
-            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
-            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
-            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
-            {'lj': 'lj'}
-        ]
-
-        for d in share_count_methods:
-            for u,m in d.items():
-                try:
-                    html = urllib.request.urlopen(u)
-                    response = html.read()
-                    response = response.decode('utf8')
-                    answer += 'response=' + response + '; '
-
-                    re_result = re.findall(m, response)
-                    if len(re_result) > 0:
-                        snc += re_result[0] + ','
-                    else:
-                        snc += '0,'
-                except:
-                    snc += '0,'
-
-        snc = snc[:-1]
-
-    return snc
 
 def setcounter(request):
     answer = 'setcounter() = '
