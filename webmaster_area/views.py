@@ -532,7 +532,7 @@ def setcounterprivate(url):
     #url = request.GET.get("url")
     #answer += str(urllib.request.urlopen(url).status)
     if url:
-        answer += 'url=' + url + '; '
+        #answer += 'url=' + url + '; '
 
         share_count_methods = [
             {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
@@ -551,7 +551,7 @@ def setcounterprivate(url):
                     html = urllib.request.urlopen(u)
                     response = html.read()
                     response = response.decode('utf8')
-                    answer += 'response=' + response + '; '
+                    #answer += 'response=' + response + '; '
 
                     re_result = re.findall(m, response)
                     if len(re_result) > 0:
@@ -603,7 +603,7 @@ def checkconfig(request):
             try:
                 url = request_url
                 if url:
-                    answer += 'url=' + url + '; '
+                    #answer += 'url=' + url + '; '
 
                     share_count_methods = [
                         {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
