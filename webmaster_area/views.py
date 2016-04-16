@@ -23,22 +23,13 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
-        #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
-        #list_distinct, list_distinct_keys = [], []
-
-        #for area in list_all_user_areas:
-        #    if area.name_area not in list_distinct_keys:
-        #        list_distinct_keys.append(area.name_area)
-        #        list_distinct.append(area) 
 
         return render(request, self.template_name,
         {
             "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-            #"areas" : list_distinct,
             "page": { "title": self.title, 'header': self.header },
             "ad_type": "Нормальный,Для взрослых",
             "area_category": AreaCategory.objects.all()
-            #'webmaster_area_form': WebmasterAreaForm()
         })
 
 @login_required
@@ -47,18 +38,9 @@ def statistic(request):
     title = 'Статистика'
     header = 'Статистика'
 
-    #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)#.order_by('-date')
-    #list_distinct, list_distinct_keys = [], []
-
-    #for area in list_all_user_areas:
-    #    if area.name_area not in list_distinct_keys:
-    #        list_distinct_keys.append(area.name_area)
-    #        list_distinct.append(area) 
-
     return render(request, template_name,
     {
         'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-        #"areas" : list_distinct,
         'page': { 'title': title, 'header': header }
     })
 
@@ -377,50 +359,41 @@ def detail(request, name):
             todayVK.append(temp)
             if temp > statistic['vk']:
                 statistic['vk'] = temp
-            #statistic['vk'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[1])
             todayFB.append(temp)
             if temp > statistic['fb']:
                 statistic['fb'] = temp
-            #statistic['fb'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[2])
             todayTW.append(temp)
             if temp > statistic['tw']:
                 statistic['tw'] = temp
-            #statistic['tw'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[3])
             todayOD.append(temp)
             if temp > statistic['od']:
                 statistic['od'] = temp
-            #statistic['od'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[4])
             todayGP.append(temp)
             if temp > statistic['gp']:
                 statistic['gp'] = temp
-            #statistic['gp'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[5])
             todayMA.append(temp)
             if temp > statistic['ma']:
                 statistic['ma'] = temp
-            #statistic['ma'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[6])
             todayLI.append(temp)
             if temp > statistic['li']:
                 statistic['li'] = temp
-            #statistic['li'] += temp
-            #statistic['all'] += temp
+
             temp = int(a.today_share_counter.split(',')[7])
             todayLJ.append(temp)
             if temp > statistic['lj']:
                 statistic['lj'] = temp
-            #statistic['lj'] += temp
-            #statistic['all'] += temp
 
         statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
         return render(request, template_name,
@@ -498,16 +471,11 @@ def update(request, pk):
 
 @login_required
 def create(request):
-    #template_name = 'webmaster_area/create.html'
-    #title = 'Create webmaster area'
-    #header = 'Создание площадки'
     template_name = 'webmaster_area/index.html'
     title = 'Webmaster area'
     header = 'Площадки'
     if request.method == 'POST':
-        #webmaster_area_form = WebmasterAreaForm(data=request.POST, user=request.user, auto_id=False)
         area_category_list = request.POST.getlist('area_category','')
-        #todo:
         area_category_clear = ''
         for a in area_category_list:
             area_category_clear += AreaCategory.objects.get(pk=a).name + ','
@@ -535,43 +503,26 @@ def create(request):
         isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
         isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
 
-        #if webmaster_area_form.is_valid():
         if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False and isUrlAreaAlreadyExist == False:
+
             webmaster_area = webmaster_area_form.save()
             #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
             try:
                 webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster).order_by('-pk')[0]
             except Exception as instance:
                 webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
+
             webmaster_area.save()
+
             return HttpResponseRedirect('/webmaster-area/')
-            #return render(request, template_name,
-            #{
-                #'success': 'Buttons constructor created'
-            #})
-        else:
-            #webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data, user=request.user)
-            #webmaster_area_form = WebmasterAreaForm(webmaster_area_form.cleaned_data)
-            return render(request, template_name,
-            {
-                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-                'page': { 'title': title, 'header': header },
-                "ad_type": "Нормальный,Для взрослых",
-                "area_category": AreaCategory.objects.all()
-                #'error': webmaster_area_form.errors,
-                #'webmaster_area_form': webmaster_area_form
-            })
-    else:
-        #return HttpResponseRedirect('/buttons-constructor/')
-        return render(request, template_name,
-        {
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-            'page': { 'title': title, 'header': header },
-            "ad_type": "Нормальный,Для взрослых",
-            "area_category": AreaCategory.objects.all()
-            #'webmaster_area_form': WebmasterAreaForm()
-            #'webmaster_area_form': WebmasterAreaForm(request.user)
-        })
+
+    return render(request, template_name,
+    {
+        "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+        'page': { 'title': title, 'header': header },
+        "ad_type": "Нормальный,Для взрослых",
+        "area_category": AreaCategory.objects.all()
+    })
 
 def checkconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
@@ -595,21 +546,7 @@ def checkconfig(request):
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
 
         #wma!
-        '''
-        difference_share_counter = ''
-        for s,s2 in zip(snc.split(','), wma_object.total_share_counter.split(',')):
-            difference_share_counter += str(int(s) - int(s2)) + ','
-        difference_share_counter = difference_share_counter[:-1]
-        new_today_social_counter = ''
-        new_today_share_counter = ''
-        for s,s2 in zip(wma_object.today_share_counter.split(','), difference_share_counter.split(',')):
-            new_today_social_counter += '0,'
-            new_today_share_counter += str(int(s) + int(s2)) + ','
-        new_today_social_counter = new_today_social_counter[:-1]
-        new_today_share_counter = new_today_share_counter[:-1]
-        new_total_social_counter = wma_object.total_social_counter
-        update_today_social_counter = wma_object.today_social_counter
-        '''
+        #...
 
         #page detail
         #Disable page_today
@@ -624,39 +561,8 @@ def checkconfig(request):
             try:
                 wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
 
-                #if wma_today:
-                    #wma_today.today_share_counter = snc
-
-                    #if index_sn is not None:
-                        #short_sn = list_sn[index_sn].shortcut
-                        #list_sn_shortcuts = [sn.shortcut for sn in list_sn]
-                        #index_sn = list_sn_shortcuts.index(short_sn)
-                        #temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-                        #temp_social_counter[index_sn] += 1
-                        #wma_today.today_social_counter = ''
-                        #for i in temp_social_counter:
-                            #wma_today.today_social_counter += str(i) + ','
-                        #wma_today.today_social_counter = wma_today.today_social_counter[:-1]
-
-                    #wma_today.save()
-                    #answer += 'console.log("'+str(wma_today) + ' updated!");' 
             except:
                 wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
-
-                #if wma_today:
-                #    if index_sn is not None:
-                #        short_sn = list_sn[index_sn].shortcut
-                #        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
-                #        index_sn = list_sn_shortcuts.index(short_sn)
-                #        temp_social_counter = [int(s) for s in wma_today.today_social_counter.split(',')]
-                #        temp_social_counter[index_sn] += 1
-                #        wma_today.today_social_counter = ''
-                #        for i in temp_social_counter:
-                #            wma_today.today_social_counter += str(i) + ','
-                #        wma_today.today_social_counter = wma_today.today_social_counter[:-1]
-                #        wma_today.save()
-
-                #    answer += 'console.log("'+str(wma_today) + ' created!");' 
 
             try:
                 page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
@@ -699,54 +605,6 @@ def checkconfig(request):
             answer = "bad id!"
             return HttpResponse(answer)
 
-        #wma today!
-
-
-        #if index_sn is not None:
-            #short_sn = list_sn[index_sn].shortcut
-            #list_sn_shortcuts = [sn.shortcut for sn in list_sn]
-            #index_sn = list_sn_shortcuts.index(short_sn)
-
-            '''
-            temp_li_today_sn = [int(s) for s in new_today_social_counter.split(',')]
-            temp_li_total_sn = [int(s) for s in new_total_social_counter.split(',')]
-            temp_li_update_today_sn = [int(s) for s in update_today_social_counter.split(',')]
-            temp_li_today_sn[index_sn] += 1
-            temp_li_total_sn[index_sn] += 1
-            temp_li_update_today_sn[index_sn] += 1
-            new_today_social_counter = ''
-            new_total_social_counter = ''
-            update_today_social_counter = ''
-            for i in temp_li_today_sn:
-                new_today_social_counter += str(i) + ','
-            for i in temp_li_total_sn:
-                new_total_social_counter += str(i) + ','
-            for i in temp_li_update_today_sn:
-                update_today_social_counter += str(i) + ','
-            new_today_social_counter = new_today_social_counter[:-1]
-            new_total_social_counter = new_total_social_counter[:-1]
-            update_today_social_counter = update_today_social_counter[:-1]
-            '''
-
-        '''
-        if wma_object.date == datetime.date.today():
-            wma_object.today_share_counter = new_today_share_counter
-            wma_object.total_share_counter = snc
-            wma_object.today_social_counter = update_today_social_counter
-            wma_object.total_social_counter = new_total_social_counter
-            wma_object.save()
-            answer += 'console.log("'+str(wma_object) + ' updated!");' 
-        else:
-            wma_object = WebmasterAreaModel.objects.create(buttons_constructor = wma_object.buttons_constructor, name_area = wma_object.name_area, url=wma_object.url, today_social_counter=new_today_social_counter, total_social_counter=new_total_social_counter, today_share_counter=difference_share_counter, total_share_counter=snc)
-            answer += 'console.log("'+str(wma_object) + ' created!");' 
-        '''
-        #page_detail, created = PageDetail.objects.get_or_create(webmaster_area=wma_object, url=request_url, defaults={'': 1, 'title': request_title})
-        #if not created:
-            #page_detail.page_social_traffic += 1
-            #page_detail.title = request_title
-            #page_detail.save()
-        #answer += 'snc = %s'%snc
-        #answer = '    console.log("%s'%history_referrer+' != %s'%history_rr+'");\n'
         answer += '    document.cookie = "_sharewallrr=; expires=Thu, 01 Jan 1970 00:00:00 UTC";'
         answer += '    var date = new Date(); date.setTime(date.getTime() + 24*60*60*1000);'
         answer += '    document.cookie = "_sharewallrr=%s'%history_referrer+'; path=%s'%urlparse(request_url).path+'; max-age="+24*60*60+"; expires="+date.toGMTString();'
@@ -758,71 +616,29 @@ def setcounter(request):
     answer = 'setcounter() = '
     answer += str(urllib.request.urlopen("http://sharewall.ru/buttons-constructor").status)
     return HttpResponse(answer)
-    '''
-    request_referer = request.META.get('HTTP_REFERER')
-    parsed_referer = urlparse(request_referer).netloc
-    wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
-    if wma_object:
-        if wma_object.date == datetime.date.today():
-            wma_object.share_today_counter += 1
-            wma_object.share_total_counter += 1
-            wma_object.save()
-            answer = 'console.log("'+str(wma_object) + ' updated!")' 
-        else:
-            wma_object = WebmasterAreaModel.objects.create(buttons_constructor = wma_object.buttons_constructor, name_area = wma_object.name_area, url=wma_object.url, share_today_counter=1, share_total_counter=wma_object.share_total_counter+1)
-            answer = 'console.log("'+str(wma_object) + ' created!")' 
-
-        request_url = request.GET.get('url', 'none url')
-        request_title = request.GET.get('title', 'none title')
-        page_detail, created = PageDetail.objects.get_or_create(webmaster_area=wma_object, url=request_url, defaults={'page_share_counter': 1, 'title': request_title})
-        if not created:
-            page_detail.page_share_counter += 1
-            page_detail.title = request_title
-            page_detail.save()
-    else:
-        answer = 'console.log(bad id!)' 
-    return HttpResponse(answer)
-    '''
 
 def getconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
+
     wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
     if wma_object:
+
         list_sn = SocialNetworks.objects.all()
+
         SOCIAL_DEFAULT = ''
         list_sn_unic = {}
+
         for s in list_sn:
             if not s.shortcut in SOCIAL_DEFAULT:
                 SOCIAL_DEFAULT += s.shortcut + ','
                 list_sn_unic[s.shortcut] = s
+
         SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
-        #list_sn_img_square = {sn.shortcut: sn.img_square for sn in list_sn}
-        #list_sn_img_circle = {sn.shortcut: sn.img_circle for sn in list_sn}
         btncr = wma_object.buttons_constructor
-        #dict_config = {}
-        #if btncr.with_counter:
-            #dict_config['counter'] = wma_object.total_share_counter
-        #if btncr.with_background:
-            #dict_config['background'] = btncr.background_color
-        #if btncr.page_url:
-            #dict_config['url'] = btncr.page_url
-        #if btncr.page_title:
-            #dict_config['title'] = btncr.page_title
-        #if btncr.page_description:
-            #dict_config['description'] = btncr.page_description
-        #dict_config['mob-view'] = btncr.mobile_view
-        #dict_config['social'] = btncr.social_networks
-        #dict_config['form'] = btncr.get_form_buttons_display()
-        #dict_config['location'] = btncr.get_location_buttons_display()
-        #dict_config['size'] = btncr.get_size_buttons_display()
-        #response_config = json.dumps(dict_config, sort_keys=True, indent=0)
 
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
-        #answer += '    sharewall = { };'
-        #answer += '    sharewall = { share_config: %s};' %response_config
-        #answer += '    console.log(sharewall.share_config); '
 
         answer += '    $("div#sharewallContainer").html(\'\');'
         if btncr.location_buttons == "VE":

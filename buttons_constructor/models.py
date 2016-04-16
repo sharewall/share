@@ -21,7 +21,6 @@ class SocialNetworks(models.Model):
     shortcut = models.CharField('shortcut for network', max_length=2)
     url = models.URLField('url for network', null=False, blank=False, default='')
     img_bd_pos = models.CharField('img background position', max_length=400)
-    #img_circle_2 = models.URLField('img_url_circle', null=True, blank=False, default='')
     db_table = 'SocialNetworks'
 
     def __str__(self):
