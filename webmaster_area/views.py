@@ -598,7 +598,7 @@ def checkconfig(request):
             answer += 'console.log("url ok");'
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
-            snc = setcounterprivate(request_url)
+            snc = setcounterprivate(url=request_url)
             answer += 'console.log("snc from server: '+snc+'");'
             
             #wma today!
