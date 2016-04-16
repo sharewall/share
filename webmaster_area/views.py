@@ -558,7 +558,7 @@ def checkconfig(request):
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
             #TODO: snc from server
-            snc = setCounterPrivate(request_url)
+            #snc = setCounterPrivate(request_url)
             answer += 'console.log("snc from server: '+snc+'");'
             
             #wma today!
