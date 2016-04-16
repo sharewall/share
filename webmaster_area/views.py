@@ -603,6 +603,7 @@ def checkconfig(request):
             try:
                 url = request_url
                 if url:
+                    snc = ''
                     #answer += 'url=' + url + '; '
 
                     share_count_methods = [
