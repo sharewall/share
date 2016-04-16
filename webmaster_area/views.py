@@ -622,7 +622,7 @@ def checkconfig(request):
                                 html = urllib.request.urlopen(u)
                                 response = html.read()
                                 response = response.decode('utf8')
-                                answer += 'response=' + response + '; '
+                                #answer += 'response=' + response + '; '
 
                                 re_result = re.findall(m, response)
                                 if len(re_result) > 0:
