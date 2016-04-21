@@ -601,44 +601,9 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
             try:
-                url = request_url
-                if url:
-                    snc = ''
-                    #answer += 'url=' + url + '; '
-
-                    share_count_methods = [
-                        {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
-                        {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
-                        {'tw': 'twitter'},
-                        {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
-                        {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
-                        {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
-                        {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
-                        {'lj': 'lj'}
-                    ]
-
-                    for d in share_count_methods:
-                        for u,m in d.items():
-                            try:
-                                html = urllib.request.urlopen(u)
-                                response = html.read()
-                                response = response.decode('utf8')
-                                #answer += 'response=' + response + '; '
-
-                                re_result = re.findall(m, response)
-                                if len(re_result) > 0:
-                                    snc += re_result[0] + ','
-                                else:
-                                    snc += '0,'
-                            except:
-                                snc += '0,'
-
-                    snc = snc[:-1]
-
-                #snc = setcounterprivate(url=request_url)
+                snc = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc+'");'
             except:
-                #answer += 'console.log("'+sys.exc_info()[0]+'");'
                 pass
             
             #wma today!

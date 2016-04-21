@@ -20,8 +20,8 @@ from bs4 import BeautifulSoup
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'webmaster_area/index.html'
-    title = 'Webmaster area'
-    header = 'Площадки'
+    title = 'Площадки'
+    header = title
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):

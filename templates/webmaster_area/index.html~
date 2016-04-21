@@ -116,7 +116,7 @@
                             <input form="create_form" id="add_name_area" type="text" pattern="[^?#%]+$" name="name_area" value="" maxlength="200" required>
                         </div> 
                         <div>        
-                            <input form="create_form" id="add_url" type="url" pattern="[https?://.+]" name="url" value="" required>
+                            <input form="create_form" id="add_url" type="url" name="url" value="" required>
                         </div> 
                         <div>                           
                           <select form="create_form" id="add_category" name="area_category" size="{{ area_category.count }}" multiple required>

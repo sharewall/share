@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from landing.views import LandingView, register, login, logout
+from landing.views import LandingView, register, login, logout, admin_webmasters
 
 #app_name = 'landing'
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^register/$', register, name='landing-register'),
     url(r'^login/$', login, name='landing-login'),
     url(r'^logout/$', logout, name='landing-logout'),
+    url(r'^admin/webmasters/$', admin_webmasters, name='admin-webmasters'),
 ]

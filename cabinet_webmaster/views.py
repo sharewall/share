@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 class CabinetWebmasterIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'cabinet_webmaster/index.html'
-    title = 'Cabinet webmaster'
+    title = 'Настройки'
     header = title
 
     @method_decorator(ensure_csrf_cookie)

@@ -1081,6 +1081,47 @@ span[data-sn="li"] {
     margin-left: 10px;
     cursor: pointer;
 }
+.sInputWebmasterSearchWrapper{
+    width: 251px;
+    height: 37px;
+    margin-bottom: 39px;
+}
+.sInputWebmasterSearchWrapper > .sInputWebmasterSearch{
+    height: 39px;
+    width: 281px;
+    background: url(../images/search-input.png) no-repeat;
+    border: none;
+    padding-left: 10px;
+    color: #262d38;
+    font: 400 14px Roboto;
+}
+.sInputWebmasterSearchWrapper > .sSearchIcon{
+    height: 39px;
+    width: 38px;
+    background: url(../images/search-icon.png);
+    display: block;
+    position: relative;
+    bottom: 110%;
+    left: 101%;
+    cursor: pointer;
+}
+.sTableAreasField > span.sAdminButton{
+    
+    height: 39px;
+    width: 135px;
+    display: inline-block;
+    line-height: 41px!important;
+    text-align: center;
+    padding-left: 0px;
+    color: #ffffff;
+    font: 400 16px Roboto;
+}
+span.sAdminButton-Yellow{
+    background: url(../images/admin-button-yellow.png) no-repeat;
+}
+span.sAdminButton-Gray{
+    background: url(../images/admin-button-gray2.png) no-repeat;
+}
 .sInputDateWrapper > span.sCalendarIcon{
     background: url(../images/calendar.png) no-repeat;
     width: 26px;

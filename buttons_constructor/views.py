@@ -94,8 +94,8 @@ def update(request, pk):
 @login_required
 def create(request):
     template_name = 'buttons_constructor/create.html'
-    title = 'Create buttons constructor'
-    header = 'Конструктор'
+    title = 'Конструктор'
+    header = title
     
     #all_soc_net_list = SocialNetworks.objects.all()
     #clear_list_soc = []

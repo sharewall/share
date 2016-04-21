@@ -1,67 +1,83 @@
 {% extends "skeleton.html" %}
 {% load staticfiles %}
-{% block custom_style %}<style>
-body{background-color:#2fabf6;}
-span:hover{cursor:pointer;} 
-input[type='email']{ display:none; }
-form { font: 400 14.5px Roboto; color: #FFFFFF; }
-.sError { position: relative; font: 400 14.5px Roboto; color: #FFFFFF; height:auto; display: inline-block; }
-.cmn-toggle {
-  position: absolute;
-  margin-left: -9999px;
-  visibility: hidden;
-  z-index: 2;
-}
-.cmn-toggle + label {
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-}
 
-input.cmn-toggle-round + label {
-  padding: 2px;
-  width: 80px; /*120*/
-  height: 20px;
-  background-color: #dddddd;
-  border-radius: 60px;
-}
-input.cmn-toggle-round + label:before,
-input.cmn-toggle-round + label:after {
-  display: inline-block;
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  bottom: 1px;
-  content: ""
-}
-input.cmn-toggle-round + label:before {
-  right: 1px;
-  opacity: 1;
-  background-color: #f1f1f1;    
-  border-radius: 60px;
-  transition: background 0.4s;
-}
-input.cmn-toggle-round + label:after {    
-  width: 28px;  /*58*/
-  background-color: #f1f1f1;
-  border-radius: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: margin 0.4s; 
-}
-input.cmn-toggle-round:checked + label:before {    
-  background-color: #FFFFFF; 
-}
-input.cmn-toggle-round:checked + label:after {
-  margin-left: 55px; /*60*/    
-    background-color: #2fabf6;
-}
-input.cmn-toggle-round:checked ~ form > input[type='email']{
+{% block custom_style %}
+
+<style>
+  body{
+    background-color:#2fabf6;
+  }
+  span:hover{
+    cursor:pointer;
+  } 
+  input[type='email']{ 
+    display:none; 
+  }
+  form { 
+    font: 400 14.5px Roboto; color: #FFFFFF; 
+  }
+  .sError { 
+    position: relative; font: 400 14.5px Roboto; color: #FFFFFF; height:auto; display: inline-block; 
+  }
+  .cmn-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+    z-index: 2;
+  }
+  .cmn-toggle + label {
     display: inline-block;
-}
-</style>{% endblock %}   
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+  }
+  input.cmn-toggle-round + label {
+    padding: 2px;
+    width: 80px; /*120*/
+    height: 20px;
+    background-color: #dddddd;
+    border-radius: 60px;
+  }
+  input.cmn-toggle-round + label:before,
+  input.cmn-toggle-round + label:after {
+    display: inline-block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: ""
+  }
+  input.cmn-toggle-round + label:before {
+    right: 1px;
+    opacity: 1;
+    background-color: #f1f1f1;    
+    border-radius: 60px;
+    transition: background 0.4s;
+  }
+  input.cmn-toggle-round + label:after {    
+    width: 28px;  /*58*/
+    background-color: #f1f1f1;
+    border-radius: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: margin 0.4s; 
+  }
+  input.cmn-toggle-round:checked + label:before {    
+    background-color: #FFFFFF; 
+  }
+  input.cmn-toggle-round:checked + label:after {
+    margin-left: 55px; /*60*/    
+      background-color: #2fabf6;
+  }
+  input.cmn-toggle-round:checked ~ form > input[type='email']{
+      display: inline-block;
+  }
+</style>
+
+{% endblock %}   
+
 {% block title %}{{ page.title }}{% endblock %}
+
 {% block content %}
 	<div class="sContent-H100 sTextAlign-C" style="padding-top:10%">
       <div class="sError">

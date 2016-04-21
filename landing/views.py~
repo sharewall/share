@@ -25,6 +25,19 @@ class LandingView(LoginRequiredMixin, TemplateView):
         })
 
 @login_required
+def admin_webmasters(request):
+    template_name = 'landing/admin-webmasters.html'
+    title = 'Вебмастера'
+    header = title
+
+    if request.user.is_staff:
+        return render(request, template_name,
+        {
+            "page": { "title": title, "header": header }
+        })
+    return HttpResponseRedirect('/login/')
+
+@login_required
 def logout(request):
     django_logout(request)
     return HttpResponseRedirect('/login/')
@@ -33,8 +46,10 @@ def logout(request):
 @ensure_csrf_cookie
 def login(request):
     template_name = 'landing/login.html'
-    title = 'Login'
+    title = 'Авторизация'
+
     request_next = request.GET.get('next', '/') # request.PATH 
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -66,7 +81,9 @@ def login(request):
 def register(request):
     template_name = 'landing/login.html'
     title = 'Register'
+
     request_next = request.GET.get('next', '/')
+
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         cabinet_webmaster_form = CabinetWebmasterForm(data={ 'wmr':'', 'mobile_phone':'', 'skype':'' })
