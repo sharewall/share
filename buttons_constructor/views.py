@@ -174,13 +174,19 @@ def create(request):
         #    if area.name_area not in list_distinct_keys:
         #        list_distinct_keys.append(area.name_area)
         #        list_distinct.append(area) 
+
+        areas = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
         
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header },
             #'buttons_constructor_form': ButtonsConstructorForm(),
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
             #'areas': list_distinct,
+            'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
             'btns_images': BtnsImages.objects.all(),
             'social_networks': SocialNetworks.objects.all()
         })

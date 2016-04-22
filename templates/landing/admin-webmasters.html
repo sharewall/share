@@ -3,6 +3,7 @@
   {% block title %}{{ page.title }}{% endblock %}
 
   {% block content %}
+    <div class="sBusyOverlay2" style="height: calc(100% - 139px); margin-top:62px; line-height:600px;">Обработка...</div>
     <div class="sContent-PB">
       <div class="sContainer sMargin-Auto">
 
@@ -15,11 +16,15 @@
           </form>
           
           <div class="sInputWebmasterSearchWrapper">
+            {% if q %}
+            <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" type="text" placeholder="Поиск по ID/логину/почте" value="{{ q }}">
+            {% else %}
             <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" type="text" placeholder="Поиск по ID/логину/почте">
+            {% endif %}
             <span class="sSearchIcon" onclick="eventSearch()"></span>
           </div>
           
-          <div class="sTableAreas">
+          <div class="sTableAreas" style="margin-bottom:40px;">
             <div class="sTableAreasFieldName">
                 <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">ID</span>
                 </div>
@@ -34,23 +39,36 @@
                 <div class="sTableAreasField" style="width:539px; text-align:center;">
                 </div>
             </div>
-            <div class="sTableAreasCell">
-                <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">1257</span>
+            {% for cab in all_cabinets %}
+            {% if cab.user.is_staff %}
+                <div class="sTableAreasCell" style="color:#008bd4">
+            {% elif cab.user.is_active == False %}
+                <div class="sTableAreasCell" style="color:red">
+            {% else %}
+                <div class="sTableAreasCell">
+            {% endif %}
+              <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.pk }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:128px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Басурман 12345</span>
+                <div class="sTableAreasField" style="width:128px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.username }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:177px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">longemail@12331311.ta</span>
+                <div class="sTableAreasField" style="width:177px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.email }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:141px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">scalex3proofx4p12</span>
+                <div class="sTableAreasField" style="width:141px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.skype }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">R856853352251</span>
+                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.wmr }}</span>
                 </div>
                 <div class="sTableAreasField" style="width:539px;">
-                    <a href="javascript:return false;" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 50px 0 50px;">Посмотреть профиль</a>
+                  <a href="/admin/profile/{{ cab.user.pk }}" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 50px 0 50px;">Посмотреть профиль</a>
                     <span class="sAdminButton sAdminButton-Yellow">Написать</span>
-                    <span class="sAdminButton sAdminButton-Gray">Забанить</span>
+                    {% if cab.user.is_staff %}
+                    {% elif cab.user.is_active %}
+                        <span data-id="{{ cab.pk }}" data-status="false" onclick="eventChangeStatus(this)" class="sAdminButton sAdminButton-Gray">Забанить</span>
+                    {% else %}
+                        <span data-id="{{ cab.pk }}" data-status="true" onclick="eventChangeStatus(this)" class="sAdminButton sAdminButton-Gray">Разбанить</span>
+                    {% endif %}
                 </div>
             </div> 
+            {% endfor %}
       </div>
     </div>
   {% endblock %}
@@ -59,6 +77,39 @@
   <script>
     function eventSearch(){
         $('form#SearchWebmaster').submit();
+    }
+    function eventChangeStatus(e){
+        $this = $(e);
+
+        $.ajax({ 
+          url: "/admin/change-status/", 
+          method: "get", 
+          data: {"id": $this.data('id'), "status": $this.data('status')}, 
+          beforeSend: function(){
+            $('.sBusyOverlay2').show();
+          },
+          success: function(response){ 
+            console.log(response); 
+
+            if (response.answer == 'ok'){
+              if(response.status == 'false'){
+                $this.data('status','true');
+                $this.text('Разбанить');
+                $this.closest('.sTableAreasCell').css('color','red');
+              }
+              else if(response.status == 'true'){
+                $this.data('status','false');
+                $this.text('Забанить');
+                $this.closest('.sTableAreasCell').css('color','#32353c');
+              }
+            }
+
+          },
+          complete: function(){
+            $('.sBusyOverlay2').hide();
+          }
+
+        });
     }
   </script>
   {% endblock %}

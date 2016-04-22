@@ -31,15 +31,26 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     {% block header %}
 
     <div id="header" class="sBd-BlueH sWidth-100p">
+          {% if user.is_staff and request.session.profile %}
+          <div class="sAdminProfile">&nbsp; {{ request.session.profile.username }}
+            <a href="/admin/profile-clear/"></a> 
+          </div>
+          {% endif %}
           <div class="sContainer sMargin-Auto">
           <div class="sHeaderWrapper">
               <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
                   <input type="checkbox" id="sWmInput" class="sInputH">
                   <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
                   <div class="sOverHidden-All sTextAlign-L">
+                      {% if user.is_staff and request.session.profile %}
+                      <span class="sVAlign-50p sPos-Rel sZi-2">
+                          {{ request.session.profile.username }}
+                      </span>
+                      {% else %}
                       <span class="sVAlign-50p sPos-Rel sZi-2">
                           {{ user.username }}
                       </span>
+                      {% endif %}
                   </div> 
                   <div class="sWmMenu sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
@@ -50,15 +61,21 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
               <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
                   <div class="sOverHidden-All">
                       <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
+                      {% if user.is_staff and request.session.profile %}
+                      <span class="sVAlign-50p sPos-Rel">
+                          {{ request.session.profile.money }} p.                    
+                      </span>
+                      {% else %}
                       <span class="sVAlign-50p sPos-Rel">
                           {{ user.cabinet_webmaster.money }} p.                    
                       </span>
+                      {% endif %}
                   </div> 
               </div>
               <div class="sHeaderBox sHeaderBox-Menu sFloat-R sPos-Rel">
                   <input type="checkbox" id="sHeaderMenuInput" class="sInputH">
                   <div class="sOverHidden-All">
-                      {% if user.is_staff %}
+                      {% if user.is_staff and request.session.profile == None %}
                       <a href="/admin/webmasters/" class="sVAlign-50p">Вебмастера</a>
                       <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
                       <a href="/buttons-constructor/create/" class="sVAlign-50p">Конструктор</a>
@@ -75,7 +92,7 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
                   <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
                   <div class="sMenu-Dd sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
-                      {% if user.is_staff %}
+                      {% if user.is_staff and request.session.profile == None %}
                       <a href="/webmaster-area/">Площадки</a>
                       <a href="/buttons-constructor/create/">Конструктор</a>
                       <a href="/webmaster-area/statistic/">Статистика</a>
@@ -95,7 +112,7 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
               </div>
           </div>
           </div>
-      </div>
+     </div>
     
     {% endblock %}
 

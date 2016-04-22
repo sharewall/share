@@ -1106,7 +1106,7 @@ span[data-sn="li"] {
     cursor: pointer;
 }
 .sTableAreasField > span.sAdminButton{
-    
+    cursor:pointer; 
     height: 39px;
     width: 135px;
     display: inline-block;
@@ -1233,96 +1233,34 @@ span.sAdminButton-Gray{
     opacity: 0;
     margin-left: -999999px;
 }
-
-/* 4 media point smaller 1145px,965px,781px,659px
-a:has(img) { background: none; }
-p:nth-of-type(3n+0)
-p:nth-of-type(2)    
-:nth-of-type() selector to select the element that is the nth child, of a particular type, of its parent.
-p:nth-child(3n+0)
-p:nth-child(2)//The :nth-child(n) selector matches every element that is the nth child, regardless of type, of its parent.n can be a number, a keyword, or a formula.
-nth-of-type(4n+1)
-ul li:not(.year):nth-of-type(4n+2){ clear: both; }
-.menu li > a:after { margin-left: 5px; content: '\25BA'; }
-.menu > li > a:after { margin-left: 5px; content: '\25BC'; }
-.menu li > a:only-child:after { margin-left: 0; content: ''; }
-.menu li:last-of-type { border-right: none; }
-<b class="caret dropdown-toggle"></b>
-<style>
-content: "Look at this orange box.";
-::-moz-selection {
-    color: red;
-    background: yellow;
+.sAdminProfile{
+    border: 1px solid rgb(191, 191, 191);
+    position: fixed;
+    top: 70px;
+    left: 45%;
+    width: 150px;
+    overflow: hidden;
+    color: #32353c;
+    font: 400 14px Roboto;
+    background-color: #e7e7e7;
+    height: 25px;
+    line-height: 25px;
+    text-align: left;
+    cursor: default;
+    /*padding-left:5px;*/
+    border-radius:5px;
+    opacity:.4;
 }
-
-::selection {
-    color: red;
-    background: yellow;
+.sAdminProfile:hover{
+    opacity:1;
 }
-h1::before {
-    content: url(smiley.gif);
+.sAdminProfile > a{
+    width: 22px;
+    height: 22px;
+    position: relative;
+    display: block;
+    background: transparent url("../images/area-delete-1.png") no-repeat scroll 0% 0%;
+    left: 85%;
+    bottom: 23px;
+    line-height: 25px;
 }
-h1::after {
-    content: url(smiley.gif);
-}
-.disable {
-    pointer-events: none;
-}
-Combinators: ul li,ul>li,h1+p,h1~p,ul a[title],li#first>a[rel="external"],h1+p.intro,h2.myclass~p[class="intro"]
-Pseudo-Classes: E:link,E:visited,E:active,E:hover,E:focus ,span:target {background: yellow;},E:enabled,E:disabled,E:checked,div:not(.two)
-#alert:target, span:focus ~ .alert,.btn:active .alert,:checked ~ .alert
-transitions: prop, dura, timi func, delay //500ms 1 prop or all shorthand // write in not event, can specify with transition-property: width,..; trans-dur: 1s, trans-tim-func: easy-in-out; 
-#block4 {left: 240px; transition: all 500ms easy-in-out, 500ms;}
-#block3:hover + #block4 { left: 240px; }
-nav a {
-  -webkit-transition-property: all;
-  -moz-transition-property: all;
-  -o-transition-property: all;
-  -ms-transition-property: all;
-  transition-property: all;
-}
-position: relative; top,left
-.container>.navbar
-.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}
-#conrainer "min-width: 310px; height: 400px; margin: 0 auto"
-@media only screen and (max-width:965px){ classes … }
-line-height: 160%;
-margin-top: -1px;
-font-size: 100%;
-width: 36%;
-float: right;
-.grid
-clear: both;
-text-aligh: left;
-vertical-align: top;
-display: inline-block;
-margin: 0 0 25px;
-width: 260px; //23% in media //48% in small media
-.galleryitem:nth-child(4n+1) //select the first in
-.sublead
-display: block; //none in media
-font-size: 105%;
-margin-bottom: 20px;
-.imageRotater
-width: 60%; // 100% in media
-.maintext
-font-size: 100%;
-line-height: 160%;
-margin-top: -10px; //15px in media
-width: 36%; //100% in media
-float: right;
-.navigation .navbar
-background-repeat: initial initial;
-background-position: initial initial;
-border-top: 1px dotted rgb(169, 169, 169)
-border-bottom: 1px dotted rgb(169, 169, 169)
-background: rgb(248,248,248)
-float: right;
-color: rgb(119,119,119);
-overflow: visible;
-margin-bottom: 20px;
-position: relative;
-//display: none; in media 
-#mobile-nav //select
-display: none; //block in media
-*/

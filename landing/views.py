@@ -4,11 +4,15 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from landing.forms import UserForm, CabinetWebmasterForm
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.core.urlresolvers import reverse
+from cabinet_webmaster.models import CabinetWebmasterModel
+from django.contrib.auth.models import User
+from itertools import chain
+from django.db.models import Q
+from django.core import serializers
 #from django.views.decorators.cache import cache_page
-#from django.contrib.auth.models import User
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
 
@@ -22,6 +26,7 @@ class LandingView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name,
         {
             "page": { "title": self.title }
+            #"profile": request.session.get('profile')
         })
 
 @login_required
@@ -31,10 +36,79 @@ def admin_webmasters(request):
     header = title
 
     if request.user.is_staff:
+        get_query_filter = request.GET.get('q')
+        all_cabinets = []
+
+        if get_query_filter:
+            try:
+                int(get_query_filter)
+                temp_1 = CabinetWebmasterModel.objects.select_related("user").filter(pk__exact=get_query_filter)
+            except:
+                temp_1 = []
+
+            #temp_2 = CabinetWebmasterModel.objects.select_related("user").filter(user__username__icontains=get_query_filter)
+            #temp_3 = CabinetWebmasterModel.objects.select_related("user").filter(user__email__icontains=get_query_filter)
+            temp_2 = CabinetWebmasterModel.objects.select_related("user").filter(Q(user__username__icontains=get_query_filter) | Q(user__email__icontains=get_query_filter))
+
+            all_cabinets = list(chain(temp_1, temp_2))
+        else:
+            all_cabinets = CabinetWebmasterModel.objects.select_related("user")
+
         return render(request, template_name,
         {
-            "page": { "title": title, "header": header }
+            "page": { "title": title, "header": header },
+            "all_cabinets": all_cabinets,
+            "q": get_query_filter
         })
+
+    return HttpResponseRedirect('/login/')
+
+@login_required
+def admin_change_status(request):
+
+    if request.user.is_staff:
+        answer = ''
+        status = None
+
+        cabinet_pk = request.GET.get('id')
+        status = request.GET.get('status')
+
+        try:
+            if cabinet_pk:
+                user = User.objects.get(cabinet_webmaster__pk=cabinet_pk)
+                user.is_active = True if status == 'true' else False
+                user.save()
+                answer = 'ok'
+            else:
+                answer = 'error, no id'
+        except:
+            answer = 'error'
+
+        return JsonResponse({"answer": answer, "status": status})
+
+    return HttpResponseRedirect('/login/')
+
+@login_required
+def admin_profile(request, pk):
+
+    if request.user.is_staff:
+        try:
+            user = User.objects.select_related('cabinet_webmaster').get(pk=pk)
+            request.session['profile'] = {'pk': user.pk, 'username': user.username, 'money': user.cabinet_webmaster.money }
+        except:
+            return HttpResponseRedirect('/admin/webmasters')
+        return HttpResponseRedirect('/')
+    
+    return HttpResponseRedirect('/login/')
+
+@login_required
+def admin_profile_clear(request):
+
+    if request.user.is_staff:
+        #request.session['profile'] = None
+        del request.session['profile']
+        return HttpResponseRedirect('/admin/webmasters')
+    
     return HttpResponseRedirect('/login/')
 
 @login_required

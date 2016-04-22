@@ -25,10 +25,15 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
+        areas = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
 
         return render(request, self.template_name,
         {
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+            'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
             "page": { "title": self.title, 'header': self.header },
             "ad_type": "Нормальный,Для взрослых",
             "area_category": AreaCategory.objects.all()
@@ -39,10 +44,15 @@ def statistic(request):
     template_name = 'webmaster_area/statistic.html'
     title = 'Статистика'
     header = 'Статистика'
+    areas = None
+
+    if request.user.is_staff and request.session.get('profile', False):
+        areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
 
     return render(request, template_name,
     {
-        'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
         'page': { 'title': title, 'header': header }
     })
 
@@ -60,7 +70,10 @@ def detailmain(request):
     dates_range_end = None
     isEmpty = True
 
-    areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+    if request.user.is_staff and request.session.get('profile', False):
+        areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
+    else:
+        areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
     
     if areas.first():
         isEmpty = False
@@ -208,7 +221,12 @@ def detailsocial(request, name):
     dates_range_start = None
     dates_range_end = None
 
-    area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    if request.user.is_staff and request.session.get('profile', False):
+        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+    else:
+        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+
+    #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
 
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
@@ -310,7 +328,12 @@ def detail(request, name):
         'all': 0
     }
 
-    area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    if request.user.is_staff and request.session.get('profile', False):
+        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+    else:
+        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+
+    #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
     
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
