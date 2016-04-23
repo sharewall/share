@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from landing.forms import UserForm, CabinetWebmasterForm
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
+from django.contrib.auth.models import User
 
 class CabinetWebmasterIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -26,12 +27,24 @@ def settings(request):
     if request.method == 'POST':
         answer = ''
         request_user = {}
-        request_user['username'] = request.user.get_username()
-        request_user['email'] = request.user.email
-        request_user['password'] = request.user.password
-        request_user['first_name'] = request.user.first_name
-        request_user['last_name'] = request.user.last_name
         request_post = {}
+        profile_user = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+
+            request_user['username'] = profile_user.get_username()
+            request_user['email'] = profile_user.email
+            request_user['password'] = profile_user.password
+            request_user['first_name'] = profile_user.first_name
+            request_user['last_name'] = profile_user.last_name
+        else:
+            request_user['username'] = request.user.get_username()
+            request_user['email'] = request.user.email
+            request_user['password'] = request.user.password
+            request_user['first_name'] = request.user.first_name
+            request_user['last_name'] = request.user.last_name
+
         request_post['password'] = request.POST.get('password')
         request_post['new_password'] = request.POST.get('new_password')
         request_post['money'] = request.POST.get('money')
@@ -42,13 +55,22 @@ def settings(request):
         request_post['last_name'] = request.POST.get('last_name')
         request_post['email'] = request.POST.get('email')
 
-        user_form = UserForm(data=request_user, instance=request.user)
+        if request.user.is_staff and request.session.get('profile', False):
+            user_form = UserForm(data=request_user, instance=profile_user)
+        else:
+            user_form = UserForm(data=request_user, instance=request.user)
+
         if(user_form.is_valid()):
+
             user = user_form.save(commit=False)
+
             if request.POST.get('delete_account') and request.POST.get('delete_account') == 'УДАЛИТЬ':
                 user.is_active = False
                 user.save()
-                django_logout(request)
+                if request.user.is_staff and request.session.get('profile', False):
+                    pass
+                else:
+                    django_logout(request)
                 answer = 'УДАЛИТЬ'
             elif request_post.get('password') and request.user.check_password(request_post.get('password')):
                 user.set_password(request_post.get('new_password'))

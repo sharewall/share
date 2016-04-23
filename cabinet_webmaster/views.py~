@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login as django_login, logout as d
 class CabinetWebmasterIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'cabinet_webmaster/index.html'
-    title = 'Cabinet webmaster'
+    title = 'Настройки'
     header = title
 
     @method_decorator(ensure_csrf_cookie)
@@ -25,12 +25,14 @@ class CabinetWebmasterIndexView(LoginRequiredMixin, TemplateView):
 def settings(request):
     if request.method == 'POST':
         answer = ''
+
         request_user = {}
         request_user['username'] = request.user.get_username()
         request_user['email'] = request.user.email
         request_user['password'] = request.user.password
         request_user['first_name'] = request.user.first_name
         request_user['last_name'] = request.user.last_name
+
         request_post = {}
         request_post['password'] = request.POST.get('password')
         request_post['new_password'] = request.POST.get('new_password')
@@ -42,13 +44,22 @@ def settings(request):
         request_post['last_name'] = request.POST.get('last_name')
         request_post['email'] = request.POST.get('email')
 
-        user_form = UserForm(data=request_user, instance=request.user)
+        if request.user.is_staff and request.session.get('profile', False):
+            user_form = UserForm(data=request_user, instance=request.session.get('profile').get('pk'))
+        else:
+            user_form = UserForm(data=request_user, instance=request.user)
+
         if(user_form.is_valid()):
+
             user = user_form.save(commit=False)
+
             if request.POST.get('delete_account') and request.POST.get('delete_account') == 'УДАЛИТЬ':
                 user.is_active = False
                 user.save()
-                django_logout(request)
+                if request.user.is_staff and request.session.get('profile', False):
+                    pass
+                else:
+                    django_logout(request)
                 answer = 'УДАЛИТЬ'
             elif request_post.get('password') and request.user.check_password(request_post.get('password')):
                 user.set_password(request_post.get('new_password'))

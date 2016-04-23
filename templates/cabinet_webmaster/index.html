@@ -3,14 +3,22 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
+  <div class="sBusyOverlay2" style="height: calc(100% - 139px); margin-top:62px; line-height:600px;">Обработка...</div>
 	<div class="sContent-PB">
         <div class="sContainer sMargin-Auto">
             <div class="sCabinet sCabinet-GlobalSettings">
                 <div class="sSettings-Title">Общие настройки аккаунта</div>
                 <div class="sSettings-Field sSettings-Field-Border">
                     <span>Логин</span>
-                    <span>{{ user.username }}</span>
+                    {% if user.is_staff and request.session.profile and request.session.profile.is_active %}
+                    <span>{{ request.session.profile.username }}</span>
                     <span class="sFloat-R">Удалить аккаунт</span>
+                    {% elif user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.username }}</span>
+                    <span></span>
+                    {% else %}
+                    <span>{{ user.username }}</span>
+                    {% endif %}
                 </div>
                 <div class="sSettings-Field-Edit">
                     <span class="sFloat-L">Удалить аккаунт</span>
@@ -24,11 +32,19 @@
                 </div>
                 <div class="sSettings-Field sSettings-Field-Border">
                     <span>ID</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span class="sNotLast">{{ request.session.profile.pk }}</span>                    
+                    {% else %}
                     <span class="sNotLast">{{ user.cabinet_webmaster.pk }}</span>                    
+                    {% endif %}
                 </div>
                 <div class="sSettings-Field sSettings-Field-Border">
                     <span>Имя</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.first_name }}</span>
+                    {% else %}
                     <span>{{ user.first_name }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -36,14 +52,22 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="first_name">Текущее имя</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="first_name" name="first_name" type="text" placeholder="Введите имя" value="{{ request.session.profile.first_name }}" />
+                        {% else %}
                         <input id="first_name" name="first_name" type="text" placeholder="Введите имя" value="{{ user.first_name }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
                 </div>
                 <div class="sSettings-Field sSettings-Field-Border">
                     <span>Фамилия</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.last_name }}</span>
+                    {% else %}
                     <span>{{ user.last_name }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -51,14 +75,22 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="last_name">Текущяя фамилия</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="last_name" name="last_name" type="text" placeholder="Введите фамилию" value="{{ request.session.profile.last_name }}" />
+                        {% else %}
                         <input id="last_name" name="last_name" type="text" placeholder="Введите фамилию" value="{{ user.last_name }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
                 </div>
                 <div class="sSettings-Field">
                     <span>Адрес электронной почты</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.email }}</span>
+                    {% else %}
                     <span>{{ user.email }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -66,14 +98,22 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="email">Текущий адрес электронной почты</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="email" name="email" type="email" placeholder="Введите адрес электронной почты" value="{{ request.session.profile.email }}" />
+                        {% else %}
                         <input id="email" name="email" type="email" placeholder="Введите адрес электронной почты" value="{{ user.email }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
                 </div>
                 <div class="sSettings-Field">
                     <span>WMR кошелёк для вывода денег</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.wmr }}</span>
+                    {% else %}
                     <span>{{ user.cabinet_webmaster.wmr }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -81,7 +121,11 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="wmr">Текущий WMR кошелёк</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="wmr" name="wmr" type="text" placeholder="Введите WMR кошелёк" value="{{ request.session.profile.wmr }}" />
+                        {% else %}
                         <input id="wmr" name="wmr" type="text" placeholder="Введите WMR кошелёк" value="{{ user.cabinet_webmaster.wmr }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
@@ -107,7 +151,11 @@
                 <div class="sSettings-Title">Контактная информация</div>
                 <div class="sSettings-Field sSettings-Field-Border">
                     <span>Мобильный телефон</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.mobile_phone }}</span>
+                    {% else %}
                     <span>{{ user.cabinet_webmaster.mobile_phone }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>   
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -115,14 +163,22 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="mobile_phone">Текущий мобильный телефон</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="mobile_phone" name="mobile_phone" type="text" placeholder="Введите мобильный телефон" value="{{ request.session.profile.mobile_phone }}" />
+                        {% else %}
                         <input id="mobile_phone" name="mobile_phone" type="text" placeholder="Введите мобильный телефон" value="{{ user.cabinet_webmaster.mobile_phone }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
                 </div>
                 <div class="sSettings-Field">
                     <span>Скайп</span>
+                    {% if user.is_staff and request.session.profile %}
+                    <span>{{ request.session.profile.skype }}</span>
+                    {% else %}
                     <span>{{ user.cabinet_webmaster.skype }}</span>
+                    {% endif %}
                     <span class="sFloat-R">Редактировать</span>      
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -130,7 +186,11 @@
                     <div class="sFloat-L">
                       <form> 
                         <label for="skype">Текущий скайп</label>
+                        {% if user.is_staff and request.session.profile %}
+                        <input id="skype" name="skype" type="text" placeholder="Введите скайп" value="{{ request.session.profile.skype }}" />
+                        {% else %}
                         <input id="skype" name="skype" type="text" placeholder="Введите скайп" value="{{ user.cabinet_webmaster.skype }}" />
+                        {% endif %}
                       </form> 
                     </div>                    
                     <span class="sFloat-R">Применить</span>
@@ -144,21 +204,49 @@
 
         <script>
             $(function(){
+
+                $('.sSettings-Field-Edit').click(function() {
+                  $(this).prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
+                }).children().click(function(e){
+                  return false;
+                });
+
                 $('.sSettings-Field > span:last-of-type:not(.sNotLast)').click(function(){
                      //$('html, body').off('click'); 
                      $parent = $(this).parent(); 
                      $parent.next('.sSettings-Field-Edit').slideToggle(200).prev().slideToggle(200);
                      //setTimeout("$('html, body').click(function(){ $('.sSettings-Field-Edit').slideUp(200); $('.sSettings-Field').slideDown(200); });", 700);
                 });
+
                 $('.sSettings-Field-Edit > span:last-of-type:not(.sNotLast)').click(function(){
                      $parent = $(this).parent(); 
-                     $.ajax({url: '/cabinet-webmaster/settings/', headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, type: "POST", data: $parent.find('form').serialize(), beforeSend: function(){ $('html, body').css('cursor','wait');  }, success: function(response, status, jqXHR) { console.log(response);
-          if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
-          else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
-          }, error: function(xhr){ console.log(xhr.statusText + ", " + xhr.responseText); }, complete: function(){ $('html, body').css('cursor','default'); 
-          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
-          } });
+
+                     $.ajax({
+                       url: '/cabinet-webmaster/settings/', 
+                       headers:{"X-CSRFToken": document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")}, 
+                       type: "POST", 
+                       data: $parent.find('form').serialize(), 
+                       beforeSend: function(){ 
+                         //$('html, body').css('cursor','wait');  
+                         $('.sBusyOverlay2').show();
+                       }, 
+                       success: function(response, status, jqXHR) { 
+                         console.log(response);
+                         if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
+                         else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
+                       }, 
+                       error: function(xhr){ 
+                         console.log(xhr.statusText + ", " + xhr.responseText); 
+                       }, 
+                       complete: function(){ 
+                         //$('html, body').css('cursor','default'); 
+                         $('.sBusyOverlay2').hide();
+                         $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
+                      } 
+                     });
+
                 });
+
             });
         </script>
 

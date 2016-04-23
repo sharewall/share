@@ -94,7 +94,18 @@ def admin_profile(request, pk):
     if request.user.is_staff:
         try:
             user = User.objects.select_related('cabinet_webmaster').get(pk=pk)
-            request.session['profile'] = {'pk': user.pk, 'username': user.username, 'money': user.cabinet_webmaster.money }
+            request.session['profile'] = {
+                'pk': user.pk, 
+                'username': user.username, 
+                'first_name': user.first_name, 
+                'last_name': user.last_name, 
+                'email': user.email, 
+                'wmr': user.cabinet_webmaster.wmr, 
+                'skype': user.cabinet_webmaster.skype, 
+                'mobile_phone': user.cabinet_webmaster.mobile_phone, 
+                'money': user.cabinet_webmaster.money,
+                'is_active': user.is_active
+            }
         except:
             return HttpResponseRedirect('/admin/webmasters')
         return HttpResponseRedirect('/')
