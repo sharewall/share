@@ -5,6 +5,7 @@
 	{% block content %}
   <div class="sContent-PB">
       <div class="sContainer sMargin-Auto">
+
           <div class="sH1Wrapper">
               <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
               <span class="sAdd-Circle"></span>
@@ -38,7 +39,7 @@
                   <div class="sTableAreasField"><span>{{ a.get_ad_type_display }}</span>
                   </div>
                   <div class="sTableAreasField">
-                      <span class="sAreaEdit"></span>
+                      <span class="sAreaEdit" onclick="eventUpdate(this)"></span>
                       <a href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
                   </div>
               </div>
@@ -48,7 +49,7 @@
               {% csrf_token %}
               <input type="submit" />
           </form>
-          <div class="sAddAreaModal">
+          <div class="sAddAreaModal" data-mode="create">
               <div class="sH1">Добавление площадки</div>
               <div class="sAddAreaWrapper">  
                   <div class="sFloat-L">
@@ -62,7 +63,7 @@
                             <input form="create_form" id="add_name_area" type="text" pattern="[^?#%]+$" name="name_area" value="" maxlength="200" required>
                         </div> 
                         <div>        
-                            <input form="create_form" id="add_url" type="url" name="url" value="" required>
+                            <input form="create_form" id="add_url" placeholder="http://" type="url" name="url" value="" required>
                         </div> 
                         <div>                           
                           <select form="create_form" id="add_category" name="area_category" size="{{ area_category.count }}" multiple required>
@@ -82,6 +83,7 @@
                   <span onclick="formSubmit()" class="sAddAreaSubmit sMargin-Auto"></span>
               </div>
           </div>
+
       </div>
   </div>
 	{% endblock %}
@@ -92,9 +94,52 @@
             function formSubmit(){
                 $('form input[type="submit"]').click();
             }
+            function eventUpdate(e){
+                $this = $(e);
+                $parent = $this.closest('.sTableAreasCell');
+                $pk = $parent.find('.sTableAreasField:nth-child(1)').find('span').text();
+                $name_area = $parent.find('.sTableAreasField:nth-child(2)').find('a').text();
+                $url = $parent.find('.sTableAreasField:nth-child(3)').find('a').text();
+                $area_category = $parent.find('.sTableAreasField:nth-child(4)').find('span').text();
+                $ad_type = $parent.find('.sTableAreasField:nth-child(5)').find('span').text();
+
+                $modal = $('div.sAddAreaModal'); 
+                $modal.find('div.sH1').text('Изменение площадки №'+$pk);
+                $modal.find('input[name="name_area"]').val($name_area).prop('disabled', true);
+                $modal.find('input[name="url"]').val('http://'+$url).prop('disabled', true);
+
+                $('select[name="area_category"]').find('option').prop('selected', false);
+                $area_category.split(',').forEach(function(v,i){
+                  $('select[name="area_category"]').find('option:contains('+v+')').prop('selected', true);
+                });
+
+                $('select[name="ad_type"]').find('option').prop('selected', false);
+                $ad_type.split(',').forEach(function(v,i){
+                  $('select[name="ad_type"]').find('option:contains('+v+')').prop('selected', true);
+                });
+
+                $('form#create_form').attr('action','/webmaster-area/update/'+$pk+'/')
+
+                if($modal.data('mode') == $pk){ $modal.toggle(); }
+                else { $modal.data('mode', $pk).show(); }
+            }
             $(function(){
-                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ $('div.sAddAreaModal').toggle(); });
+                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ 
+                  $modal = $('div.sAddAreaModal'); 
+                  $modal.find('div.sH1').text('Добавление площадки');
+                  $modal.find('input[name="name_area"]').val('').prop('disabled', false);
+                  $modal.find('input[name="url"]').val('').prop('disabled', false);
+                  $('select[name="area_category"]').find('option').prop('selected', false);
+                  $('select[name="ad_type"]').find('option').prop('selected', false);
+
+                  $('form#create_form').attr('action','/webmaster-area/create/')
+
+                  if($modal.data('mode') == 'create'){ $modal.toggle(); }
+                  else { $modal.data('mode', 'create').show(); }
+                });
+
                 $('.sAddAreaWrapper > div:nth-child(1) > label:nth-child(4)').css('padding-top', $('select#add_category').attr('size') * 30);
+
                 if(location.search.indexOf('?create') != -1){
                     $('div.sH1Wrapper span.sAdd-Circle').click(); 
                 }

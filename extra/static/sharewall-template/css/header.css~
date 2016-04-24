@@ -384,6 +384,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-left: 20px;
     padding-right: 30px;
     overflow-x: hidden;  
+    cursor: default;
 }
 .sSettings-Field-Border{
     border-bottom: #ededed 1px solid;
@@ -460,6 +461,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     font: 400 14px Roboto;
     background-color: #e7e7e7;
     /*margin-bottom: 573px; 72 573*/
+    cursor: default;
 }
 .sEmptyCalc {
     height: -moz-calc(100% - 139px);

@@ -103,7 +103,8 @@ def admin_profile(request, pk):
                 'wmr': user.cabinet_webmaster.wmr, 
                 'skype': user.cabinet_webmaster.skype, 
                 'mobile_phone': user.cabinet_webmaster.mobile_phone, 
-                'money': user.cabinet_webmaster.money 
+                'money': user.cabinet_webmaster.money,
+                'is_active': user.is_active
             }
         except:
             return HttpResponseRedirect('/admin/webmasters')

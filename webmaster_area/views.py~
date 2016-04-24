@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from webmaster_area.forms import WebmasterAreaForm, AreaCategory
 from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
 from bs4 import BeautifulSoup
+from django.contrib.auth.models import User
 
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -25,10 +26,15 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
+        areas = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
 
         return render(request, self.template_name,
         {
-            "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+            'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
             "page": { "title": self.title, 'header': self.header },
             "ad_type": "Нормальный,Для взрослых",
             "area_category": AreaCategory.objects.all()
@@ -437,64 +443,74 @@ def detail(request, name):
 
 @login_required
 def delete(request, pk):
+    profile_user = None
+
+    if request.user.is_staff and request.session.get('profile', False):
+        profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+
     try:
-        WebmasterAreaModel.objects.get(pk=pk).delete()
-    except Exception as inst:
+        if profile_user:
+            WebmasterAreaModel.objects.get(pk=pk, buttons_constructor__cabinet_webmaster__user=profile_user).delete()
+
+            return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
+        else:
+            WebmasterAreaModel.objects.get(pk=pk, buttons_constructor__cabinet_webmaster__user=request.user).delete()
+    except:
         pass
+
     return HttpResponseRedirect('/webmaster-area/')
 
 @login_required
 def update(request, pk):
-    template_name = 'webmaster_area/update.html'
-    title = 'Update webmaster area'
     request_instance = None
+    profile_user = None
+
+    if request.user.is_staff and request.session.get('profile', False):
+        profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+
     try:
-        request_instance = WebmasterAreaModel.objects.get(pk=pk)
-    except Exception as inst:
+        request_instance = WebmasterAreaModel.objects.get(pk=pk, buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.get(pk=pk, buttons_constructor__cabinet_webmaster__user=request.user)
+    except:
         pass
-    if request_instance:
-        request_form_data = {
+
+    if request_instance and request.method == 'POST':
+
+        area_category_list = request.POST.getlist('area_category','')
+        area_category_clear = ''
+
+        for a in area_category_list:
+            area_category_clear += AreaCategory.objects.get(pk=a).name + ','
+        area_category_clear = area_category_clear[:-1]
+
+        request_post_data = {
             'name_area': request_instance.name_area,
             'url': request_instance.url,
-            'buttons_constructor': request_instance.buttons_constructor
+            #TODO: disable change name_area and url else need to check for conflict name_area and url
+            #'name_area': request.POST.get('name_area', ''),
+            #'url': request.POST.get('url', ''),
+            'ad_type': request.POST.get('ad_type', ''),
+            'area_category': area_category_clear
         }
-        webmaster_area_form = WebmasterAreaForm(data=request_form_data, user=request.user, instance=request_instance, auto_id=False)
-        header = request_instance.name_area
-        if request.method == 'POST':
-            webmaster_area_form = WebmasterAreaForm(data=request.POST, user=request.user, instance=request_instance)
-            if webmaster_area_form.is_valid():
-                webmaster_area = webmaster_area_form.save(commit=False)
-                webmaster_area.save()
-                return HttpResponseRedirect('/webmaster-area/')
-                #return render(request, template_name,
-                #{
-                    #'success': 'Buttons constructor created'
-                #})
-            else:
-                webmaster_area_form = WebmasterAreaForm(buttons_constructor_form.cleaned_data, user=request.user, auto_id=False)
-                return render(request, template_name,
-                {
-                    'page': { 'title': title, 'header': header },
-                    'error': webmaster_area_form.errors,
-                    'webmaster_area_form': webmaster_area_form
-                })
-        else:
-            #return HttpResponseRedirect('/buttons-constructor/')
-            return render(request, template_name,
-            {
-                'pk': pk,
-                'page': { 'title': title, 'header': header },
-                'webmaster_area_form': webmaster_area_form
-            })
-    else:
-        return HttpResponseRedirect('/webmaster-area/')
+        webmaster_area_form = WebmasterAreaForm(data=request_post_data, instance=request_instance, auto_id=False)
+
+        if webmaster_area_form.is_valid():
+
+            webmaster_area = webmaster_area_form.save(commit=False)
+            webmaster_area.save()
+
+            #return HttpResponseRedirect('/webmaster-area/')
+
+    return HttpResponseRedirect('/webmaster-area/')
 
 @login_required
 def create(request):
-    template_name = 'webmaster_area/index.html'
-    title = 'Webmaster area'
-    header = 'Площадки'
+
     if request.method == 'POST':
+        profile_user = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+
         area_category_list = request.POST.getlist('area_category','')
         area_category_clear = ''
         for a in area_category_list:
@@ -516,7 +532,7 @@ def create(request):
         #for area in user_wma_list:
         #    user_wma_names_list.append(area.name_area)
         for area in all_wma_list:
-            if area.buttons_constructor.cabinet_webmaster.user == request.user:
+            if area.buttons_constructor.cabinet_webmaster.user == profile_user if profile_user is not None else request.user:
                 user_wma_names_list.append(area.name_area)
             all_wma_urls_list.append(area.url)
 
@@ -528,21 +544,16 @@ def create(request):
             webmaster_area = webmaster_area_form.save()
             #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
             try:
-                webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster).order_by('-pk')[0]
+                webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.filter(cabinet_webmaster=profile_user.cabinet_webmaster).order_by('-pk')[0] if profile_user is not None else ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster).order_by('-pk')[0]
             except Exception as instance:
-                webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
+                webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.create(cabinet_webmaster=profile_user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk')) if profile_user is not None else ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
 
             webmaster_area.save()
 
-            return HttpResponseRedirect('/webmaster-area/')
+            if profile_user:
+                return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
 
-    return render(request, template_name,
-    {
-        "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-        'page': { 'title': title, 'header': header },
-        "ad_type": "Нормальный,Для взрослых",
-        "area_category": AreaCategory.objects.all()
-    })
+    return HttpResponseRedirect('/webmaster-area/')
 
 def setcounterprivate(url):
 

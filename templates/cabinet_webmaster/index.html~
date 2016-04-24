@@ -3,6 +3,7 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
+  <div class="sBusyOverlay2" style="height: calc(100% - 139px); margin-top:62px; line-height:600px;">Обработка...</div>
 	<div class="sContent-PB">
         <div class="sContainer sMargin-Auto">
             <div class="sCabinet sCabinet-GlobalSettings">
@@ -17,6 +18,7 @@
                     <span></span>
                     {% else %}
                     <span>{{ user.username }}</span>
+                    <span class="sFloat-R">Удалить аккаунт</span>
                     {% endif %}
                 </div>
                 <div class="sSettings-Field-Edit">
@@ -226,18 +228,25 @@
                        type: "POST", 
                        data: $parent.find('form').serialize(), 
                        beforeSend: function(){ 
-                         $('html, body').css('cursor','wait');  
+                         //$('html, body').css('cursor','wait');  
+                         $('.sBusyOverlay2').show();
                        }, 
                        success: function(response, status, jqXHR) { 
                          console.log(response);
-                         if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
-                         else { $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
+                         {% if user.is_staff and request.session.profile %}
+                           if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/admin/profile/{{ request.session.profile.pk }}/?next=/login/' } 
+                           else if(response != ''){ window.location = '/admin/profile/{{ request.session.profile.pk }}' }
+                         {% else %}
+                           if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
+                           else if(response != ''){ $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }
+                         {% endif %}
                        }, 
                        error: function(xhr){ 
                          console.log(xhr.statusText + ", " + xhr.responseText); 
                        }, 
                        complete: function(){ 
-                         $('html, body').css('cursor','default'); 
+                         //$('html, body').css('cursor','default'); 
+                         $('.sBusyOverlay2').hide();
                          $parent.prev('.sSettings-Field').slideToggle(200).next().slideToggle(200);
                       } 
                      });

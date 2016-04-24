@@ -108,7 +108,9 @@ def admin_profile(request, pk):
             }
         except:
             return HttpResponseRedirect('/admin/webmasters')
-        return HttpResponseRedirect('/')
+
+        request_next = request.GET.get('next', '/') # request.PATH 
+        return HttpResponseRedirect(request_next)
     
     return HttpResponseRedirect('/login/')
 

@@ -1,64 +1,11 @@
   {% extends "skeleton.html" %}
 
-  {% block header %}
-    <div id="header" class="sBd-BlueH sWidth-100p">
-          <div class="sContainer sMargin-Auto">
-          <div class="sHeaderWrapper">
-              <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
-                  <input type="checkbox" id="sWmInput" class="sInputH">
-                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
-                  <div class="sOverHidden-All sTextAlign-L">
-                      <span class="sVAlign-50p sPos-Rel sZi-2">
-                          {{ user.username }}
-                      </span>
-                  </div> 
-                  <div class="sWmMenu sPos-Rel sZi-1">
-                      <span class="sWmMenuSpace"></span>
-                      <a href="/cabinet-webmaster/">Настройки</a>
-                      <a href="/logout/">Выйти</a>
-                  </div>
-              </div>
-              <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
-                  <div class="sOverHidden-All">
-                      <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
-                      <span class="sVAlign-50p sPos-Rel">
-                          {{ user.cabinet_webmaster.money }} p.                    
-                      </span>
-                  </div> 
-              </div>
-              <div class="sHeaderBox sHeaderBox-Menu sFloat-R sPos-Rel">
-                  <input type="checkbox" id="sHeaderMenuInput" class="sInputH">
-                  <div class="sOverHidden-All">
-                      <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
-                      <a href="/buttons-constructor/" class="sVAlign-50p">Конструктор</a>
-                      <a href="/webmaster-area/statistic/" class="sVAlign-50p">Статистика</a>
-                      <a href="javascript:return false;" class="sVAlign-50p">Рефералы</a>
-                      <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
-                  </div>                
-                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
-                  <div class="sMenu-Dd sPos-Rel sZi-1">
-                      <span class="sWmMenuSpace"></span>
-                      <a href="/buttons-constructor/">Конструктор</a>
-                      <a href="/webmaster-area/statistic/">Статистика</a>
-                      <a href="javascript:return false;">Рефералы</a>
-                      <a href="javascript:return false;">FAQ</a>
-                  </div>
-              </div>
-              <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
-                  <a href="/" class="sFloat-L">
-                      Sharing
-                  </a>
-              </div>
-          </div>
-          </div>
-      </div>
-  {% endblock %}
-
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
   <div class="sContent-PB">
       <div class="sContainer sMargin-Auto">
+
           <div class="sH1Wrapper">
               <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
               <span class="sAdd-Circle"></span>
@@ -92,17 +39,17 @@
                   <div class="sTableAreasField"><span>{{ a.get_ad_type_display }}</span>
                   </div>
                   <div class="sTableAreasField">
-                      <span class="sAreaEdit"></span>
+                      <span class="sAreaEdit" onclick="eventUpdate(this)"></span>
                       <a href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
                   </div>
               </div>
               {% endfor %}
           </div>         
-                        <form id="create_form" style="display:none; opacity:0;" method="post" action="/webmaster-area/create/">
-                            {% csrf_token %}
-                            <input type="submit" />
-                        </form>
-          <div class="sAddAreaModal">
+          <form id="create_form" style="display:none; opacity:0;" method="post" action="/webmaster-area/create/">
+              {% csrf_token %}
+              <input type="submit" />
+          </form>
+          <div class="sAddAreaModal" data-mode="create">
               <div class="sH1">Добавление площадки</div>
               <div class="sAddAreaWrapper">  
                   <div class="sFloat-L">
@@ -116,7 +63,7 @@
                             <input form="create_form" id="add_name_area" type="text" pattern="[^?#%]+$" name="name_area" value="" maxlength="200" required>
                         </div> 
                         <div>        
-                            <input form="create_form" id="add_url" type="url" name="url" value="" required>
+                            <input form="create_form" id="add_url" placeholder="http://" type="url" name="url" value="" required>
                         </div> 
                         <div>                           
                           <select form="create_form" id="add_category" name="area_category" size="{{ area_category.count }}" multiple required>
@@ -136,53 +83,67 @@
                   <span onclick="formSubmit()" class="sAddAreaSubmit sMargin-Auto"></span>
               </div>
           </div>
+
       </div>
   </div>
 	{% endblock %}
 
-  {% block footer %}
-       <div id="footer" class="sBd-GrayF sWidth-100p">
-          <div class="sContainer sMargin-Auto">
-          <div class="sFooterWrapper">
-              <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
-                  <a href="/" class="sFloat-L">
-                      Sharing
-                  </a>
-              </div>
-              <div class="sFooterBox sFooterBox-Sn sFloat-R sPos-Rel">
-                  <div class="sOverHidden-All">
-                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Fb">              </a>
-                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Tw">              </a>
-                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Vk">              </a>
-                      <a href="javascript:return false;" class="sFloat-L sSn sSn-Ok">              </a>
-                  </div>
-              </div>
-              <div class="sFooterBox sFooterBox-Menu sFloat-R sPos-Rel">
-                  <div class="sOverHidden-All">
-                      <a href="javascript:return false;" class="sVAlign-50p">
-                          Вебмастеру
-                      </a>
-                      <a href="javascript:return false;" class="sVAlign-50p">
-                          Возможности
-                      </a>
-                      <a href="javascript:return false;" class="sVAlign-50p">
-                          FAQ
-                      </a>
-                  </div>
-              </div>
-          </div>
-           </div>
-        </div>
+  {% block footer_script %}
+
         <script>
             function formSubmit(){
                 $('form input[type="submit"]').click();
             }
+            function eventUpdate(e){
+                $this = $(e);
+                $parent = $this.closest('.sTableAreasCell');
+                $pk = $parent.find('.sTableAreasField:nth-child(1)').find('span').text();
+                $name_area = $parent.find('.sTableAreasField:nth-child(2)').find('a').text();
+                $url = $parent.find('.sTableAreasField:nth-child(3)').find('a').text();
+                $area_category = $parent.find('.sTableAreasField:nth-child(4)').find('span').text();
+                $ad_type = $parent.find('.sTableAreasField:nth-child(5)').find('span').text();
+
+                $modal = $('div.sAddAreaModal'); 
+                $modal.find('div.sH1').text('Изменение площадки №'+$pk);
+                $modal.find('input[name="name_area"]').val($name_area);
+                $modal.find('input[name="url"]').val('http://'+$url);
+
+                $('select[name="area_category"]').find('option').prop('selected', false);
+                $area_category.split(',').forEach(function(v,i){
+                  $('select[name="area_category"]').find('option:contains('+v+')').prop('selected', true);
+                });
+
+                $('select[name="ad_type"]').find('option').prop('selected', false);
+                $ad_type.split(',').forEach(function(v,i){
+                  $('select[name="ad_type"]').find('option:contains('+v+')').prop('selected', true);
+                });
+
+                $('form#create_form').attr('action','/webmaster-area/update/'+$pk+'/')
+
+                if($modal.data('mode') == $pk){ $modal.toggle(); }
+                else { $modal.data('mode', $pk).show(); }
+            }
             $(function(){
-                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ $('div.sAddAreaModal').toggle(); });
+                $('div.sH1Wrapper span.sAdd-Circle').click(function(){ 
+                  $modal = $('div.sAddAreaModal'); 
+                  $modal.find('div.sH1').text('Добавление площадки');
+                  $modal.find('input[name="name_area"]').val('');
+                  $modal.find('input[name="url"]').val('');
+                  $('select[name="area_category"]').find('option').prop('selected', false);
+                  $('select[name="ad_type"]').find('option').prop('selected', false);
+
+                  $('form#create_form').attr('action','/webmaster-area/create/')
+
+                  if($modal.data('mode') == 'create'){ $modal.toggle(); }
+                  else { $modal.data('mode', 'create').show(); }
+                });
+
                 $('.sAddAreaWrapper > div:nth-child(1) > label:nth-child(4)').css('padding-top', $('select#add_category').attr('size') * 30);
+
                 if(location.search.indexOf('?create') != -1){
                     $('div.sH1Wrapper span.sAdd-Circle').click(); 
                 }
             });            
         </script>
+
   {% endblock %}
