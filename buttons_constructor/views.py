@@ -8,23 +8,18 @@ from django.http import HttpResponse, HttpResponseRedirect
 from buttons_constructor.forms import ButtonsConstructorForm
 from buttons_constructor.models import ButtonsConstructorModel, BtnsImages, SocialNetworks
 from webmaster_area.models import WebmasterAreaModel
+from django.contrib.auth.models import User
 
 class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'buttons_constructor/index.html'
-    title = 'Buttons constructor'
-    header = 'Список ваших конструкторов'
+    title = 'Список ваших конструкторов'
+    header = title
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
+
         return HttpResponseRedirect('/buttons-constructor/create/')
-        '''
-        return render(request, self.template_name,
-        {
-            "constructors": ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster),
-            "page": { "title": self.title, 'header': self.header }
-        })
-        '''
 
 @login_required
 def delete(request, pk):
@@ -97,33 +92,32 @@ def create(request):
     title = 'Конструктор'
     header = title
     
-    #all_soc_net_list = SocialNetworks.objects.all()
-    #clear_list_soc = []
-    #SOCIAL_DEFAULT = ''
-    #for s in all_soc_net_list:
-        #if not s.shortcut in SOCIAL_DEFAULT:
-            #SOCIAL_DEFAULT += s.shortcut + ','
-            #clear_list_soc += s
-
     if request.method == 'POST':
         buttons_constructor_form = ButtonsConstructorForm(data=request.POST)
+        profile_user = None
+
+        if request.user.is_staff and request.session.get('profile', False):
+            profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+
         if buttons_constructor_form.is_valid():
             buttons_constructor = buttons_constructor_form.save()
-            buttons_constructor.cabinet_webmaster = request.user.cabinet_webmaster
+            buttons_constructor.cabinet_webmaster = profile_user.cabinet_webmaster if profile_user is not None else request.user.cabinet_webmaster
+
             cleaned_social_networks = ''
-            #social_networks
             for s in buttons_constructor_form.cleaned_data.get('social_networks'):
                 cleaned_social_networks += s + ','
+
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
-            #buttons_constructor.with_counter = True
+
             buttons_constructor.save()
+
             wm_area_pk_post = request.POST.get('webmaster_area','')
             if wm_area_pk_post:
                 if wm_area_pk_post != 'all':
 
                     try:
-                        wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
+                        wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
                         old_btn_const_pk = wm_area.buttons_constructor.pk
                         wm_area.buttons_constructor = buttons_constructor
                         wm_area.save()
@@ -132,7 +126,7 @@ def create(request):
                     except:
                         pass
                 else:
-                    wm_area_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+                    wm_area_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
                     old_btns_pk_list = []
 
                     try:
@@ -147,62 +141,21 @@ def create(request):
                             ButtonsConstructorModel.objects.get(pk=pk).delete()
                     except:
                         pass
-            return HttpResponseRedirect('/webmaster-area/statistic/')
-            #return render(request, template_name,
-            #{
-                #'success': 'Buttons constructor created'
-            #})
-        else:
-            #ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
-            #buttons_constructor_form = ButtonsConstructorForm(buttons_constructor_form.cleaned_data)
-            return render(request, template_name,
-            {
-                'page': { 'title': title, 'header': header },
-                #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-                "areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-                'btns_images': BtnsImages.objects.all(),
-                'social_networks': SocialNetworks.objects.all()
-                #'error': buttons_constructor_form.errors,
-                #'buttons_constructor_form': buttons_constructor_form
-            })
-    else:
-        #return HttpResponseRedirect('/buttons-constructor/')
-        #list_all_user_areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user).order_by('-date')
-        #list_distinct, list_distinct_keys = [], []
 
-        #for area in list_all_user_areas:
-        #    if area.name_area not in list_distinct_keys:
-        #        list_distinct_keys.append(area.name_area)
-        #        list_distinct.append(area) 
+                return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/') if profile_user is not None else HttpResponseRedirect('/')
 
-        areas = None
+    areas = None
 
-        if request.user.is_staff and request.session.get('profile', False):
-            areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
-        
-        return render(request, template_name,
-        {
-            'page': { 'title': title, 'header': header },
-            #'buttons_constructor_form': ButtonsConstructorForm(),
-            #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
-            #'areas': list_distinct,
-            'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-            'btns_images': BtnsImages.objects.all(),
-            'social_networks': SocialNetworks.objects.all()
-        })
-
-
-    # records = LandingModel.objects.all()
-    # def get_context_data(self, **kwargs):
-        # records = LandingModel.objects.all()
-        # context = dict(records=records)
-        # return context
-
-#class LandingAboutView(TemplateView):
-    #template_name = 'landing/about.html'
-
-    #def get_context_data(self, **kwargs):
-        #record = get_object_or_404(LandingModel, pk=kwargs['pk'])
-        #context = dict(record=record, header='About %s' % record.title, title='About' + record.title)
-        #return context
-
+    if request.user.is_staff and request.session.get('profile', False):
+        areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
+    
+    return render(request, template_name,
+    {
+        'page': { 'title': title, 'header': header },
+        #'buttons_constructor_form': ButtonsConstructorForm(),
+        #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
+        #'areas': list_distinct,
+        'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
+        'btns_images': BtnsImages.objects.all(),
+        'social_networks': SocialNetworks.objects.all()
+    })
