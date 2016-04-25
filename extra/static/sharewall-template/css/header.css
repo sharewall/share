@@ -459,8 +459,6 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sTableAreas{
     color: #32353c;
     font: 400 14px Roboto;
-    background-color: #e7e7e7;
-    /*margin-bottom: 573px; 72 573*/
     cursor: default;
 }
 .sEmptyCalc {
@@ -474,6 +472,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sTableAreas .sTableAreasFieldName{
     height: 45px;
+    background: #e7e7e7;
 }
 .sTableAreasCell{
     height: 41px;
@@ -671,6 +670,13 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sAreaChoices-Line > span.sActive{
     color: #1693d5;
+}
+.sAreaChoices-Line > a{
+  color: #2fabf6;
+  font: 400 14px Roboto;
+  line-height: 58px;
+  padding-left: 20px;
+  margin-right: 12px;
 }
 h2.sH2{
     color: #636d7a;
@@ -1006,7 +1012,7 @@ span[data-sn="li"] {
 }
 .sAreaSelectWrapper select{
     background: transparent;
-    width: 175px;
+    width: 195px;
     height: 28px;
     padding: 5px;
     padding-left: 8px;
@@ -1016,7 +1022,7 @@ span[data-sn="li"] {
     -webkit-appearance: none; 
 }
 .sAreaSelectWrapper {
-    width: 155px;
+    width: 175px;
     height: 28px;
     overflow: hidden;
     background: url(../images/select-area-arrow.png) no-repeat right #fff;

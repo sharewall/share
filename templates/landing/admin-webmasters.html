@@ -24,7 +24,7 @@
             <span class="sSearchIcon" onclick="eventSearch()"></span>
           </div>
           
-          <div class="sTableAreas" style="margin-bottom:40px;">
+          <div class="sTableAreas" style="margin-bottom:40px; max-height: 680px; overflow-y: auto;">
             <div class="sTableAreasFieldName">
                 <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">ID</span>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.wmr }}</span>
                 </div>
                 <div class="sTableAreasField" style="width:539px;">
-                  <a href="/admin/profile/{{ cab.user.pk }}" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 50px 0 50px;">Посмотреть профиль</a>
+                  <a href="/admin/profile/{{ cab.user.pk }}" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 40px 0 50px;">Посмотреть профиль</a>
                     <span class="sAdminButton sAdminButton-Yellow">Написать</span>
                     {% if cab.user.is_staff %}
                     {% elif cab.user.is_active %}

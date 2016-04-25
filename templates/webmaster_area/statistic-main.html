@@ -7,6 +7,14 @@
       <script type="text/javascript" src="{% static "sharewall-template/js/datepicker.js" %}"></script>
       <script type="text/javascript" src="{% static "sharewall-template/js/eye.js" %}"></script>
       <script type="text/javascript" src="{% static "sharewall-template/js/utils.js" %}"></script>
+      <style>
+      input:checked + label.sBSInput{
+        background: url("{% static "sharewall-template/images/bs-chekbox-checked.png" %}");
+      }
+      .sBSInput{
+        margin-top:0px;
+      }
+      </style>
   {% endblock %}   
 
   {% block title %}{{ page.title }}{% endblock %}
@@ -25,7 +33,16 @@
                     <span class="sFilterShow" onclick="filterDateShow()">Фильтровать</span>
                     <p id="date2"></p>
               </div>
-              
+              {% if user.is_staff and not request.session.profile %}
+                <label class="sFloat-L" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Свои
+                  <input id="for0" type="radio" name="for" value="0" style="opacity:0; display:none; margin-left:9999px;">
+                  <label for="for0" class="sBSInput"></label>
+                </label>
+                <label class="sFloat-L" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Все
+                  <input id="for1" type="radio" name="for" value="1" style="opacity:0; display:none; margin-left:9999px;">
+                  <label for="for1" class="sBSInput"></label>
+                </label>
+              {% endif %}
               <div class="sStatistic">
                 <iframe src="/webmaster-area/detail-main/" style="width: 100%; min-height: 450px;" scrolling="no" id="detail" frameborder="0"></iframe>
               </div>
@@ -37,59 +54,64 @@
   {% block footer_script %}
 
   <script>
-  $(function(){
-      //var now = new Date();
-      //now.setDate(now.getDate()-10);
-      //var now2 = new Date();
-      //now2.setDate(now.getDate()-5);
-      //now2.setHours(0,0,0,0);
-      $('div.sBusyOverlay').show();
 
-      $('#date2').DatePicker({
-          flat: true,
-          format: 'd.m.Y',
-          date: ['10.04.2016','30.04.2016'],
-          current: '11.04.2016',
-          calendars: 3,
-          mode: 'range',
-          starts: 1,
-          onChange: function(formated, dates){
-            $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
-                    //if ($('#closeOnSelect input').attr('checked')) {
-                    //    $('#inputDate').DatePickerHide();
-                    //}
+      $(function(){
+          //var now = new Date();
+          //now.setDate(now.getDate()-10);
+          //var now2 = new Date();
+          //now2.setDate(now.getDate()-5);
+          //now2.setHours(0,0,0,0);
+          $('div.sBusyOverlay').show();
+
+          $('#date2').DatePicker({
+              flat: true,
+              format: 'd.m.Y',
+              date: ['10.04.2016','30.04.2016'],
+              current: '11.04.2016',
+              calendars: 3,
+              mode: 'range',
+              starts: 1,
+              onChange: function(formated, dates){
+                $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
+              }
+          }).hide();
+
+          $('#for0').prop('checked',true);
+          $('input[name="for"]').change(function(){ 
+            var forWho = $(this).val(); 
+            try{
+              $('div.sBusyOverlay').show();
+              $('iframe').attr('src','/webmaster-area/detail-main/?daterange='+$('#inputDate').val()+'&for='+forWho);
+            }
+            catch(e){
+              $('div.sBusyOverlay').hide();
+            }
+          });   
+      });
+
+      function setDatePicker(start, end){
+          $('#date2').DatePickerSetDate([start, end], true);
+      }
+
+      function showDatePicker(){
+          $('#date2').slideToggle(400);
+      }
+
+      function filterDateShow(){
+          try{
+            $('div.sBusyOverlay').show();
+            {% if user.is_staff and not request.session.profile %}
+              var forWho = $('input[name="for"]:checked').val();
+              $('iframe').attr('src','/webmaster-area/detail-main/?daterange='+$('#inputDate').val()+'&for='+forWho);
+            {% else %}
+              $('iframe').attr('src','/webmaster-area/detail-main/?daterange='+$('#inputDate').val());
+            {% endif %}
           }
-      }).hide();
-      
-  });
-  function setDatePicker(start, end){
-      $('#date2').DatePickerSetDate([start, end], true);
-      //$('#date2').DatePicker({
-      //    flat: true,
-      //    format: 'd.m.Y',
-      //    date: ['11.04.2016','12.04.2016'],
-      //    current: '11.04.2016',
-      //    calendars: 3,
-      //    mode: 'range',
-      //    starts: 1,
-      //    onChange: function(formated, dates){
-      //      $('#inputDate').val(formated[0]+" " +"-"+" "+formated[1]);
-      //    }
-      //}).hide();
-  }
-  function showDatePicker(){
-      $('#date2').slideToggle(400);
-  }
-  function filterDateShow(){
-      //console.log($('#inputDate').val());
-      try{
-        $('div.sBusyOverlay').show();
-        $('iframe').attr('src','/webmaster-area/detail-main/?daterange='+$('#inputDate').val());
+          catch(e){
+            $('div.sBusyOverlay').hide();
+          }
       }
-      catch(e){
-        $('div.sBusyOverlay').hide();
-      }
-  }
+
   </script>
 
   {% endblock %}

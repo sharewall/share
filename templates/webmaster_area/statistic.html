@@ -34,11 +34,26 @@
                     <p id="date2"></p>
               </div>
               <div class="sAreaChoices-Line">
-                  {% for a in areas %}
-                  <span onclick="showDetail(this)">{{ a.name_area }}</span>
-                  {% endfor %}
-              </div>
-          
+                {% if user.is_staff and not request.session.profile %}
+                <span class="sFloat-L" style="cursor:default;">ID вебмастера</span>
+                <div class="sFloat-L sAreaSelectWrapper" style="margin-left:20px; width:50px;">
+                  <select name="webmaster_id">
+                    {% for pk, name in users_data %} 
+                    <option value="{{ pk }}">{{ pk }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</option>
+                    {% endfor %} 
+                  </select>
+                </div>
+                {% endif %}
+
+                <a href="/webmaster-area/" class="sFloat-L">Площадки</a>
+                <div class="sAreaSelectWrapper">
+                  <select name="webmaster_area">
+                    {% for a in areas %} 
+                    <option>{{ a.name_area }}</option>
+                    {% endfor %} 
+                  </select>
+                </div>
+              </div> 
               <div class="sStatistic">
                 <div data-tabs="1"></div>
                 <div data-tabs="2"></div>
@@ -51,24 +66,81 @@
   {% block footer_script %}
 
         <script>
+
             $(function(){
                 {% if areas.count < 1 %}
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
+
+                {% if user.is_staff %}
+                 $('select[name="webmaster_id"]').val({{ user.pk }});
+                {% endif %}
+
                 $('.sListConstructors > span.sTabs').click(function(){
-                  $this = $(this); $this.parent().find('span.sTabs').removeClass('sActive'); $this.addClass('sActive'); 
+                  $this = $(this); 
+                  $this.parent().find('span.sTabs').removeClass('sActive'); 
+                  $this.addClass('sActive'); 
                   var tabNumber = $this.data('tabs'); 
                   $('.sStatistic > div').hide();
                   $('.sStatistic > div[data-tabs="'+tabNumber+'"]').show();
-                  //$('iframe').hide();  
-                  //$('iframe:nth-child('+tabNumber+')').show(); 
-                  //$('iframe').remove();
-                  //$('.sAreaChoices-Line > span').removeClass('sActive');
                 });
                 $('<iframe  style="width: 100%; " frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="1"]');
                 $('<iframe  style="width: 100%; " frameborder="0" scrolling="no" id="detail-social"></iframe>').appendTo('.sStatistic > div[data-tabs="2"]');
                 $('.sListConstructors > span:first-of-type()').click();
-                $('.sAreaChoices-Line > span:first-of-type()').click();
+
+                $('select[name="webmaster_id"]').change(function(){ 
+                    var selected_id_val = $(this).find('option:selected').val();
+
+                    $.ajax({ 
+                      url: "/admin/area-by-id/", 
+                      data: {
+                        "wmid": selected_id_val
+                      }, 
+                      beforeSend: function(){
+                        $('div.sBusyOverlay').show();
+                      },
+                      success: function(r){ 
+                        if(r.answer='ok'){ 
+
+                          $select_area = $('select[name="webmaster_area"]').empty();
+
+                          if(r.areas.length < 1){
+                            $('.sStatistic').hide();
+                          }
+                          else{
+                            r.areas.forEach(function(v,i){  
+                              $select_area.append('<option>'+v+'</option>');
+                            }); 
+                            
+                            $('select[name="webmaster_area"]').find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change');
+                            $('.sStatistic').show();
+                          }
+
+                        } 
+                      },
+                      complete: function(){
+                        $('div.sBusyOverlay').hide();
+                      }
+                    });
+
+                  });
+
+                $('select[name="webmaster_area"]').change(function(){ 
+                  try{
+                    $('div.sBusyOverlay').show();
+                    $this = $(this);
+                    var selected_area_text = $this.find('option:selected').text();
+                    var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
+                    $('.sStatistic > div').show();
+                    $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','590px');
+                    setTimeout(function(){
+                      $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','450px');
+                    }, 500);
+                  }
+                  catch(e){
+                    $('div.sBusyOverlay').hide();
+                  }
+                }).find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change'); 
 
                 $('#date2').DatePicker({
                     flat: true,
@@ -84,52 +156,32 @@
                     }
                 }).hide();
             });
-            function showDetail(e){
-              try{
-              $('div.sBusyOverlay').show();
-              $this = $(e);
-              $('.sAreaChoices-Line > span').removeClass('sActive');
-              //$('iframe').remove();
-              //var tabNumber = $('.sListConstructors > span.sTabs.sActive').data('tabs');
-              //if(tabNumber == 1){
-              //$('<iframe src="/webmaster-area/detail/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="1"]');
-              //$('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detail"></iframe>').appendTo('.sStatistic > div[data-tabs="2"]');
-              //}
-              //else if(tabNumber == 2){
-              //$('<iframe src="/webmaster-area/detail-social/'+$this.text()+'" style="width: 100%; min-height: 450px;" frameborder="0" scrolling="no" id="detailSocial"></iframe>').appendTo('.sStatistic');
-              //}
-              $('.sStatistic > div').show();
-              $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+$this.text()).css('min-height','590px');
-              setTimeout(function(){
-                $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+$this.text()).css('min-height','450px');
-              }, 500);
-              //$('.sListConstructors > span.sTabs.sActive').click();
-              $this.addClass('sActive');
-              }
-              catch(e){
-              $('div.sBusyOverlay').hide();
-              }
-            }
+
+
             function setDatePicker(start, end){
                 $('#date2').DatePickerSetDate([start, end], true);
             }
+
             function showDatePicker(){
                 $('#date2').slideToggle(400);
             }
+
             function filterDateShow(){
                 try{
                   $('div.sBusyOverlay').show();
-                  $this = $('.sAreaChoices-Line > span.sActive');
+                  var selected_area_text = $('select[name="webmaster_area"]').find('option:selected').text();
+                  var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
                   $('.sStatistic > div').show();
-                  $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+$this.text()+'/?daterange='+$('#inputDate').val()).css('min-height','590px');
+                  $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','590px');
                   setTimeout(function(){
-                    $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+$this.text()+'/?daterange='+$('#inputDate').val()).css('min-height','450px');
+                    $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','450px');
                   }, 500);
                 }
                 catch(e){
                   $('div.sBusyOverlay').hide();
                 }
             }
+
         </script>
 
   {% endblock %}

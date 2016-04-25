@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^setcounter/$', views.setcounter, name='webmaster-area-setcounter'),
     url(r'^getconfig/$', views.getconfig, name='webmaster-area-getconfig'),
     url(r'^checkconfig/$', views.checkconfig, name='webmaster-area-checkconfig'),
+    url(r'^detail-error/$', views.detail_error, name='webmaster-area-detail-error'),
 ]
 

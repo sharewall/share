@@ -46,12 +46,20 @@ def statistic(request):
     title = 'Статистика'
     header = 'Статистика'
     areas = None
+    users_data = []
+
+    if request.user.is_staff:
+        #users = User.objects.all()
+        users_data = sorted(list(User.objects.values_list('pk', 'username')))
+        #for u in users:
+        #    users_data[u[0]]=u[1]
 
     if request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
 
     return render(request, template_name,
     {
+        'users_data': users_data,
         'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
         #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
         'page': { 'title': title, 'header': header }
@@ -71,7 +79,9 @@ def detailmain(request):
     dates_range_end = None
     isEmpty = True
 
-    if request.user.is_staff and request.session.get('profile', False):
+    if request.user.is_staff and request.GET.get('for', False) and request.GET.get('for') == '1':
+        areas = WebmasterAreaModel.objects.all()
+    elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
@@ -222,10 +232,15 @@ def detailsocial(request, name):
     dates_range_start = None
     dates_range_end = None
 
-    if request.user.is_staff and request.session.get('profile', False):
-        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
-    else:
-        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    try:
+        if request.user.is_staff and request.GET.get('wmid', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.GET.get('wmid'), name_area=name)
+        elif request.user.is_staff and request.session.get('profile', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+        else:
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    except:
+        area = None
 
     #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
 
@@ -298,7 +313,18 @@ def detailsocial(request, name):
             'todayLJ': todayLJ
         })
     else:
-        return HttpResponseRedirect('/webmaster-area/statistic/')
+        return HttpResponseRedirect('/webmaster-area/detail-error/')
+
+@login_required
+def detail_error(request):
+    template_name = 'webmaster_area/detail-social.html'
+    title = "Ошибка"
+    header = title
+
+    return render(request, template_name,
+    {
+        'page': { 'title': title, 'header': header }
+    })
 
 @login_required
 def detail(request, name):
@@ -329,10 +355,15 @@ def detail(request, name):
         'all': 0
     }
 
-    if request.user.is_staff and request.session.get('profile', False):
-        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
-    else:
-        area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    try:
+        if request.user.is_staff and request.GET.get('wmid', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.GET.get('wmid'), name_area=name)
+        elif request.user.is_staff and request.session.get('profile', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+        else:
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    except:
+        area = None
 
     #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
     
@@ -439,7 +470,7 @@ def detail(request, name):
             'todayLJ': todayLJ
         })
     else:
-        return HttpResponseRedirect('/webmaster-area/statistic/')
+        return HttpResponseRedirect('/webmaster-area/detail-error/')
 
 @login_required
 def delete(request, pk):

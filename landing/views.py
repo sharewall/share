@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import Q
 from django.core import serializers
+from webmaster_area.models import WebmasterAreaModel
 #from django.views.decorators.cache import cache_page
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
@@ -60,6 +61,24 @@ def admin_webmasters(request):
             "all_cabinets": all_cabinets,
             "q": get_query_filter
         })
+
+    return HttpResponseRedirect('/login/')
+
+@login_required
+def admin_area_by_id(request):
+
+    if request.user.is_staff and request.GET.get('wmid', False):
+        answer = ''
+        request_wmid = request.GET.get('wmid')
+        areas = []
+
+        try:
+            areas = sorted(list(WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request_wmid).values_list('name_area', flat=True)))
+            answer = 'ok'
+        except:
+            answer = 'error'
+
+        return JsonResponse({"answer": answer, "areas": areas})
 
     return HttpResponseRedirect('/login/')
 

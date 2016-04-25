@@ -16,11 +16,15 @@
           </form>
           
           <div class="sInputWebmasterSearchWrapper">
+            {% if q %}
             <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" type="text" placeholder="Поиск по ID/логину/почте" value="{{ q }}">
+            {% else %}
+            <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" type="text" placeholder="Поиск по ID/логину/почте">
+            {% endif %}
             <span class="sSearchIcon" onclick="eventSearch()"></span>
           </div>
           
-          <div class="sTableAreas" style="margin-bottom:40px;">
+          <div class="sTableAreas" style="margin-bottom:40px; max-height: 680px; overflow-y: auto;">
             <div class="sTableAreasFieldName">
                 <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">ID</span>
                 </div>
