@@ -72,7 +72,7 @@
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
 
-                {% if user.is_staff %}
+                {% if user.is_staff and not request.session.profile %}
                  $('select[name="webmaster_id"]').val({{ user.pk }});
                 {% endif %}
 
@@ -88,54 +88,65 @@
                 $('<iframe  style="width: 100%; " frameborder="0" scrolling="no" id="detail-social"></iframe>').appendTo('.sStatistic > div[data-tabs="2"]');
                 $('.sListConstructors > span:first-of-type()').click();
 
-                $('select[name="webmaster_id"]').change(function(){ 
-                    var selected_id_val = $(this).find('option:selected').val();
+                {% if user.is_staff and not request.session.profile %}
+                  $('select[name="webmaster_id"]').change(function(){ 
+                      var selected_id_val = $(this).find('option:selected').val();
 
-                    $.ajax({ 
-                      url: "/admin/area-by-id/", 
-                      data: {
-                        "wmid": selected_id_val
-                      }, 
-                      beforeSend: function(){
-                        $('div.sBusyOverlay').show();
-                      },
-                      success: function(r){ 
-                        if(r.answer='ok'){ 
+                      $.ajax({ 
+                        url: "/admin/area-by-id/", 
+                        data: {
+                          "wmid": selected_id_val
+                        }, 
+                        beforeSend: function(){
+                          $('div.sBusyOverlay').show();
+                        },
+                        success: function(r){ 
+                          if(r.answer='ok'){ 
 
-                          if(r.areas.length < 1){
-                            $('.sStatistic').hide();
-                          }
-                          else{
                             $select_area = $('select[name="webmaster_area"]').empty();
 
-                            r.areas.forEach(function(v,i){  
-                              $select_area.append('<option>'+v+'</option>');
-                            }); 
-                            
-                            $('select[name="webmaster_area"]').find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change');
-                            $('.sStatistic').show();
-                          }
+                            if(r.areas.length < 1){
+                              $('.sStatistic').hide();
+                            }
+                            else{
+                              r.areas.forEach(function(v,i){  
+                                $select_area.append('<option>'+v+'</option>');
+                              }); 
+                              
+                              $('select[name="webmaster_area"]').find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change');
+                              $('.sStatistic').show();
+                            }
 
-                        } 
-                      },
-                      complete: function(){
-                        $('div.sBusyOverlay').hide();
-                      }
-                    });
+                          } 
+                        },
+                        complete: function(){
+                          $('div.sBusyOverlay').hide();
+                        }
+                      });
 
                   });
+                {% endif %}
 
                 $('select[name="webmaster_area"]').change(function(){ 
                   try{
                     $('div.sBusyOverlay').show();
                     $this = $(this);
                     var selected_area_text = $this.find('option:selected').text();
-                    var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
+
                     $('.sStatistic > div').show();
-                    $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','590px');
-                    setTimeout(function(){
-                      $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','450px');
-                    }, 500);
+
+                    {% if user.is_staff and not request.session.profile %}
+                      var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
+                      $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','590px');
+                      setTimeout(function(){
+                        $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?wmid='+selected_id_val).css('min-height','450px');
+                      }, 500);
+                    {% else %}
+                      $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text).css('min-height','590px');
+                      setTimeout(function(){
+                        $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text).css('min-height','450px');
+                      }, 500);
+                    {% endif %}
                   }
                   catch(e){
                     $('div.sBusyOverlay').hide();
