@@ -1,0 +1,69 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="sContent-PB">
+  <div class="sContainer sMargin-Auto">
+
+      <div class="sH1Wrapper">
+          <h1 class="sH1 sFloat-L">{{ page.header }}</h1>   
+          <div class="sClear-Both"></div>
+      </div> 
+
+      <div class="sTableAreas" style="margin-top:5px; margin-bottom:40px; max-height: 680px; overflow-y: auto;">
+            <div class="sPos-Rel sFloat-L sChatShowCount">
+              {% if chats and chats.count > 0 %}
+              <span>Найдено {{ chats.count }} записи</span>
+              {% else %}
+              <span>Найдено 0 записи</span>
+              {% endif %}
+            </div>
+            <div class="sPos-Rel sFloat-R sPager">
+                <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
+                <span class="sRoute" data-route="b"></span>
+                <span class="sRoute" data-route="f"></span>
+            </div>
+            <div class="sClear-Both"></div>
+          
+            <div class="sTableAreasFieldName">
+                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Дата</span>
+                </div>
+                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Отдел</span>
+                </div>
+                <div class="sTableAreasField" style="width:140px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Номер тикета</span>
+                </div>
+                <div class="sTableAreasField" style="width:230px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Тема</span>
+                </div>
+                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Состояние</span>
+                </div>
+                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Обновление</span>
+                </div>
+                <div class="sTableAreasField" style="width:208px; text-align:center;">
+                </div>
+            </div>
+
+            {% for chat in chats %}
+            <div class="sTableAreasCell">
+              <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showCreateDate }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showDepartment }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:140px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">#{{ chat.pk }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:230px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.header }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:125px; text-align:center;"><span data-chatstate="active" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showUpdateDate }}</span>
+                </div>
+                <div class="sTableAreasField" style="width:208px;">
+                  <a href="javascript:return false;" class="sGoWatchChat">Просмотр тикета</a>
+                </div>
+            </div> 
+            {% endfor %}
+                
+   </div>
+</div>
+{% endblock %}

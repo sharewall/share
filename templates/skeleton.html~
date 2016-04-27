@@ -54,8 +54,8 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
                   </div> 
                   <div class="sWmMenu sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
-                      <a href="/cabinet-webmaster/">Настройки</a>
-                      <a href="/logout/">Выйти</a>
+                      <a href="{% url "cabinet-webmaster-index" %}">Настройки</a>
+                      <a href="{% url "landing-logout" %}">Выйти</a>
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
@@ -74,39 +74,67 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
               </div>
               <div class="sHeaderBox sHeaderBox-Menu sFloat-R sPos-Rel">
                   <input type="checkbox" id="sHeaderMenuInput" class="sInputH">
-                  <div class="sOverHidden-All">
+                  <div class="">
                       {% if user.is_staff and request.session.profile == None %}
-                      <a href="/admin/webmasters/" class="sVAlign-50p">Вебмастера</a>
-                      <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
-                      <a href="/buttons-constructor/create/" class="sVAlign-50p">Конструктор</a>
-                      <a href="/webmaster-area/statistic/" class="sVAlign-50p">Статистика</a>
-                      <a href="javascript:return false;" class="sVAlign-50p">Тикеты</a>
+                      <a href="{% url "admin-webmasters" %}" class="sVAlign-50p">Вебмастера</a>
+                      <a href="{% url "webmaster-area-index" %}" class="sVAlign-50p">Площадки</a>
+                      <a href="{% url "buttons-constructor-create" %}" class="sVAlign-50p">Конструктор</a>
+                      <a href="{% url "webmaster-area-statistic" %}" class="sVAlign-50p">Статистика</a>
+                      <a href="javascript:return false;" data-chatdd="show" class="sVAlign-50p sPos-Rel">Тикеты
+                          <div class="sChatDD">
+                            <span class="sNone">Тикеты</span>
+                            <span data-url="{% url "chat-create" %}">Открыть тикет</span>
+                            <span data-url="{% url "chat-all" %}">Мои тикеты</span>
+                            <span data-url="{% url "admin-chat-billing" %}">Поддержкa</span>
+                            <span data-url="{% url "admin-chat-support" %}">Биллинг</span>
+                          </div>
+                      </a>
                       {% else %}
-                      <a href="/webmaster-area/" class="sVAlign-50p">Площадки</a>
-                      <a href="/buttons-constructor/create/" class="sVAlign-50p">Конструктор</a>
-                      <a href="/webmaster-area/statistic/" class="sVAlign-50p">Статистика</a>
-                      <a href="javascript:return false;" class="sVAlign-50p">Тикеты</a>
+                      <a href="{% url "webmaster-area-index" %}" class="sVAlign-50p">Площадки</a>
+                      <a href="{% url "buttons-constructor-create" %}" class="sVAlign-50p">Конструктор</a>
+                      <a href="{% url "webmaster-area-statistic" %}" class="sVAlign-50p">Статистика</a>
+                      <a href="javascript:return false;" data-chatdd="show" class="sVAlign-50p sPos-Rel">Тикеты
+                          <div class="sChatDD">
+                            <span class="sNone">Тикеты</span>
+                            <span data-url="{% url "chat-create" %}">Открыть тикет</span>
+                            <span data-url="{% url "chat-all" %}">Мои тикеты</span>
+                          </div>
+                      </a>
                       <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
                       {% endif %}
                   </div>                
                   <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
                   <div class="sMenu-Dd sPos-Rel sZi-1">
                       <span class="sWmMenuSpace"></span>
-                      {% if user.is_staff %}
-                      <a href="/webmaster-area/">Площадки</a>
-                      <a href="/buttons-constructor/create/">Конструктор</a>
-                      <a href="/webmaster-area/statistic/">Статистика</a>
-                      <a href="javascript:return false;">Тикеты</a>
+                      {% if user.is_staff and request.session.profile == None %}
+                      <a href="{% url "webmaster-area-index" %}">Площадки</a>
+                      <a href="{% url "buttons-constructor-create" %}">Конструктор</a>
+                      <a href="{% url "webmaster-area-statistic" %}">Статистика</a>
+                      <a href="javascript:return false;" data-chatdd="show" class="sPos-Rel">Тикеты
+                          <div class="sChatDD" style="top: 1px; left: -15px;">
+                            <span class="sNone">Тикеты</span>
+                            <span data-url="{% url "chat-create" %}">Открыть тикет</span>
+                            <span data-url="{% url "chat-all" %}">Мои тикеты</span>
+                            <span data-url="{% url "admin-chat-billing" %}">Поддержкa</span>
+                            <span data-url="{% url "admin-chat-support" %}">Биллинг</span>
+                          </div>
+                      </a>
                       {% else %}
-                      <a href="/buttons-constructor/create/">Конструктор</a>
-                      <a href="/webmaster-area/statistic/">Статистика</a>
-                      <a href="javascript:return false;">Тикеты</a>
+                      <a href="{% url "buttons-constructor-create" %}">Конструктор</a>
+                      <a href="{% url "webmaster-area-statistic" %}">Статистика</a>
+                      <a href="javascript:return false;" data-chatdd="show" class="sPos-Rel">Тикеты
+                          <div class="sChatDD" style="top: 1px; left: -15px;">
+                            <span class="sNone">Тикеты</span>
+                            <span data-url="{% url "chat-create" %}">Открыть тикет</span>
+                            <span data-url="{% url "chat-all" %}">Мои тикеты</span>
+                          </div>
+                      </a>
                       <a href="javascript:return false;">FAQ</a>
                       {% endif %}
                   </div>
               </div>
               <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
-                  <a href="/" class="sFloat-L">
+                <a href="{% url "landing-index" %}" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -124,7 +152,7 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <div class="sContainer sMargin-Auto">
           <div class="sFooterWrapper">
               <div class="sFooterBox sFooterBox-Logo sFloat-L sPos-Rel">
-                  <a href="/" class="sFloat-L">
+                  <a href="{% url "landing-index" %}" class="sFloat-L">
                       Sharing
                   </a>
               </div>
@@ -156,7 +184,13 @@ script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     {% endblock %}  
 
     {% block footer_script %}{% endblock %}
-
+        
+        <script>
+            $(function(){
+               $('[data-url]').click(function(){ location.href = $(this).data('url'); }) 
+            });    
+        </script>
+        
     </div>
   </body>
   

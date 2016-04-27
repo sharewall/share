@@ -22,8 +22,14 @@ class Chat(models.Model):
     #to_user_pk = models.IntegerField('to_user_pk', blank=True, null=True)
     header = models.CharField('message_header', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
-    date_create = models.DateField('date_create', auto_now_add=True)
+    date_create = models.DateTimeField('date_create', auto_now_add=True)#DateField
     date_update = models.DateTimeField('date_update', auto_now=True)
+
+    def showCreateDate(self):
+        return str(self.date_create.strftime('%d.%m.%Y %H:%M'))
+
+    def showUpdateDate(self):
+        return str(self.date_update.strftime('%d.%m.%Y %H:%M'))
 
     BILLING = 'BIL'
     SUPPORT = 'SUP'
@@ -42,6 +48,17 @@ class Chat(models.Model):
         (ANSWERED,'ANSWERED'),
     )
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default=ACTIVE)
+
+    def showDepartment(self):
+        return str('Служба поддержки' if self.department == self.SUPPORT else 'Биллинг')
+
+    def showStatus(self):
+        if self.status == self.CLOSE:
+            return 'Закрыт'
+        elif self.status == self.ACTIVE:
+            return 'В процессе'
+        else:
+            return 'Отвечен'
 
     def __str__(self):
         return str('From: %s' % self.user.username + '; Header: %s' % self.header + '; Status: %s' % self.status + '; Date_update: %s ' % self.date_update.strftime('%d/%m/%Y %H:%M'))

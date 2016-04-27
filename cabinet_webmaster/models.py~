@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 def generate_filename(self, filename):
-    path = "%s/%s" % (str(self.user.pk), str(uuid.uuid4()+'-'+filename))
+    path = "%s/%s" % ( str(self.user.pk), str(uuid.uuid4()) + '-' + filename )
     return path
 
 class CabinetWebmasterModel(models.Model):
@@ -22,8 +22,25 @@ class Chat(models.Model):
     #to_user_pk = models.IntegerField('to_user_pk', blank=True, null=True)
     header = models.CharField('message_header', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
-    date_create = models.DateField('date_create', auto_now_add=True)
+    date_create = models.DateTimeField('date_create', auto_now_add=True)#DateField
     date_update = models.DateTimeField('date_update', auto_now=True)
+
+    def showCreateDate(self):
+        return str(self.date_create.strftime('%d.%m.%Y %H:%M'))
+
+    def showUpdateDate(self):
+        return str(self.date_update.strftime('%d.%m.%Y %H:%M'))
+
+    def showDepartment(self):
+        return str('Служба поддержки' if self.department == SUPPORT else 'Биллинг')
+
+    def showStatus(self):
+        if self.status == CLOSE:
+            return 'Закрыт'
+        elif self.status == ACTIVE:
+            return 'В процессе'
+        else:
+            return 'Отвечен'
 
     BILLING = 'BIL'
     SUPPORT = 'SUP'

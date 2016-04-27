@@ -7,7 +7,7 @@ from landing.forms import UserForm, CabinetWebmasterForm
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.core.urlresolvers import reverse
-from cabinet_webmaster.models import CabinetWebmasterModel
+from cabinet_webmaster.models import CabinetWebmasterModel, Chat
 from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import Q
@@ -29,6 +29,59 @@ class LandingView(LoginRequiredMixin, TemplateView):
             "page": { "title": self.title }
             #"profile": request.session.get('profile')
         })
+
+@login_required
+def chat(request):
+    template_name = 'landing/chat.html'
+    title = 'Мои тикеты'
+    header = title
+
+    chats = Chat.objects.filter(user=request.user)
+
+    return render(request, template_name,
+    {
+        "page": { "title": title, "header": header },
+        'chats': chats
+    })
+
+@login_required
+def chat_create(request):
+    template_name = 'landing/chat-create.html'
+    title = 'Открыть тикет'
+    header = title
+
+    return render(request, template_name,
+    {
+        "page": { "title": title, "header": header }
+    })
+
+@login_required
+def admin_chat_billing(request):
+    template_name = 'landing/chat.html'
+    title = 'Биллинг'
+    header = title
+
+    if request.user.is_staff:
+        return render(request, template_name,
+        {
+            "page": { "title": title, "header": header }
+        })
+
+    return HttpResponseRedirect(reverse('landing-login'))
+
+@login_required
+def admin_chat_support(request):
+    template_name = 'landing/chat.html'
+    title = 'Служба поддержки'
+    header = title
+
+    if request.user.is_staff:
+        return render(request, template_name,
+        {
+            "page": { "title": title, "header": header }
+        })
+
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def admin_webmasters(request):
@@ -62,7 +115,7 @@ def admin_webmasters(request):
             "q": get_query_filter
         })
 
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def admin_area_by_id(request):
@@ -80,7 +133,7 @@ def admin_area_by_id(request):
 
         return JsonResponse({"answer": answer, "areas": areas})
 
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def admin_change_status(request):
@@ -105,7 +158,7 @@ def admin_change_status(request):
 
         return JsonResponse({"answer": answer, "status": status})
 
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def admin_profile(request, pk):
@@ -131,7 +184,7 @@ def admin_profile(request, pk):
         request_next = request.GET.get('next', '/') # request.PATH 
         return HttpResponseRedirect(request_next)
     
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def admin_profile_clear(request):
@@ -141,12 +194,13 @@ def admin_profile_clear(request):
         del request.session['profile']
         return HttpResponseRedirect('/admin/webmasters')
     
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
 def logout(request):
     django_logout(request)
-    return HttpResponseRedirect('/login/')
+
+    return HttpResponseRedirect(reverse('landing-login'))
 
 #@csrf_exempt
 @ensure_csrf_cookie
@@ -222,7 +276,7 @@ def register(request):
             #    'cabinet_webmaster_form': cabinet_webmaster_form
             #})
     else:
-        return HttpResponseRedirect('/login/')    
+        return HttpResponseRedirect(reverse('landing-login'))
         #if not 'user_form' in locals():
             #user_form = UserForm()
         #if not 'cabinet_webmaster_form' in locals():
