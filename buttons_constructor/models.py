@@ -1,4 +1,3 @@
-#import uuid
 from django.db import models
 from cabinet_webmaster.models import CabinetWebmasterModel
 
