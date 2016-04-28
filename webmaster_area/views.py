@@ -662,8 +662,9 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
             try:
-                snc = setcounterprivate(url=request_url)
-                answer += 'console.log("snc from server: '+snc+'");'
+                snc_server = setcounterprivate(url=request_url)
+                answer += 'console.log("snc from server: '+snc_server+'");'
+                snc = snc_server
             except:
                 pass
             
