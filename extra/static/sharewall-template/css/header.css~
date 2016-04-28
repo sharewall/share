@@ -441,6 +441,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sH1Wrapper{
     padding-top: 85px;
     padding-bottom: 20px;
+    cursor: default;
 }
 .sH1 + .sAdd-Circle{
     background: url(../images/add-circle-1.png);
@@ -1022,7 +1023,7 @@ span[data-sn="li"] {
     -webkit-appearance: none; 
 }
 .sAreaSelectWrapper {
-    width: 155px;
+    width: 175px;
     height: 28px;
     overflow: hidden;
     background: url(../images/select-area-arrow.png) no-repeat right #fff;
@@ -1273,4 +1274,75 @@ span.sAdminButton-Gray{
     left: 85%;
     bottom: 23px;
     line-height: 25px;
+}
+.sChatDD{
+    box-shadow: 0px 5px 7px 0px rgba(117, 129, 141, 0.5);
+    border-radius: 10px;
+    background: #efefef;
+    width: 136px;
+    color: #282f3a;
+    font: 400 15px / 31px Roboto;
+    /*padding-top: 20px;
+     margin-top: 13px;*/
+    position: absolute;
+    top: -5px;
+    right: -70px;
+    
+    display: none;
+    opacity: 0;
+}
+.sChatDD span.sNone{
+    color: #282f3a;
+    cursor: default;
+}
+.sChatDD span{
+    padding-left: 15px;
+}
+.sChatDD span:not(.sNone){
+    display: block;
+    height: 33px;
+}
+.sChatDD span:not(.sNone):hover{
+    background-color: #d6d6d6;
+}
+[data-chatdd="show"]:hover > .sChatDD{
+    display: block;
+    opacity: 1;
+}
+[data-chatstate="close"]{
+   color: #6b6b6b;
+}
+[data-chatstate="answered"]{
+    color: #40a70d;
+}
+[data-chatstate="active"]{
+    color: #ffa600;
+}
+.sGoWatchChat{
+    background: url(../images/eye.png)no-repeat;
+    margin-left: 23px;
+    padding-left: 27px!important;
+    background-position: 0px 14px;
+}
+.sChatShowCount{
+    color: #636d7a;
+    font: 400 16px / 18px Roboto;
+    height: 36px;
+    line-height: 36px;
+}
+.sPager{
+    color: #636d7a;
+    font: 400 16px / 18px Roboto;
+    height: 36px;
+}
+.sRoute{
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+}
+.sRoute[data-route="f"]{
+    background: url(../images/route-f.png)no-repeat;
+}
+.sRoute[data-route="b"]{
+    background: url(../images/route-b.png)no-repeat;
 }

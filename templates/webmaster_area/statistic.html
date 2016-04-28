@@ -68,7 +68,7 @@
         <script>
 
             $(function(){
-                {% if areas.count < 1 %}
+                {% if not user.is_staff and areas.count < 1 %}
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
 

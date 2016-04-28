@@ -68,7 +68,7 @@
         <script>
 
             $(function(){
-                {% if areas.count < 1 %}
+                {% if user.is_staff and areas.count < 1 %}
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
 
@@ -181,12 +181,21 @@
                 try{
                   $('div.sBusyOverlay').show();
                   var selected_area_text = $('select[name="webmaster_area"]').find('option:selected').text();
-                  var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
+
                   $('.sStatistic > div').show();
-                  $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','590px');
-                  setTimeout(function(){
-                    $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','450px');
-                  }, 500);
+
+                  {% if user.is_staff and not request.session.profile %}
+                    var selected_id_val = $('select[name="webmaster_id"]').find('option:selected').val();
+                    $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','590px');
+                    setTimeout(function(){
+                      $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?daterange='+$('#inputDate').val()+'&wmid='+selected_id_val).css('min-height','450px');
+                    }, 500);
+                  {% else %}
+                    $('.sStatistic > div[data-tabs="1"] > iframe').attr('src','/webmaster-area/detail/'+selected_area_text+'/?daterange='+$('#inputDate').val()).css('min-height','590px');
+                    setTimeout(function(){
+                      $('.sStatistic > div[data-tabs="2"] > iframe').attr('src','/webmaster-area/detail-social/'+selected_area_text+'/?daterange='+$('#inputDate').val()).css('min-height','450px');
+                    }, 500);
+                  {% endif %}
                 }
                 catch(e){
                   $('div.sBusyOverlay').hide();
