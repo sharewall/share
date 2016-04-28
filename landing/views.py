@@ -176,7 +176,8 @@ def admin_profile(request, pk):
                 'skype': user.cabinet_webmaster.skype, 
                 'mobile_phone': user.cabinet_webmaster.mobile_phone, 
                 'money': user.cabinet_webmaster.money,
-                'is_active': user.is_active
+                'is_active': user.is_active,
+                'is_staff': user.is_staff
             }
         except:
             return HttpResponseRedirect('/admin/webmasters')

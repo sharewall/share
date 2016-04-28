@@ -33,9 +33,10 @@
                     <span class="sFilterShow" onclick="filterDateShow()">Фильтровать</span>
                     <p id="date2"></p>
               </div>
+              {% if user.is_staff and request.session.profile and not request.session.profile.is_staff or not user.is_staff and areas.count < 1 %}
               {% if user.is_staff and not request.session.profile %}
                 <label class="sFloat-L" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Свои
-                  <input id="for0" type="radio" name="for" value="0" style="opacity:0; display:none; margin-left:9999px;" checked>
+                  <input id="for0" type="radio" name="for" value="0" style="opacity:0; display:none; margin-left:9999px;">
                   <label for="for0" class="sBSInput"></label>
                 </label>
                 <label class="sFloat-L" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Все
