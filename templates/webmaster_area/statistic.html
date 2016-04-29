@@ -233,11 +233,11 @@
 
             function fillPages(lpd){
               $('.sChatShowCount > span').text('Найдено '+lpd.length+' страниц');
-              lpd.sort(function(a,b){
-                return !((a.sharing < b.sharing)? -1 : ((a.sharing > b.sharing)? 1 : 0));
-              });
               $('.sTableAreasCell').remove();
-              lpd.forEach(function(v,k){
+
+              lpd.sort(function(a,b){
+                return (a.sharing < b.sharing ? 1 : -1);
+              }).forEach(function(v,k){
                 $('.sTableAreas').append('<div class="sTableAreasCell"><div class="sTableAreasField" style="width:74px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+k+'</span></div><div class="sTableAreasField" style="width:500px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;"><a style="padding-left:0px;" href="'+v.url+'">'+v.title+'</a></span></div><div class="sTableAreasField" style="width:100px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.sharing+'</span></div><div class="sTableAreasField" style="width:150px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.traffic+'</span></div><div class="sTableAreasField" style="width:330px; text-align:center;"><span data-chatstate="answered" style="padding:0 10px 0 10px; text-align:center;">Подробней: '+v.sharing_detail+' -- '+v.traffic_detail+'</span></div></div>');
               });
 
