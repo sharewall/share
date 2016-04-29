@@ -354,6 +354,7 @@ def detail(request, name):
         'lj': 0,
         'all': 0
     }
+    list_page_detail = []
 
     try:
         if request.user.is_staff and request.GET.get('wmid', False):
@@ -373,8 +374,31 @@ def detail(request, name):
         if area_per_day_list.last():
             last_day = area_per_day_list.last()
 
+            #TODO: list_page_detail
+            page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+            for pd in page_detail_list:
+                temp_total_share_counter = 0
+                temp_total_social_counter = 0
+
+                for s in pd.total_share_counter.split(','):
+                    temp_total_share_counter += int(s)
+                for s in pd.total_social_counter.split(','):
+                    temp_total_social_counter += int(s)
+
+                list_page_detail.append({
+                    'title':pd.title,
+                    'url':pd.url,
+                    'sharing':temp_total_share_counter,
+                    'traffic':temp_total_social_counter,
+                    'sharing_detail':pd.total_share_counter,
+                    'traffic_detail':pd.total_social_counter
+                    })
+
+            #TODO: move sort to client
+            #sorted(list_page_detail, key=lambda k: k['sharing'], reverse=True)
+
             if datetime.datetime.now().date() == last_day.date:
-                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+                #page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
                 last_day.today_share_counter = ''
                 temp_all_share_counters = [0,0,0,0,0,0,0,0]
 
@@ -453,6 +477,7 @@ def detail(request, name):
                 statistic['lj'] = temp
 
         statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
+
         return render(request, template_name,
         {
             'statistic': statistic,
@@ -467,7 +492,8 @@ def detail(request, name):
             'todayGP': todayGP,
             'todayMA': todayMA,
             'todayLI': todayLI,
-            'todayLJ': todayLJ
+            'todayLJ': todayLJ,
+            'list_page_detail': list_page_detail
         })
     else:
         return HttpResponseRedirect('/webmaster-area/detail-error/')
@@ -635,6 +661,10 @@ def checkconfig(request):
         history_referrer = request.GET.get('referrer', 'none referrer')
         history_rr = request.GET.get('rr', 'none rr')
         request_url = request.GET.get('url', 'none url')
+
+        #TODO: to lower case
+        request_url = request_url.lower()
+
         request_title = request.GET.get('title', 'none title')
         snc = request.GET.get('snc', 'none snc')
         snc = snc[:-1]
@@ -661,12 +691,15 @@ def checkconfig(request):
 
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
+
+            '''
             try:
                 snc_server = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
             except:
                 pass
+            '''
             
             #wma today!
             try:

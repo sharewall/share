@@ -89,19 +89,25 @@ class PageDetail(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related webmaster_area', related_name='page_detail')
     title = models.CharField(max_length=512, default='', verbose_name='page title')
     url = models.URLField('page url', null=False, blank=False, default='')
+
     sn_list = SocialNetworks.objects.all()
+
     SOCIAL_DEFAULT = ''
     COUNTER_DEFAULT = ''
+
     for s in sn_list:
         if not s.shortcut in SOCIAL_DEFAULT:
             SOCIAL_DEFAULT += s.shortcut + ','
             COUNTER_DEFAULT += '0,'
+
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
+
     #today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     total_social_counter = models.CharField("total social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     #today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     total_share_counter = models.CharField("total share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
     db_table = 'PageDetail'
 
     def __str__(self):

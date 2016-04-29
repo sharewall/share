@@ -148,10 +148,23 @@
                 }
                 ]
             });
+
+            //console.log({{ todayFB|safe }});
+            //console.log({{ dates|safe }});
             //console.log({{ statistic|safe }});
-            $('.highcharts-button').hide();
-            $('svg > text:last-of-type').hide();
-            window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
+            //console.log({{ list_page_detail|safe }});
+
+            try{
+              //window.parent.list_page_detail = {{ list_page_detail|safe }};
+              //console.log(window.parent.list_page_detail);
+              window.parent.fillPages({{ list_page_detail }});
+            }
+            finally{
+              $('.highcharts-button').hide();
+              $('svg > text:last-of-type').hide();
+              window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
+            }
+
         });
     </script>
   </body>

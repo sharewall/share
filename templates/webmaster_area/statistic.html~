@@ -20,9 +20,10 @@
           <div class="sListConstructors">
               
               <h2 class="sH2">Статистика</h2>
-              <span class="sTextAlign-C sTabs" data-tabs="1">Площадки</span>
+              <span class="sTextAlign-C sTabs" data-tabs="1">Шаринг</span>
               <span class="sTextAlign-C sTabs" data-tabs="2">Социальный трафик</span>
               <span class="sTextAlign-C sTabs" data-tabs="3">Заработок</span>
+              <span class="sTextAlign-C sTabs" data-tabs="4">Страницы</span>
               <div class="sGLine"></div>
               <div class="sDatePicker" style="margin-top:26px;">
                     <label for="inputDate">Период: </label>
@@ -30,7 +31,7 @@
                       <input class="inputDate" id="inputDate" value="">
                         <span class="sCalendarIcon" onclick="showDatePicker()"></span>
                     </div>
-                    <span class="sFilterShow" onclick="filterDateShow()">Фильтровать</span>
+                    <span class="sFilterShow" onclick="filterDateShow()">По дате</span>
                     <p id="date2"></p>
               </div>
               <div class="sAreaChoices-Line">
@@ -57,6 +58,35 @@
               <div class="sStatistic">
                 <div data-tabs="1"></div>
                 <div data-tabs="2"></div>
+                <div data-tabs="4">
+                
+            <div class="sTableAreas" style="margin-top:5px; margin-bottom:40px; max-height: 680px; overflow-y: auto;">
+                
+            <div class="sPos-Rel sFloat-L sChatShowCount">
+              <span>Найдено 0 страниц</span>
+            </div>
+            <div class="sPos-Rel sFloat-R sPager">
+                <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
+                <span class="sRoute" data-route="b"></span>
+                <span class="sRoute" data-route="f"></span>
+            </div>
+            <div class="sClear-Both"></div>
+          
+                <div class="sTableAreasFieldName">
+                    <div class="sTableAreasField" style="width:74px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Позиция</span>
+                    </div>
+                    <div class="sTableAreasField" style="width:500px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Страница</span>
+                    </div>
+                    <div class="sTableAreasField" style="width:100px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Шаринг</span>
+                    </div>
+                    <div class="sTableAreasField" style="width:150px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Cоц. трафик</span>
+                    </div>
+                    <div class="sTableAreasField" style="width:330px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Подробно</span>
+                    </div>
+                </div>
+
+                    
+                </div>
               </div>
           </div>
       </div>
@@ -68,7 +98,7 @@
         <script>
 
             $(function(){
-                {% (if user.is_staff and request.session.profile and not request.session.profile.is_staff) or (not user.is_staff and areas.count < 1) %}
+                {% if user.is_staff and request.session.profile and not request.session.profile.is_staff or not user.is_staff and areas.count < 1 %}
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
 
@@ -168,7 +198,6 @@
                 }).hide();
             });
 
-
             function setDatePicker(start, end){
                 $('#date2').DatePickerSetDate([start, end], true);
             }
@@ -200,6 +229,18 @@
                 catch(e){
                   $('div.sBusyOverlay').hide();
                 }
+            }
+
+            function fillPages(lpd){
+              $('.sChatShowCount > span').text('Найдено '+lpd.length+' страниц');
+              lpd.sort(function(a,b){
+                return ((a.sharing < b.sharing)? -1 : ((a.sharing > b.sharing)? 1 : 0));
+              });
+              $('.sTableAreasCell').remove();
+              lpd.forEach(function(v,k){
+                $('.sTableAreas').append('<div class="sTableAreasCell"><div class="sTableAreasField" style="width:74px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+k+'</span></div><div class="sTableAreasField" style="width:500px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;"><a style="padding-left:0px;" href="'+v.url+'">'+v.title+'</a></span></div><div class="sTableAreasField" style="width:100px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.sharing+'</span></div><div class="sTableAreasField" style="width:150px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.traffic+'</span></div><div class="sTableAreasField" style="width:330px; text-align:center;"><span data-chatstate="answered" style="padding:0 10px 0 10px; text-align:center;">Подробней: '+v.sharing_detail+' -- '+v.traffic_detail+'</span></div></div>');
+              });
+
             }
 
         </script>
