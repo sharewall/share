@@ -157,7 +157,7 @@
             try{
               //window.parent.list_page_detail = {{ list_page_detail|safe }};
               //console.log(window.parent.list_page_detail);
-              window.parent.fillPages({{ list_page_detail }});
+              window.parent.fillPages({{ list_page_detail|safe }});
             }
             finally{
               $('.highcharts-button').hide();

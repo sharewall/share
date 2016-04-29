@@ -25,9 +25,42 @@
     <div class="sWrapper">
         <div class="sHeight-Auto">
             <div class="sContainer sMargin-Auto" style="width:100%;">
-                <div class="sListConstructors">
-                    <div id="highCharts" style="padding-bottom: 100px; min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <div class="sListConstructors" style="padding-bottom:0px;">
+                    <div id="highCharts" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
+
+                <div class="sTableAreas">
+                    <div class="sTableAreasFieldName">
+                        <div class="sTableAreasField" style="width:180px;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Расшарили</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:130px;"><span style="padding:0 20px 0 20px; text-align:center;">Соц. трафик</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:90px;"><span style="padding:0 20px 0 20px; text-align:center;">Показы</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">Клики</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Заработок</span>
+                        </div>
+                    </div>
+                      
+                    <div class="sTableAreasCell">
+                        <div class="sTableAreasField" style="width:180px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Общая статистика</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.shares }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:130px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.socials }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:90px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.shows }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.clicks }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.money }}</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
