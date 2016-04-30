@@ -199,26 +199,37 @@ def detailmain(request):
 
             else:
                 dates.append(temp_areaPDay_date)
-                shares.append(
-                        int(a.today_share_counter.split(',')[0])+
-                        int(a.today_share_counter.split(',')[1])+
-                        int(a.today_share_counter.split(',')[2])+
-                        int(a.today_share_counter.split(',')[3])+
-                        int(a.today_share_counter.split(',')[4])+
-                        int(a.today_share_counter.split(',')[5])+
-                        int(a.today_share_counter.split(',')[6])+
-                        int(a.today_share_counter.split(',')[7])
-                        )
-                socials.append(
-                        int(a.today_social_counter.split(',')[0])+
-                        int(a.today_social_counter.split(',')[1])+
-                        int(a.today_social_counter.split(',')[2])+
-                        int(a.today_social_counter.split(',')[3])+
-                        int(a.today_social_counter.split(',')[4])+
-                        int(a.today_social_counter.split(',')[5])+
-                        int(a.today_social_counter.split(',')[6])+
-                        int(a.today_social_counter.split(',')[7])
-                        )
+
+                temp_today_share_counter = (
+                    int(a.today_share_counter.split(',')[0])+
+                    int(a.today_share_counter.split(',')[1])+
+                    int(a.today_share_counter.split(',')[2])+
+                    int(a.today_share_counter.split(',')[3])+
+                    int(a.today_share_counter.split(',')[4])+
+                    int(a.today_share_counter.split(',')[5])+
+                    int(a.today_share_counter.split(',')[6])+
+                    int(a.today_share_counter.split(',')[7])
+                )
+
+                temp_today_social_counter = (
+                    int(a.today_social_counter.split(',')[0])+
+                    int(a.today_social_counter.split(',')[1])+
+                    int(a.today_social_counter.split(',')[2])+
+                    int(a.today_social_counter.split(',')[3])+
+                    int(a.today_social_counter.split(',')[4])+
+                    int(a.today_social_counter.split(',')[5])+
+                    int(a.today_social_counter.split(',')[6])+
+                    int(a.today_social_counter.split(',')[7])
+                )
+
+                if temp_today_share_counter > statistic['shares']:
+                    statistic['shares'] = temp_today_share_counter
+
+                if temp_today_social_counter > statistic['socials']:
+                    statistic['socials'] = temp_today_social_counter
+
+                shares.append(temp_today_share_counter)
+                socials.append(temp_today_social_counter)
 
     return render(request, template_name,
     {
@@ -475,6 +486,24 @@ def detail(request, name):
                     for i,i2 in zip(temp_all_share_counters, temp_share_counter):
                         temp_all_share_counters[index]=(i+i2)
                         index+=1
+
+                    #list_page_detail
+                    #temp_total_share_counter = 0
+                    #temp_total_social_counter = 0
+
+                    #for s in pd.total_share_counter.split(','):
+                    #    temp_total_share_counter += int(s)
+                    #for s in pd.total_social_counter.split(','):
+                    #    temp_total_social_counter += int(s)
+
+                    #list_page_detail.append({
+                    #    'title':pd.title,
+                    #    'url':pd.url,
+                    #    'sharing':temp_total_share_counter,
+                    #    'traffic':temp_total_social_counter,
+                    #    'sharing_detail':pd.total_share_counter,
+                    #    'traffic_detail':pd.total_social_counter
+                    #    })
 
                 for i in temp_all_share_counters:
                     last_day.today_share_counter += str(i) + ','

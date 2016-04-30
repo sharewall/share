@@ -487,6 +487,24 @@ def detail(request, name):
                         temp_all_share_counters[index]=(i+i2)
                         index+=1
 
+                    #list_page_detail
+                    #temp_total_share_counter = 0
+                    #temp_total_social_counter = 0
+
+                    #for s in pd.total_share_counter.split(','):
+                    #    temp_total_share_counter += int(s)
+                    #for s in pd.total_social_counter.split(','):
+                    #    temp_total_social_counter += int(s)
+
+                    #list_page_detail.append({
+                    #    'title':pd.title,
+                    #    'url':pd.url,
+                    #    'sharing':temp_total_share_counter,
+                    #    'traffic':temp_total_social_counter,
+                    #    'sharing_detail':pd.total_share_counter,
+                    #    'traffic_detail':pd.total_social_counter
+                    #    })
+
                 for i in temp_all_share_counters:
                     last_day.today_share_counter += str(i) + ','
 
@@ -769,14 +787,14 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
 
-            '''
+            
             try:
                 snc_server = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
             except:
                 pass
-            '''
+            
             
             #wma today!
             try:

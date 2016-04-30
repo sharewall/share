@@ -479,10 +479,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: 41px;
     border-bottom: 1px solid #fff;
 }
-.sTableAreasCell:nth-child(odd){    
+.sTableAreasCell:nth-child(odd):not(.sTableAreas2){    
     background-color: #f6f6f6;
 }
-.sTableAreasCell:nth-child(even){
+.sTableAreasCell:nth-child(even):not(.sTableAreas2){
     background-color: #efefef; 
 }
 .sTableAreasField{
@@ -1008,7 +1008,7 @@ span[data-sn="ma"] {
 span[data-sn="li"] {
     background-position: -246px 0px;
 }
-span[data-sn="li"] {
+span[data-sn="lj"] {
     background-position: -287px 0px;
 }
 .sAreaSelectWrapper select{
