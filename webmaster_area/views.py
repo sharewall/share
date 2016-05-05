@@ -68,7 +68,56 @@ def statistic(request):
     })
 
 def updateServer(request):
-    return HttpResponse("Ok")
+    answer = "Answer= "
+    areas = WebmasterAreaModel.objects.all()
+
+    for area in areas:
+        answer = answer + area.name_area + ": "
+        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
+        if area_per_day_list.last():
+            last_day = area_per_day_list.last()
+
+            if datetime.datetime.now().date() == last_day.date:
+                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+
+                last_day.today_social_counter = ''
+                temp_all_social_counters = [0,0,0,0,0,0,0,0]
+
+                last_day.today_share_counter = ''
+                temp_all_share_counters = [0,0,0,0,0,0,0,0]
+
+                for pd in page_detail_list:
+                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
+                    index=0
+
+                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
+                    index2=0
+
+                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
+                        temp_all_social_counters[index]=(i+i2)
+                        index+=1
+
+                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
+                        temp_all_share_counters[index2]=(i+i2)
+                        index2+=1
+
+                for i in temp_all_social_counters:
+                    last_day.today_social_counter += str(i) + ','
+
+                for i in temp_all_share_counters:
+                    last_day.today_share_counter += str(i) + ','
+
+                last_day.today_social_counter = last_day.today_social_counter[:-1]
+                answer = answer + last_day.today_social_counter + "; "
+
+                last_day.today_share_counter = last_day.today_share_counter[:-1]
+                answer = answer + last_day.today_share_counter + ". "
+
+                last_day.save()
+
+
+    return HttpResponse(answer)
 
 @login_required
 def detailmain(request):
@@ -731,6 +780,7 @@ def setcounterprivate(url):
     if url:
         #answer += 'url=' + url + '; '
 
+        #TODO: some make freeze
         share_count_methods = [
             {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
             {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
@@ -802,14 +852,14 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
 
-            
+            ''' 
             try:
                 snc_server = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
             except:
                 pass
-            
+            ''' 
             
             #wma today!
             try:
@@ -880,6 +930,7 @@ def setcounter(request):
             {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
             {'tw': 'twitter'},
             {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
+            #{'gp': 'google'},
             {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
             {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
             {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
