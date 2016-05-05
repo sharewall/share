@@ -17,6 +17,8 @@ from webmaster_area.forms import WebmasterAreaForm, AreaCategory
 from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
+from itertools import chain
+from django.db.models import Q
 
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -65,6 +67,9 @@ def statistic(request):
         'page': { 'title': title, 'header': header }
     })
 
+def updateServer():
+    return HttpResponse("Ok")
+
 @login_required
 def detailmain(request):
     template_name = 'webmaster_area/detail-main.html'
@@ -85,9 +90,11 @@ def detailmain(request):
         'clicks': 0,        
         'money': 0
     }
+    for_1 = False
 
     if request.user.is_staff and request.GET.get('for', False) and request.GET.get('for') == '1':
         areas = WebmasterAreaModel.objects.all()
+        for_1 = True
     elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
@@ -102,21 +109,29 @@ def detailmain(request):
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
     except Exception as inst:
         temp_areaTodayList = None
+
         if not isEmpty:
-            temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
+            temp_areaTodayList = AreaToday.objects.filter(Q(webmaster_area=areas.first()) and Q(webmaster_area=areas.last()))#and last for correct date range
 
         if temp_areaTodayList is not None and temp_areaTodayList.first():
             temp_areaToday = temp_areaTodayList.first()
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
+
             temp_areaToday = temp_areaTodayList.last()
             dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
         else:
             dates_range_start = datetime.datetime.now().date()
             dates_range_end = datetime.datetime.now().date()
 
+    #TODO: Bug, If not date today in db for area we have empty date, so...
+    if for_1:
+        areas = [areas.last(),]
+
     for area in areas:
 
-        if dates_range_start and dates_range_end:
+        if for_1:
+            area_per_day_list = AreaToday.objects.all()
+        elif dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])
         else:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
@@ -787,14 +802,14 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
 
-            '''
+            
             try:
                 snc_server = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
             except:
                 pass
-            '''
+            
             
             #wma today!
             try:

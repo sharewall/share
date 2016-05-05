@@ -1,0 +1,6 @@
+all:
+	g++ update-server.c -o update-server
+clean:
+	rm -rf *o update-server
+run: clean all
+	./update-server

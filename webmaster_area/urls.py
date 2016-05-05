@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^getconfig/$', views.getconfig, name='webmaster-area-getconfig'),
     url(r'^checkconfig/$', views.checkconfig, name='webmaster-area-checkconfig'),
     url(r'^detail-error/$', views.detail_error, name='webmaster-area-detail-error'),
+    url(r'^thu-may/555/update-server/$', views.updateServer, name='webmaster-area-update-server'),
 ]
 

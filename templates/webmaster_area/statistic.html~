@@ -248,7 +248,7 @@
              function sortPageDetail(by){
 
                 $('.sTableAreasCell').remove();
-                $('.[data-detail="true"]').remove();
+                $('[data-detail="true"]').remove();
 
                 _lpd.sort(function(a,b){
 

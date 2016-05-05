@@ -1,0 +1,2 @@
+all:
+	g++ update-server.c -o update-server
