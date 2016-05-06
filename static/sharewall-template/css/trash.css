@@ -1,0 +1,78 @@
+.cmn-toggle {
+  position: absolute;
+  margin-left: -9999px;
+  visibility: visible; /*hidden */
+    z-index: 2;
+}
+.cmn-toggle + span {
+  /*display: block;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  user-select: none;*/
+    cursor: pointer;
+    position: relative;
+    top: -36px;
+    left: 4px;
+    width: 145px;
+    height: 112px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 12px 20px 0.00px rgba(117, 129, 141, 0.75);
+    visibility: hidden;
+}
+
+input.cmn-toggle-round + span {
+  /*padding: 2px;
+  width: 120px;
+  height: 60px;
+  background-color: #dddddd;
+  border-radius: 60px;*/
+}
+input.cmn-toggle-round + span:before,
+input.cmn-toggle-round + span:after {
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  content: "";
+    opacity: 0;
+    visibility: visible;
+}
+input.cmn-toggle-round + span:before {
+  right: 1px;
+    opacity: 1;
+  /*background-color: #f1f1f1;*/
+    background-color: #ffffff;
+  /*border-radius: 60px;*/
+  transition: background 0.4s;
+    content: "";
+}
+input.cmn-toggle-round + span:after {
+    
+  /*width: 58px;*/
+  /*background-color: #fff;*/
+    background-color: #f1f1f1;
+  /*border-radius: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);*/
+  transition: margin 0.4s;
+    content: ""
+}
+input.cmn-toggle-round:checked + span:before {
+    opacity: 0;
+  background-color: #8ce196;
+    content: "";
+}
+input.cmn-toggle-round:checked + span:after {
+  margin-left: 60px;
+    content: "";
+}
+<div class="switch">
+  <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
+   <label for="cmn-toggle-1"></label>
+</div>
+<div class="switch">
+  <input id="cmn-toggle-4" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
+  <label for="cmn-toggle-4"></label>
+</div>

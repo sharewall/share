@@ -132,6 +132,10 @@ def detailmain(request):
     dates_range_start = None
     dates_range_end = None
     isEmpty = True
+    temp_statistic = {
+        'shares': 0,
+        'socials': 0
+    }
     statistic = {
         'shares': 0,        
         'socials': 0,        
@@ -139,54 +143,77 @@ def detailmain(request):
         'clicks': 0,        
         'money': 0
     }
-    for_1 = False
+    for_1 = False # Not all
+    area_first = None
+    areas = []
 
     if request.user.is_staff and request.GET.get('for', False) and request.GET.get('for') == '1':
-        areas = WebmasterAreaModel.objects.all()
+        #areas = WebmasterAreaModel.objects.all()
         for_1 = True
+        area_first = WebmasterAreaModel.objects.first()
     elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
     
-    if areas.first():
+    if area_first or areas.first():
         isEmpty = False
 
     try:
         request_dateRange = request.GET.get('daterange').split(' - ')
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
-    except Exception as inst:
+    except:
         temp_areaTodayList = None
 
-        if not isEmpty:
-            temp_areaTodayList = AreaToday.objects.filter(Q(webmaster_area=areas.first()) and Q(webmaster_area=areas.last()))#and last for correct date range
+        if for_1 and area_first is not None:
+            temp_first_area_today = AreaToday.objects.filter(webmaster_area=area_first)
+            if temp_first_area_today.first():
+                dates_range_start = temp_first_area_today.date
+            else:
+                dates_range_start = datetime.datetime.now().date()
+
+            dates_range_end = datetime.datetime.now().date()
+        elif not isEmpty:
+            #temp_areaTodayList = AreaToday.objects.filter(Q(webmaster_area=areas.first()) and Q(webmaster_area=areas.last()))#and last for correct date range
+            temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
 
         if temp_areaTodayList is not None and temp_areaTodayList.first():
             temp_areaToday = temp_areaTodayList.first()
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
 
-            temp_areaToday = temp_areaTodayList.last()
-            dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
+            dates_range_end = datetime.datetime.now().date()
+            '''
+            if for_1:
+                dates_range_end = datetime.datetime.now().date()
+                #pass
+            else:
+                temp_areaToday = temp_areaTodayList.last()
+                dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
+                #pass
+            '''
         else:
             dates_range_start = datetime.datetime.now().date()
             dates_range_end = datetime.datetime.now().date()
 
-    #TODO: Bug, If not date today in db for area we have empty date, so...
+    #TODO: If for all, then vehicle:
     if for_1:
-        areas = [areas.last(),]
+        areas = [0,]
 
     for area in areas:
 
+        temp_statistic['shares'] = 0
+        temp_statistic['socials'] = 0
+
         if for_1:
-            area_per_day_list = AreaToday.objects.all()
+            area_per_day_list = AreaToday.objects.all().select_related('webmaster_area')
+            temp_area_per_day_statistic = []
         elif dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])
         else:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
-        #!
-        if area_per_day_list.last():
+        if not for_1 and area_per_day_list.last():
             last_day = area_per_day_list.last()
 
             if datetime.datetime.now().date() == last_day.date:
@@ -252,11 +279,27 @@ def detailmain(request):
                     int(a.today_social_counter.split(',')[7])
                 )
 
-                if temp_today_share_counter > statistic['shares']:
-                    statistic['shares'] = temp_today_share_counter
+                if for_1:
+                    try:
+                        temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['pk'] == a.webmaster_area.pk)
 
-                if temp_today_social_counter > statistic['socials']:
-                    statistic['socials'] = temp_today_social_counter
+                        if temp_today_share_counter > temp_area_per_day_statistic[temp_index]['share']:
+                            temp_area_per_day_statistic[temp_index]['share'] = temp_today_share_counter
+
+                        if temp_today_social_counter > temp_area_per_day_statistic[temp_index]['social']:
+                            temp_area_per_day_statistic[temp_index]['social'] = temp_today_social_counter
+                    except:
+                        temp_area_per_day_statistic.append({
+                            'pk' : a.webmaster_area.pk,
+                            'share' : temp_today_share_counter,
+                            'social' : temp_today_social_counter
+                        })
+                else:
+                    if temp_today_share_counter > temp_statistic['shares']:
+                        temp_statistic['shares'] = temp_today_share_counter
+
+                    if temp_today_social_counter > temp_statistic['socials']:
+                        temp_statistic['socials'] = temp_today_social_counter
 
                 shares[dates.index(temp_areaPDay_date)]+=temp_today_share_counter
                 socials[dates.index(temp_areaPDay_date)]+=temp_today_social_counter
@@ -286,17 +329,44 @@ def detailmain(request):
                     int(a.today_social_counter.split(',')[7])
                 )
 
-                if temp_today_share_counter > statistic['shares']:
-                    statistic['shares'] = temp_today_share_counter
+                if for_1:
+                    try:
+                        temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['pk'] == a.webmaster_area.pk)
 
-                if temp_today_social_counter > statistic['socials']:
-                    statistic['socials'] = temp_today_social_counter
+                        if temp_today_share_counter > temp_area_per_day_statistic[temp_index]['share']:
+                            temp_area_per_day_statistic[temp_index]['share'] = temp_today_share_counter
+
+                        if temp_today_social_counter > temp_area_per_day_statistic[temp_index]['social']:
+                            temp_area_per_day_statistic[temp_index]['social'] = temp_today_social_counter
+                    except:
+                        temp_area_per_day_statistic.append({
+                            'pk' : a.webmaster_area.pk,
+                            'share' : temp_today_share_counter,
+                            'social' : temp_today_social_counter
+                        })
+                else:
+                    if temp_today_share_counter > temp_statistic['shares']:
+                        temp_statistic['shares'] = temp_today_share_counter
+
+                    if temp_today_social_counter > temp_statistic['socials']:
+                        temp_statistic['socials'] = temp_today_social_counter
 
                 shares.append(temp_today_share_counter)
                 socials.append(temp_today_social_counter)
 
+        #TODO: save for each area
+        if not for_1:
+            statistic['shares'] += temp_statistic['shares']
+            statistic['socials'] += temp_statistic['socials']
+            temp_area_per_day_statistic = []
+        else:
+            for share, social in [[t['share'], t['social']] for t in temp_area_per_day_statistic]:
+                statistic['shares'] += int(share)
+                statistic['socials'] += int(social)
+
     return render(request, template_name,
     {
+        'temp_area_per_day_statistic': temp_area_per_day_statistic,
         'statistic': statistic,
         'isEmpty': isEmpty,
         'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
@@ -852,14 +922,14 @@ def checkconfig(request):
             #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
 
-            
+            ''' 
             try:
                 snc_server = setcounterprivate(url=request_url)
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
             except:
                 pass
-            
+            ''' 
             
             #wma today!
             try:

@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_pudb.PudbMiddleware',
 ]
 
 ROOT_URLCONF = 'share.urls'
@@ -131,3 +132,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "extra", "static")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+DEBUG_PROPAGATE_EXCEPTIONS = True
