@@ -63,7 +63,7 @@
             <div class="sTableAreas" style="margin-top:5px; margin-bottom:40px; max-height: 680px; overflow-y: auto;">
                 
             <div class="sPos-Rel sFloat-L sChatShowCount">
-              <span>Найдено 0 страниц</span>
+              <span>Найдено 0</span>
             </div>
             <div class="sPos-Rel sFloat-R sPager">
                 <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
@@ -97,6 +97,9 @@
 
         <script>
 
+            var _page_current = 0;
+            var _page_count = 0;
+            var _page_divider = 14;
             var _lpd;
 
             $(function(){
@@ -239,11 +242,62 @@
             }
 
             function fillPages(lpd){
-              $('.sChatShowCount > span').text('Найдено '+lpd.length+' страниц');
+              $('.sChatShowCount > span').text('Найдено '+lpd.length);
+
               _lpd = lpd;
-                
+              $('.sRoute[data-route="b"]').data('num', 0).css('cursor', 'pointer');
+              $('.sRoute[data-route="f"]').data('num', _page_divider).css('cursor', 'pointer');
+
+              if(lpd.length <= 0){
+                _page_count = 1;
+              }
+              else if((lpd.length/_page_divider)%1===0){
+                _page_count = parseInt(lpd.length/_page_divider);
+              }
+              else{
+                _page_count = parseInt(lpd.length/_page_divider+1);
+              }
+
               sortPageDetail('sharing');
             }
+
+              $('.sRoute[data-route="b"]').click(function(){ 
+                if(_page_current > 1){
+                  $prev = $(this); 
+                  $next = $('.sRoute[data-route="f"]'); 
+
+                  var prev_num = $prev.data('num');
+
+                  $next.data('num', prev_num);
+                  $prev.data('num', parseInt(prev_num - 14));
+
+                  $tableCell = $('.sTableAreas > .sTableAreasCell'); 
+                  $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
+
+                  _page_current -= 1;
+
+                  $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
+                }
+              });
+
+              $('.sRoute[data-route="f"]').click(function(){ 
+                if(_page_current < _page_count){
+                  $next = $(this); 
+                  $prev = $('.sRoute[data-route="b"]'); 
+
+                  var next_num = $next.data('num');
+
+                  $prev.data('num', next_num);
+                  $next.data('num', parseInt(next_num + 14));
+
+                  $tableCell = $('.sTableAreas > .sTableAreasCell'); 
+                  $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
+
+                  _page_current += 1;
+
+                  $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
+                }
+              });
 
              function sortPageDetail(by){
 
@@ -258,12 +312,17 @@
                     return (a.traffic < b.traffic ? 1 : -1);
                   }
                 }).forEach(function(v,k){
-                  $('.sTableAreas').append('<div class="sTableAreasCell"><div class="sTableAreasField" style="width:74px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+k+'</span></div><div class="sTableAreasField" style="width:500px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;"><a style="padding-left:0px;" href="'+v.url+'">'+v.title+'</a></span></div><div class="sTableAreasField" style="width:100px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.sharing+'</span></div><div class="sTableAreasField" style="width:150px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.traffic+'</span></div><div class="sTableAreasField" style="width:330px; text-align:center;"><span data-event="detail" data-chatstate="answered" style="cursor: pointer; padding:0 10px 0 10px; text-align:center; width:100px; margin:0 auto;">Подробней</span></div></div>').append('<div data-detail="true" style="display:none;"><div class="sTableAreasFieldName"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center;"></span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Вконтакте</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">Facebook</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">Twitter</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">Одноклассники</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">Google+</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">LiveJournal</span></div></div><div class="sTableAreasCell"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color: #40a70d;">Шаринг</span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[0]+'</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[1]+'</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[2]+'</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[3]+'</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[4]+'</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[5]+'</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[6]+'</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[7]+'</span></div></div><div class="sTableAreasCell"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color: #40a70d;">Соц. трафик</span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[0]+'</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[1]+'</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[2]+'</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[3]+'</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[4]+'</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[5]+'</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[6]+'</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[7]+'</span></div></div></div>');
+                  $('.sTableAreas').append('<div class="sTableAreasCell"><div class="sTableAreasField" style="width:74px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+k+'</span></div><div class="sTableAreasField" style="width:500px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;"><a style="padding-left:0px;" target="_blank" href="'+v.url+'">'+v.title+'</a></span></div><div class="sTableAreasField" style="width:100px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.sharing+'</span></div><div class="sTableAreasField" style="width:150px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">'+v.traffic+'</span></div><div class="sTableAreasField" style="width:330px; text-align:center;"><span data-event="detail" data-chatstate="answered" style="cursor: pointer; padding:0 10px 0 10px; text-align:center; width:100px; margin:0 auto;">Подробней</span></div></div>').append('<div data-detail="true" style="display:none;"><div class="sTableAreasFieldName"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center;"></span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Вконтакте</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">Facebook</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">Twitter</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">Одноклассники</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">Google+</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">LiveJournal</span></div></div><div class="sTableAreasCell"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color: #40a70d;">Шаринг</span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[0]+'</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[1]+'</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[2]+'</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[3]+'</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[4]+'</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[5]+'</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[6]+'</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.sharing_detail.split(",")[7]+'</span></div></div><div class="sTableAreasCell"><div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color: #40a70d;">Соц. трафик</span></div><div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[0]+'</span></div><div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[1]+'</span></div><div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[2]+'</span></div><div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[3]+'</span></div><div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[4]+'</span></div><div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[5]+'</span></div><div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[6]+'</span></div><div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">'+v.traffic_detail.split(",")[7]+'</span></div></div></div>');
                 });
 
-              $('[data-event="detail"]').click(function(){ 
+              $('[data-event="detail"]').off('click').click(function(){ 
                 $(this).closest('.sTableAreasCell').next('div[data-detail="true"]').toggle(); 
               });
+
+              $('.sTableAreas').children('.sTableAreasCell').hide().slice(0, _page_divider).show();
+
+              _page_current = 1;
+              $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
 
              }
 

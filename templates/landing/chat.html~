@@ -54,7 +54,14 @@
                 </div>
                 <div class="sTableAreasField" style="width:230px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.header }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;"><span data-chatstate="active" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                <div class="sTableAreasField" style="width:125px; text-align:center;">
+                {% if chat.status == 'ACT' %}
+                  <span data-chatstate="active" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                {% elif chat.status == 'CLO' %}
+                  <span data-chatstate="close" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                {% else %}
+                  <span data-chatstate="answered" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                {% endif %}
                 </div>
                 <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showUpdateDate }}</span>
                 </div>
