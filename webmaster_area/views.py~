@@ -1,8 +1,6 @@
-import datetime, json, os
-import re
-import sys
-from urllib.parse import urlparse
+import datetime, json, os, re, sys, requests
 import urllib.request
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
@@ -19,6 +17,7 @@ from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import Q
+from django.core.validators import URLValidator
 
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -146,6 +145,7 @@ def detailmain(request):
     for_1 = False # Not all
     area_first = None
     areas = []
+    temp_area_per_day_statistic = []
 
     if request.user.is_staff and request.GET.get('for', False) and request.GET.get('for') == '1':
         #areas = WebmasterAreaModel.objects.all()
@@ -206,8 +206,7 @@ def detailmain(request):
         temp_statistic['socials'] = 0
 
         if for_1:
-            area_per_day_list = AreaToday.objects.all().select_related('webmaster_area')
-            temp_area_per_day_statistic = []
+            area_per_day_list = AreaToday.objects.all()#.select_related('webmaster_area')
         elif dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])
         else:
@@ -255,114 +254,66 @@ def detailmain(request):
         for a in area_per_day_list:
             temp_areaPDay_date = a.date.strftime("%d.%m")
 
-            if temp_areaPDay_date in dates:
+            temp_today_share_counter = (
+                int(a.today_share_counter.split(',')[0])+
+                int(a.today_share_counter.split(',')[1])+
+                int(a.today_share_counter.split(',')[2])+
+                int(a.today_share_counter.split(',')[3])+
+                int(a.today_share_counter.split(',')[4])+
+                int(a.today_share_counter.split(',')[5])+
+                int(a.today_share_counter.split(',')[6])+
+                int(a.today_share_counter.split(',')[7])
+            )
 
-                temp_today_share_counter = (
-                    int(a.today_share_counter.split(',')[0])+
-                    int(a.today_share_counter.split(',')[1])+
-                    int(a.today_share_counter.split(',')[2])+
-                    int(a.today_share_counter.split(',')[3])+
-                    int(a.today_share_counter.split(',')[4])+
-                    int(a.today_share_counter.split(',')[5])+
-                    int(a.today_share_counter.split(',')[6])+
-                    int(a.today_share_counter.split(',')[7])
-                )
+            temp_today_social_counter = (
+                int(a.today_social_counter.split(',')[0])+
+                int(a.today_social_counter.split(',')[1])+
+                int(a.today_social_counter.split(',')[2])+
+                int(a.today_social_counter.split(',')[3])+
+                int(a.today_social_counter.split(',')[4])+
+                int(a.today_social_counter.split(',')[5])+
+                int(a.today_social_counter.split(',')[6])+
+                int(a.today_social_counter.split(',')[7])
+            )
 
-                temp_today_social_counter = (
-                    int(a.today_social_counter.split(',')[0])+
-                    int(a.today_social_counter.split(',')[1])+
-                    int(a.today_social_counter.split(',')[2])+
-                    int(a.today_social_counter.split(',')[3])+
-                    int(a.today_social_counter.split(',')[4])+
-                    int(a.today_social_counter.split(',')[5])+
-                    int(a.today_social_counter.split(',')[6])+
-                    int(a.today_social_counter.split(',')[7])
-                )
+            if for_1:
+                try:
+                    temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['date'] == a.date)
 
-                if for_1:
-                    try:
-                        temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['pk'] == a.webmaster_area.pk)
-
-                        if temp_today_share_counter > temp_area_per_day_statistic[temp_index]['share']:
-                            temp_area_per_day_statistic[temp_index]['share'] = temp_today_share_counter
-
-                        if temp_today_social_counter > temp_area_per_day_statistic[temp_index]['social']:
-                            temp_area_per_day_statistic[temp_index]['social'] = temp_today_social_counter
-                    except:
-                        temp_area_per_day_statistic.append({
-                            'pk' : a.webmaster_area.pk,
-                            'share' : temp_today_share_counter,
-                            'social' : temp_today_social_counter
-                        })
-                else:
-                    if temp_today_share_counter > temp_statistic['shares']:
-                        temp_statistic['shares'] = temp_today_share_counter
-
-                    if temp_today_social_counter > temp_statistic['socials']:
-                        temp_statistic['socials'] = temp_today_social_counter
-
-                shares[dates.index(temp_areaPDay_date)]+=temp_today_share_counter
-                socials[dates.index(temp_areaPDay_date)]+=temp_today_social_counter
-
+                    temp_area_per_day_statistic[temp_index]['share'] += temp_today_share_counter
+                    temp_area_per_day_statistic[temp_index]['social'] += temp_today_social_counter
+                except:
+                    temp_area_per_day_statistic.append({
+                        #'pk' : a.webmaster_area.pk,
+                        'date' : a.date,
+                        'share' : temp_today_share_counter,
+                        'social' : temp_today_social_counter
+                    })
             else:
+                if temp_today_share_counter > temp_statistic['shares']:
+                    temp_statistic['shares'] = temp_today_share_counter
+
+                if temp_today_social_counter > temp_statistic['socials']:
+                    temp_statistic['socials'] = temp_today_social_counter
+
+            if not temp_areaPDay_date in dates:
                 dates.append(temp_areaPDay_date)
-
-                temp_today_share_counter = (
-                    int(a.today_share_counter.split(',')[0])+
-                    int(a.today_share_counter.split(',')[1])+
-                    int(a.today_share_counter.split(',')[2])+
-                    int(a.today_share_counter.split(',')[3])+
-                    int(a.today_share_counter.split(',')[4])+
-                    int(a.today_share_counter.split(',')[5])+
-                    int(a.today_share_counter.split(',')[6])+
-                    int(a.today_share_counter.split(',')[7])
-                )
-
-                temp_today_social_counter = (
-                    int(a.today_social_counter.split(',')[0])+
-                    int(a.today_social_counter.split(',')[1])+
-                    int(a.today_social_counter.split(',')[2])+
-                    int(a.today_social_counter.split(',')[3])+
-                    int(a.today_social_counter.split(',')[4])+
-                    int(a.today_social_counter.split(',')[5])+
-                    int(a.today_social_counter.split(',')[6])+
-                    int(a.today_social_counter.split(',')[7])
-                )
-
-                if for_1:
-                    try:
-                        temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['pk'] == a.webmaster_area.pk)
-
-                        if temp_today_share_counter > temp_area_per_day_statistic[temp_index]['share']:
-                            temp_area_per_day_statistic[temp_index]['share'] = temp_today_share_counter
-
-                        if temp_today_social_counter > temp_area_per_day_statistic[temp_index]['social']:
-                            temp_area_per_day_statistic[temp_index]['social'] = temp_today_social_counter
-                    except:
-                        temp_area_per_day_statistic.append({
-                            'pk' : a.webmaster_area.pk,
-                            'share' : temp_today_share_counter,
-                            'social' : temp_today_social_counter
-                        })
-                else:
-                    if temp_today_share_counter > temp_statistic['shares']:
-                        temp_statistic['shares'] = temp_today_share_counter
-
-                    if temp_today_social_counter > temp_statistic['socials']:
-                        temp_statistic['socials'] = temp_today_social_counter
-
                 shares.append(temp_today_share_counter)
                 socials.append(temp_today_social_counter)
+            else:
+                shares[dates.index(temp_areaPDay_date)] += temp_today_share_counter
+                socials[dates.index(temp_areaPDay_date)] += temp_today_social_counter
 
         #TODO: save for each area
         if not for_1:
             statistic['shares'] += temp_statistic['shares']
             statistic['socials'] += temp_statistic['socials']
-            temp_area_per_day_statistic = []
         else:
             for share, social in [[t['share'], t['social']] for t in temp_area_per_day_statistic]:
-                statistic['shares'] += int(share)
-                statistic['socials'] += int(social)
+                if share > statistic['shares']:
+                    statistic['shares'] = share
+                if social > statistic['socials']:
+                    statistic['socials'] = social
 
     return render(request, template_name,
     {
@@ -449,7 +400,7 @@ def detailsocial(request, name):
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
-        except Exception as inst:
+        except:
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
@@ -621,24 +572,6 @@ def detail(request, name):
                         temp_all_share_counters[index]=(i+i2)
                         index+=1
 
-                    #list_page_detail
-                    #temp_total_share_counter = 0
-                    #temp_total_social_counter = 0
-
-                    #for s in pd.total_share_counter.split(','):
-                    #    temp_total_share_counter += int(s)
-                    #for s in pd.total_social_counter.split(','):
-                    #    temp_total_social_counter += int(s)
-
-                    #list_page_detail.append({
-                    #    'title':pd.title,
-                    #    'url':pd.url,
-                    #    'sharing':temp_total_share_counter,
-                    #    'traffic':temp_total_social_counter,
-                    #    'sharing_detail':pd.total_share_counter,
-                    #    'traffic_detail':pd.total_social_counter
-                    #    })
-
                 for i in temp_all_share_counters:
                     last_day.today_share_counter += str(i) + ','
 
@@ -649,7 +582,7 @@ def detail(request, name):
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
-        except Exception as inst:
+        except:
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
@@ -843,14 +776,15 @@ def create(request):
     return HttpResponseRedirect('/webmaster-area/')
 
 def setcounterprivate(url):
-
     snc = ''
-    #url = request.GET.get("url")
-    #answer += str(urllib.request.urlopen(url).status)
-    if url:
-        #answer += 'url=' + url + '; '
+    val = URLValidator()
 
-        #TODO: some make freeze
+    try:
+        val(url)
+    except:
+        return '-1'
+
+    if url:
         share_count_methods = [
             {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
             {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
@@ -865,22 +799,30 @@ def setcounterprivate(url):
         for d in share_count_methods:
             for u,m in d.items():
                 try:
-                    html = urllib.request.urlopen(u)
-                    response = html.read()
-                    response = response.decode('utf8')
-                    #answer += 'response=' + response + '; '
-
-                    re_result = re.findall(m, response)
-                    if len(re_result) > 0:
-                        snc += re_result[0] + ','
-                    else:
-                        snc += '0,'
+                    val(u)
                 except:
                     snc += '0,'
+                else:
+                    try:
+                        timeout = 2.0
+
+                        response = requests.get(u, timeout=timeout)
+                        re_result = re.findall(m, response.text)
+                        
+                        if len(re_result) > 0:
+                            snc += re_result[0] + ','
+                        else:
+                            snc += '0,'
+                    except requests.Timeout as err:
+                        #return HttpResponse(err)
+                        return '-1'
+                    except:
+                        return '-1'
 
         snc = snc[:-1]
+        return snc
 
-    return snc
+    return '-1'
 
 def checkconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
@@ -907,9 +849,6 @@ def checkconfig(request):
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
 
-        #wma!
-        #...
-
         #page detail
         #Disable page_today
         #Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
@@ -918,18 +857,12 @@ def checkconfig(request):
 
         if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
             answer += 'console.log("url ok");'
-
-            #TODO: snc from server
             answer += 'console.log("snc from client: '+snc+'");'
 
-            ''' 
-            try:
-                snc_server = setcounterprivate(url=request_url)
+            snc_server = setcounterprivate(request_url)
+            if not snc_server == '-1':
                 answer += 'console.log("snc from server: '+snc_server+'");'
                 snc = snc_server
-            except:
-                pass
-            ''' 
             
             #wma today!
             try:
@@ -988,46 +921,11 @@ def checkconfig(request):
 
 
 def setcounter(request):
-    answer = 'setcounter() = '
-    snc = ''
     url = request.GET.get("url")
-    #answer += str(urllib.request.urlopen(url).status)
-    if url:
-        answer += 'url=' + url + '; '
+    snc_server = setcounterprivate(url)
 
-        share_count_methods = [
-            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
-            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
-            {'tw': 'twitter'},
-            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
-            #{'gp': 'google'},
-            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
-            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
-            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
-            {'lj': 'lj'}
-        ]
+    return HttpResponse(snc_server)
 
-        for d in share_count_methods:
-            for u,m in d.items():
-                try:
-                    html = urllib.request.urlopen(u)
-                    response = html.read()
-                    response = response.decode('utf8')
-                    answer += 'response=' + response + '; '
-
-                    re_result = re.findall(m, response)
-                    if len(re_result) > 0:
-                        snc += re_result[0] + ','
-                    else:
-                        snc += '0,'
-                except:
-                    snc += '0,'
-
-        snc = snc[:-1]
-
-    answer += 'snc=' + snc
-    return HttpResponse(snc)
-    #return HttpResponse(answer)
 
 def getconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
