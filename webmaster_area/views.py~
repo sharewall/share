@@ -849,7 +849,7 @@ def checkconfig(request):
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
 
-        #page detail
+        #Page detail
         #Disable page_today
         #Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
         request_url_html = urllib.request.urlopen(request_url)

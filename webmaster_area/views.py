@@ -804,7 +804,7 @@ def setcounterprivate(url):
                     snc += '0,'
                 else:
                     try:
-                        timeout = 2.0
+                        timeout = 4.0
 
                         response = requests.get(u, timeout=timeout)
                         re_result = re.findall(m, response.text)
