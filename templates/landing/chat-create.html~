@@ -113,7 +113,7 @@
                             <span class="sFilesCounter" style="display:none;">0</span>  
                             <span class="sFilesReset" style="display:none;" title="Удалить"></span>
                         </div>
-                        <input form="createChat" type="file" name="files" id="add_files" multiple="multiple"/>
+                        <input form="createChat" type="file" name="files[]" id="add_files" multiple="multiple"/>
                       </div>
                       <span class="sFloat-R" style="width:190px; font: 400 14px Roboto;">
                           Разрешённые типы файлов:

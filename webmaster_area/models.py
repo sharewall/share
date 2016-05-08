@@ -76,7 +76,7 @@ class AreaToday(models.Model):
     
     def __str__(self):
         if self.webmaster_area:
-            return str("Area name: %s" % self.webmaster_area.name_area + ", area url: %s" % self.webmaster_area.url + " <<== %s" % self.webmaster_area)
+            return str('Date: %s ' % self.date.strftime('%d/%m/%Y') + '; <<== %s' % self.webmaster_area)
         else:
             return str("Without webmaster_area")
 

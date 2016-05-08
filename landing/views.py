@@ -7,7 +7,7 @@ from landing.forms import UserForm, CabinetWebmasterForm
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.core.urlresolvers import reverse
-from cabinet_webmaster.models import CabinetWebmasterModel, Chat
+from cabinet_webmaster.models import CabinetWebmasterModel, Chat, ChatMessage, ChatMessageFile
 from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import Q
@@ -49,6 +49,22 @@ def chat_create(request):
     template_name = 'landing/chat-create.html'
     title = 'Открыть тикет'
     header = title
+
+    if request.method == 'POST':
+
+        #TODO: validate
+        header = request.POST.get('header')
+        department = request.POST.get('department')
+        text = request.POST.get('text')
+
+        chat = Chat.objects.create(user=request.user, header=header, text=text, department=department, status='ACT')
+
+        chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=request.user.username, text=text)
+
+        for f in request.FILES.getlist('files'):
+            ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f)
+
+        return HttpResponseRedirect(reverse('chat-all'))
 
     return render(request, template_name,
     {
