@@ -45,6 +45,48 @@ def chat(request):
     })
 
 @login_required
+def chat_update(request, pk):
+    template_name = 'landing/chat-update.html'
+    title = 'Просмотр тикета'
+    header = title
+    chat = None
+    chatMessages = []
+
+    if request.method == 'POST':
+
+        #TODO: validate
+        name = request.POST.get('name','')
+        email = request.POST.get('email','')
+        text = request.POST.get('text','')
+
+        try:
+            chat = Chat.objects.get(pk=pk, user=request.user)
+
+            chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=name, text=text)
+            for f in request.FILES.getlist('files'):
+                ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f)
+        except:
+            pass
+
+        return HttpResponseRedirect(reverse('chat-update', args=[pk]))
+    
+    try:
+        chat = Chat.objects.get(pk=pk, user=request.user)
+
+        header = 'Тикет #%s'%str(pk)+' (%s)'%chat.header
+
+        chatMessages = ChatMessage.objects.filter(chat=chat)
+    except:
+        pass
+
+    return render(request, template_name,
+    {
+        "page": { "title": title, "header": header },
+        'chat': chat,
+        'chatMessages': chatMessages
+    })
+
+@login_required
 def chat_create(request):
     template_name = 'landing/chat-create.html'
     title = 'Открыть тикет'

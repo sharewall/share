@@ -71,13 +71,20 @@ class ChatMessage(models.Model):
     is_staff = models.BooleanField('is_staff', editable=False, default=False)
     date_update = models.DateTimeField('date_update', auto_now=True)
 
+    def showUpdateDate(self):
+        return str(self.date_update.strftime('%d/%m/%Y %H:%M'))
+
     def save(self, *args, **kwargs):
         self.is_staff = self.user.is_staff 
+        if self.is_staff:
+            self.chat.status = 'ANS'
+        else:
+            self.chat.status = 'ACT'
         self.chat.save()
         super(ChatMessage, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str('Chat: %s' % self.chat + ' ---- From_name: %s' % self.name + '; Is_staff: %s ' % self.is_staff + '; Date_update: %s ' % self.date_update.strftime('%d/%m/%Y %H:%M'))
+        return str('Chat: %s' % self.chat + ' ---- From_name: %s' % self.name + '; Is_staff: %s ' % self.is_staff + '; Date_update: %s ' % self.showUpdateDate())
 
 class ChatMessageFile(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message_file")

@@ -1,0 +1,231 @@
+{% extends "skeleton.html" %}
+{% load staticfiles %}
+
+{% block custom_style %}
+  <style>
+      input:checked + label.sBSInput{
+        background: url("{% static "sharewall-template/images/bs-chekbox-checked.png" %}");
+      }
+      .sBSInput{
+        margin-right:4px;
+      }
+      
+      .fileform {
+        border-radius: 7px 20px 20px 7px;
+        background-color: #FFFFFF;
+        height: 29px;
+        /*overflow: hidden;*/
+        padding: 2px;
+        position: relative;
+        text-align: left;
+        vertical-align: middle;
+        width: 350px;
+        overflow: visible;
+        z-index: 0;
+      }
+      .fileform #fileformlabel {
+        background-color: #FFFFFF;
+        float: left;
+        height: 22px;
+        line-height: 22px;
+        overflow: hidden;
+        padding: 2px 0px 2px 5px;
+        text-align: left;
+        vertical-align: middle;
+        width: 215px;
+      }
+      .fileform .selectbutton {
+        font-family: 'roboto';
+        font-size: 14px;
+        background-color: #A2A3A3;
+        border-radius: 20px;
+        color: #FFFFFF;
+        float: right;
+        height: 35px;
+        line-height: 35px;
+        /*overflow: hidden;*/
+        text-align: center;
+        width: 135px;
+        position: absolute;
+        top: -1px;
+        right: 0;
+        overflow: visible;
+        z-index: 2!important;
+        cursor: pointer;
+      }  
+      .fileform #add_files {
+        position: relative;
+        overflow: hidden;
+        bottom: 28px;
+        left: 218px;
+        width: 135px;
+        -moz-opacity: 0;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        font-size: 150px;
+        height: 30px;
+        z-index: 2;
+        cursor: pointer!important;
+      }
+  </style>
+{% endblock %}  
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="sContent-PB">
+  <div class="sContainer sMargin-Auto" style="margin-bottom:162px;">
+
+      <div class="sH1Wrapper" style="padding-top:141px; padding-bottom: 61px;">
+          <h1 class="sH1 sFloat-L" style="color: #222429!important; font: 400 30px Roboto;">{{ page.header }}</h1>   
+          <div class="sClear-Both"></div>
+      </div> 
+      
+      <div class="sChatUpdateStatus">
+        <div>
+            <span>Отправлен</span>
+            <span>Отдел</span>
+            <span>Состояние</span>
+        </div>
+        <div>
+            <span>{{ chat.showCreateDate }}</span>
+            <span>{{ chat.showDepartment }}</span>
+            <span>{{ chat.showStatus }}</span>
+        </div>
+      </div>
+      
+      <span class="sChatUpdateToggle">Ответ</span>
+      
+      <div class="sChatWrapper sChatWrapper-Up" style="display:none;">
+          <form id="updateChat" style="display:none; opacity:0;" method="post" action="/chat/{{chat.pk}}/" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="submit" />
+          </form>
+          
+          <div class="sChatMainWrapper" style="height:530px!important;">
+              
+              <div class="sChatUpdate">
+                  <input form="updateChat" id="add_username" name="username" value="" placeholder="{{ user.username }}" maxlength="100" required="" type="text">
+                  <input form="updateChat" id="add_email" name="email" value="" placeholder="{{ user.email }}" maxlength="100" type="email">
+              </div>
+              
+              <div class="sChatUpdate sChatUpdate-T">
+                <label>Сообщение
+                    <textarea required="" id="add_text" name="text" form="updateChat"></textarea>  
+                </label>
+              </div>
+              
+              <div class="sNone" style="margin-left:20px!important;">
+                  <label class="sFloat-L" for="add_filse" style="height:29px; font: 400 14px / 29px Roboto; margin-right: 10px;">Вложения</label>
+                  <div class="fileform sFloat-L">
+                    <div id="fileformlabel"></div>
+                    <div class="selectbutton">Выберите файл
+                        <span class="sFilesCounter" style="display:none;">0</span>  
+                        <span class="sFilesReset" style="display:none;" title="Удалить"></span>
+                    </div>
+                    <input form="updateChat" type="file" name="files" id="add_files" multiple="multiple"/>
+                  </div>
+                  <span class="sFloat-L" style="display:block; width:190px; font: 400 14px Roboto; margin-left: 50px;">
+                      Разрешённые типы файлов:
+                      jpg,jpeg,gif,png,pdf
+                  </span>
+              </div>
+              
+              <div class="sClear-Both"></div>
+          </div>
+          
+          <div class="sChatFooterWrapper" style="text-align: center!important; padding-left:0px!important;">
+            <span class="sChatSubmitBtn" data-event="submit">Отправить</span>
+          </div>
+          
+      </div>
+      
+      <div class="sChatMessageWrapper">
+          
+          <div class="sPos-Rel sFloat-R sPager" style="margin-bottom:30px;">
+            <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
+            <span style="cursor: pointer;" class="sRoute" data-route="b"></span>
+            <span style="cursor: pointer;" class="sRoute" data-route="f"></span>
+          </div>
+          <div class="sClear-Both"></div>
+          
+          {% for message in chatMessages %}
+            {% if message.is_staff %}
+              <div class="sChatMessage" data-client="false">
+                  <div>
+                    <span class="sFloat-L">{{ message.name }} || Сотрудник</span>
+            {% else %}
+              <div class="sChatMessage" data-client="true">
+                  <div>
+                    <span class="sFloat-L">{{ message.name }} || Клиент</span>
+            {% endif %}
+            <span class="sFloat-R">{{ message.showUpdateDate }}</span>
+                </div>
+                <div style="padding-top:17px;">
+                  {{  message.text }}
+                </div>
+            </div>
+          {% endfor %}
+          
+      </div>
+      
+  </div>
+</div>
+{% endblock %}
+
+{% block footer_script %}
+<script>
+    
+    $(function(){        
+        
+        $('.sChatUpdateToggle').click(function(){
+            $(this).next('.sChatWrapper').toggle();
+        }); 
+    
+        $('#add_files').change(function(){
+            $files = $(this.files);
+            if($files.length > 0){
+              $('.sFilesCounter').text($files.length).show();
+              $('.sFilesReset').show();  
+            }else{
+              $('.sFilesCounter').text(0).hide();
+              $('.sFilesReset').hide();
+            }
+            //console.log($files);
+            
+            $label = $('#fileformlabel');
+            $label.text('');
+            var allowed_types = ['image/jpeg','image/pjpeg','image/png','image/gif','application/pdf'];
+            
+            $.each($files, function(i,f){
+              console.log(f);
+                
+              if($.inArray(f.type, allowed_types) < 0){
+                  $('.sFilesReset').click();
+                  return false;
+              }
+             
+              $label.text($label.text().concat(f.name+', '));
+            });
+            
+            $label.text($label.text().slice(0,-2));
+        }).change();
+        
+        $('.sFilesReset').click(function(){
+            $('#add_files').val('').change();
+        });
+        
+        $('.sChatSubmitBtn[data-event="submit"]').click(function(){
+            //console.log($('form#createChat').serialize());
+            $('form#updateChat').find('input[type="submit"]').click();
+        });
+        
+        $('.sChatSubmitBtn[data-event="cancel"]').click(function(){
+            document.location = "/chat/";
+        });
+        
+        $('#add_department_sup').prop('checked', true);
+    });
+   
+</script>
+{% endblock %}

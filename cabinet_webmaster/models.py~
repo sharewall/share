@@ -31,17 +31,6 @@ class Chat(models.Model):
     def showUpdateDate(self):
         return str(self.date_update.strftime('%d.%m.%Y %H:%M'))
 
-    def showDepartment(self):
-        return str('Служба поддержки' if self.department == SUPPORT else 'Биллинг')
-
-    def showStatus(self):
-        if self.status == CLOSE:
-            return 'Закрыт'
-        elif self.status == ACTIVE:
-            return 'В процессе'
-        else:
-            return 'Отвечен'
-
     BILLING = 'BIL'
     SUPPORT = 'SUP'
     DEPARTMENT_CHOICES=(
@@ -60,6 +49,17 @@ class Chat(models.Model):
     )
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default=ACTIVE)
 
+    def showDepartment(self):
+        return str('Служба поддержки' if self.department == self.SUPPORT else 'Биллинг')
+
+    def showStatus(self):
+        if self.status == self.CLOSE:
+            return 'Закрыт'
+        elif self.status == self.ACTIVE:
+            return 'В процессе'
+        else:
+            return 'Отвечен'
+
     def __str__(self):
         return str('From: %s' % self.user.username + '; Header: %s' % self.header + '; Status: %s' % self.status + '; Date_update: %s ' % self.date_update.strftime('%d/%m/%Y %H:%M'))
 
@@ -71,13 +71,20 @@ class ChatMessage(models.Model):
     is_staff = models.BooleanField('is_staff', editable=False, default=False)
     date_update = models.DateTimeField('date_update', auto_now=True)
 
+    def showUpdateDate(self):
+        return str(self.date_update.strftime('%d/%m/%Y %H:%M'))
+
     def save(self, *args, **kwargs):
         self.is_staff = self.user.is_staff 
+        if self.is_staff:
+            self.chat.status = 'ANS'
+        else:
+            self.chat.status = 'ACT'
         self.chat.save()
         super(ChatMessage, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str('Chat: %s' % self.chat + ' ---- From_name: %s' % self.name + '; Is_staff: %s ' % self.is_staff + '; Date_update: %s ' % self.date_update.strftime('%d/%m/%Y %H:%M'))
+        return str('Chat: %s' % self.chat + ' ---- From_name: %s' % self.name + '; Is_staff: %s ' % self.is_staff + '; Date_update: %s ' % self.showUpdateDate())
 
 class ChatMessageFile(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message_file")
