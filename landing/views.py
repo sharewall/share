@@ -75,7 +75,10 @@ def chat_update(request, pk):
 
         header = 'Тикет #%s'%str(pk)+' (%s)'%chat.header
 
-        chatMessages = ChatMessage.objects.filter(chat=chat)
+        tempChatMessages = ChatMessage.objects.filter(chat=chat)
+        for message in tempChatMessages:
+            files = ChatMessageFile.objects.filter(chat_message=message)
+            chatMessages.append({'message': message, 'files': files})
     except:
         pass
 

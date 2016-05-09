@@ -150,19 +150,22 @@
           <div class="sClear-Both"></div>
           
           {% for message in chatMessages %}
-            {% if message.is_staff %}
+            {% if message.message.is_staff %}
               <div class="sChatMessage" data-client="false">
                   <div>
-                    <span class="sFloat-L">{{ message.name }} || Сотрудник</span>
+                    <span class="sFloat-L">{{ message.message.name }} || Сотрудник</span>
             {% else %}
               <div class="sChatMessage" data-client="true">
                   <div>
-                    <span class="sFloat-L">{{ message.name }} || Клиент</span>
+                    <span class="sFloat-L">{{ message.message.name }} || Клиент</span>
             {% endif %}
-            <span class="sFloat-R">{{ message.showUpdateDate }}</span>
+            <span class="sFloat-R">{{ message.message.showUpdateDate }}</span>
                 </div>
                 <div style="padding-top:17px;">
-                  {{  message.text }}
+                  {% for file in message.files %}      
+                    <a href="{{ file.file_store.url }}" style="color: #008bd4; font: 400 14px Roboto;" target="_blank">{{ file.file_store.name }}</a>
+                  {% endfor %}
+                  {{ message.message.text }}
                 </div>
             </div>
           {% endfor %}
