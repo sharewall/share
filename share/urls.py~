@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 #urlpatterns = patterns('',
     #(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
@@ -26,4 +28,4 @@ urlpatterns = [
     url(r'^buttons-constructor/', include('buttons_constructor.urls')),
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
     url(r'^webmaster-area/', include('webmaster_area.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
