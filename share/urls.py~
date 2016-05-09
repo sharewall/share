@@ -28,4 +28,4 @@ urlpatterns = [
     url(r'^buttons-constructor/', include('buttons_constructor.urls')),
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
     url(r'^webmaster-area/', include('webmaster_area.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

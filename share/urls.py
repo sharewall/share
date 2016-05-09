@@ -29,3 +29,6 @@ urlpatterns = [
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
     url(r'^webmaster-area/', include('webmaster_area.urls')),
 ]# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += patterns('', 
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
+)
