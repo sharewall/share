@@ -68,7 +68,7 @@ class ChatMessage(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, verbose_name="related_chat", related_name="chat_message")
     name = models.CharField('from_name', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
-    is_staff = models.BooleanField('is_staff', editable=False, default=False)
+    is_staff = models.BooleanField('is_staff', editable=True, default=False)
     date_update = models.DateTimeField('date_update', auto_now=True)
 
     def showUpdateDate(self):
@@ -76,7 +76,7 @@ class ChatMessage(models.Model):
 
     def save(self, *args, **kwargs):
         self.is_staff = self.user.is_staff 
-        if self.is_staff:
+        if self.user.is_staff:
             self.chat.status = 'ANS'
         else:
             self.chat.status = 'ACT'
