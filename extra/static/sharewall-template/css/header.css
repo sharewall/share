@@ -1397,6 +1397,8 @@ span.sAdminButton-Gray{
     height: 78px;
     line-height: 78px;
     padding-left: 290px;
+    position: relative;
+    z-index: 2;
 }
 .sChatSubmitBtn{
     width: 199px;
@@ -1435,4 +1437,5 @@ span.sAdminButton-Gray{
     right: -11px;
     top: 20px;
     cursor: pointer;
+    z-index: 2;
 }

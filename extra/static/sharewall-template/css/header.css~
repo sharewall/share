@@ -479,10 +479,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     height: 41px;
     border-bottom: 1px solid #fff;
 }
-.sTableAreasCell:nth-child(odd):not(.sTableAreas2){    
+.sTableAreasCell:nth-child(odd){    
     background-color: #f6f6f6;
 }
-.sTableAreasCell:nth-child(even):not(.sTableAreas2){
+.sTableAreasCell:nth-child(even){
     background-color: #efefef; 
 }
 .sTableAreasField{
@@ -884,7 +884,8 @@ div.sDescription > p.Step-2{
     margin-bottom: 16px;
 }
 .sAdditionalWrapper > textarea{
-    resize: vertical;
+    /*resize: vertical;*/
+    resize: none;
     border-radius: 3px;
     border: 1px solid #ccc;
     width: 282px;
@@ -1345,4 +1346,93 @@ span.sAdminButton-Gray{
 }
 .sRoute[data-route="b"]{
     background: url(../images/route-b.png)no-repeat;
+}
+
+.sChatWrapper{
+    background-color: #efefef;
+    color: #32353c;
+    font: 400 14px / 50px Roboto;
+    margin-bottom: 182px;
+}
+.sChatWrapper-Wm{
+    width: 1170px;
+    height: 504px;
+}
+.sChatMainWrapper{
+    height: 423px;
+}
+.sChatMainWrapper > div:first-of-type{
+    width: 99px;
+    margin-left: 200px;
+    text-align: right;
+}
+.sChatMainWrapper > div:not(:last-of-type){
+    padding-top: 22px;
+}
+.sChatMainWrapper > div:not(.sNone) > label{
+    display: block;
+    padding-right: 17px;
+}
+.sChatMainWrapper > div > div:not(.sNone) input{
+    height: 35px;
+    width: 589px;
+    border: 0px none;
+    border-radius: 7px;
+    padding-left: 5px;
+    color: #3d4853;
+}
+.sChatMainWrapper > div > div:not(.sNone) textarea{
+    /*resize: vertical;*/
+    resize: none;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+    color: #3d4853;
+    font: 400 14px / 30px Roboto;
+    width: 590px;
+    height: 179px;
+    padding-left: 5px;
+}
+.sChatFooterWrapper{
+    border-top: 1px solid #ffffff;
+    height: 78px;
+    line-height: 78px;
+    padding-left: 290px;
+}
+.sChatSubmitBtn{
+    width: 199px;
+    height: 69px;
+    text-align: center;
+    line-height: 59px !important;
+    display: inline-block;
+    color: #ffffff;
+    font: 400 22px Roboto;
+    cursor: pointer;
+}
+.sChatSubmitBtn[data-event="submit"]{
+    background: url(../images/chatSubmit.png)no-repeat;
+}
+.sChatSubmitBtn[data-event="cancel"]{
+    background: url(../images/chatCancel.png)no-repeat;
+}
+.sFilesCounter{
+    width: 33px;
+    height: 33px;
+    border-radius: 20px;
+    background-color: #A2A3A3;
+    line-height: 33px;
+    text-align: center;
+    /*display: inline-block;*/
+    position: absolute;
+    right: -15px;
+    top: -11px;
+}
+.sFilesReset{
+    background: url(../images/area-delete-1.png) no-repeat;
+    width: 22px;
+    height: 22px;
+    border-radius: 10px;
+    position: absolute;
+    right: -11px;
+    top: 20px;
+    cursor: pointer;
 }
