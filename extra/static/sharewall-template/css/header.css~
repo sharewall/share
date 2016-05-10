@@ -117,7 +117,9 @@ a { text-decoration: none!important; }
      display: inline-block!important;
 }
 .sContainer{
-    width: 1171px;      
+    /*min-width: 1171px;*/
+
+    width: 1171px;
     transition: width 0.5s;
     -moz-transition: width 0.5s;
     -webkit-transition: width 0.5s;
@@ -1353,10 +1355,14 @@ span.sAdminButton-Gray{
     color: #32353c;
     font: 400 14px / 50px Roboto;
     margin-bottom: 182px;
+    width: 1170px;
 }
 .sChatWrapper-Wm{
-    width: 1170px;
     height: 504px;
+}
+.sChatWrapper-Up{
+    height: 604px;
+    margin-bottom: 32px!important;
 }
 .sChatMainWrapper{
     height: 423px;
@@ -1381,6 +1387,36 @@ span.sAdminButton-Gray{
     padding-left: 5px;
     color: #3d4853;
 }
+.sChatUpdate{
+    margin-left: 20px!important;
+    width: 100%!important;
+    margin-top: 42px!important;
+    text-align: left!important;
+}
+.sChatUpdate-T{
+    margin-top: 0px!important;   
+}
+.sChatUpdate > input{
+    height: 34px;
+    width: 366px;
+    color: #505050;
+    font: 400 15px Roboto;
+    padding-left: 12px;
+    border: 0px none;
+    border-radius: 7px;
+    margin-right: 12px;
+}
+.sChatUpdate textarea{
+    resize: none;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    background-color: #ffffff;
+    width: 1105px;
+    height: 243px;
+    padding: 12px;
+    color: #505050;
+    font: 400 15px Roboto;
+}
 .sChatMainWrapper > div > div:not(.sNone) textarea{
     /*resize: vertical;*/
     resize: none;
@@ -1397,6 +1433,8 @@ span.sAdminButton-Gray{
     height: 78px;
     line-height: 78px;
     padding-left: 290px;
+    position: relative;
+    z-index: 2;
 }
 .sChatSubmitBtn{
     width: 199px;
@@ -1435,4 +1473,71 @@ span.sAdminButton-Gray{
     right: -11px;
     top: 20px;
     cursor: pointer;
+    z-index: 2;
+}
+.sChatUpdateStatus{
+    background-color: #e7e7e7;
+    height: 79px;
+    color: #222429;
+    font: 400 16px Roboto;
+}
+.sChatUpdateToggle{
+    background: url(../images/chat-update-toggle.png)no-repeat;
+    color: #ffffff;
+    font: 400 22px Roboto;
+    text-align: center;
+    height: 69px;
+    width: 139px;
+    line-height: 59px;
+    display: block;
+    margin: 19px 0px 8px 0px;
+    cursor: pointer;
+}
+.sChatUpdateStatus{
+    text-align: center;
+}
+.sChatUpdateStatus div:nth-child(1) span{
+    width: 375px;
+    height: 34px;
+    color: #222429;
+    font: 400 16px Roboto;
+    display: inline-block;
+    margin-left: 5px;
+    line-height: 34px;
+}
+.sChatUpdateStatus div:nth-child(2) span{
+    width: 375px;
+    height: 34px;
+    color: #505050;
+    font: 400 15px Roboto;
+    display: inline-block;
+    background-color: #ffffff;
+    margin-left: 5px;
+    line-height: 34px;
+}
+.sChatMessageWrapper{
+    
+}
+.sChatMessage{
+    width: 1170px;
+    height: 190px;
+    color: #26292d;
+    font: 400 15px / 22px Roboto;
+    background-color: #f2f2f2;
+}
+.sChatMessage > div{
+    padding: 0px 21px 0px 21px;
+    overflow: auto;
+}
+.sChatMessage > div:nth-child(1){
+    color: #ffffff;
+    font: 400 15px Roboto;
+    height: 40px;
+    line-height: 40px;
+}
+.sChatMessage[data-client="true"] > div:nth-child(1){
+    background-color: #b3b3b3;
+}
+.sChatMessage[data-client="false"] > div:nth-child(1){
+    background-color: #6d6e70;
 }

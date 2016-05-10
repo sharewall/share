@@ -36,7 +36,10 @@ def chat(request):
     title = 'Мои тикеты'
     header = title
 
-    chats = Chat.objects.filter(user=request.user)
+    if request.user.is_staff and :
+
+    else:
+        chats = Chat.objects.filter(user=request.user)
 
     return render(request, template_name,
     {
@@ -55,29 +58,34 @@ def chat_update(request, pk):
     if request.method == 'POST':
 
         #TODO: validate
-        name = request.POST.get('name','')
-        email = request.POST.get('email','')
+        name = request.POST.get('name', request.user.username)
+        email = request.POST.get('email', request.user.email)
         text = request.POST.get('text','')
 
         try:
-            chat = Chat.objects.get(pk=pk, user=request.user)
+            if request.user.is_staff:
+                chat = Chat.objects.get(pk=pk)
+            else:
+                chat = Chat.objects.get(pk=pk, user=request.user)
 
-            chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=name, text=text)
+            chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=name, email=email, text=text)
             for f in request.FILES.getlist('files'):
-                ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f)
+                ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f, file_name=f.name[-100:])
         except:
             pass
 
         return HttpResponseRedirect(reverse('chat-update', args=[pk]))
     
     try:
-        chat = Chat.objects.get(pk=pk, user=request.user)
+        if request.user.is_staff:
+            chat = Chat.objects.get(pk=pk)
+        else:
+            chat = Chat.objects.get(pk=pk, user=request.user)
 
         header = 'Тикет #%s'%str(pk)+' (%s)'%chat.header
 
         tempChatMessages = ChatMessage.objects.filter(chat=chat)
         for message in tempChatMessages:
-            #files = []
             files = ChatMessageFile.objects.filter(chat_message=message)
             chatMessages.append({'message': message, 'files': files})
     except:
@@ -105,10 +113,10 @@ def chat_create(request):
 
         chat = Chat.objects.create(user=request.user, header=header, text=text, department=department, status='ACT')
 
-        chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=request.user.username, text=text)
+        chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=request.user.username, email=request.user.email, text=text)
 
         for f in request.FILES.getlist('files'):
-            ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f)
+            ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f, file_name=f.name[-100:])
 
         return HttpResponseRedirect(reverse('chat-all'))
 
@@ -124,9 +132,12 @@ def admin_chat_billing(request):
     header = title
 
     if request.user.is_staff:
+        chats = Chat.objects.filter(department='BIL')
+
         return render(request, template_name,
         {
-            "page": { "title": title, "header": header }
+            "page": { "title": title, "header": header },
+            'chats': chats
         })
 
     return HttpResponseRedirect(reverse('landing-login'))
@@ -137,10 +148,14 @@ def admin_chat_support(request):
     title = 'Служба поддержки'
     header = title
 
+
     if request.user.is_staff:
+        chats = Chat.objects.filter(department='SUP')
+
         return render(request, template_name,
         {
-            "page": { "title": title, "header": header }
+            "page": { "title": title, "header": header },
+            'chats': chats
         })
 
     return HttpResponseRedirect(reverse('landing-login'))

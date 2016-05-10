@@ -105,7 +105,7 @@
           <div class="sChatMainWrapper" style="height:530px!important;">
               
               <div class="sChatUpdate">
-                  <input form="updateChat" id="add_username" name="username" value="" placeholder="{{ user.username }}" maxlength="100" required="" type="text">
+                  <input form="updateChat" id="add_username" name="username" value="" placeholder="{{ user.username }}" maxlength="100" type="text">
                   <input form="updateChat" id="add_email" name="email" value="" placeholder="{{ user.email }}" maxlength="100" type="email">
               </div>
               
@@ -163,7 +163,8 @@
                 </div>
                 <div style="padding-top:17px;">
                   {% for file in message.files %}      
-                    <a href="{{ file.file_store.url }}" style="color: #008bd4; font: 400 14px Roboto;" target="_blank">{{ file.file_store.name }}</a>
+                    <a href="{{ file.file_store.url }}" style="color: #008bd4; font: 400 14px Roboto;" target="_blank">{{ file.file_name }}</a>
+                    <br/>
                   {% endfor %}
                   {{ message.message.text }}
                 </div>

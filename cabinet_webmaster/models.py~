@@ -67,6 +67,7 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message")
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, verbose_name="related_chat", related_name="chat_message")
     name = models.CharField('from_name', max_length=100, blank=True, default='')
+    email = models.CharField('email', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
     is_staff = models.BooleanField('is_staff', editable=True, default=False)
     date_update = models.DateTimeField('date_update', auto_now=True)
@@ -90,6 +91,7 @@ class ChatMessageFile(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message_file")
     chat_message = models.ForeignKey(ChatMessage, on_delete=models.CASCADE, verbose_name="related_chat_message", related_name="chat_message_file")
     file_store = models.FileField(upload_to=generate_filename)
+    file_name = models.CharField('file_name', max_length=100, blank=True, default='file')
     
     def __str__(self):
         return str('Chat_message: %s' % self.chat_message + '; File_store: %s ' % self.file_store)

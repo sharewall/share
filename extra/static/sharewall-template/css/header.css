@@ -117,7 +117,8 @@ a { text-decoration: none!important; }
      display: inline-block!important;
 }
 .sContainer{
-    width: 1171px;      
+    /*min-width: 1171px;*/
+    width: 1171px;
     transition: width 0.5s;
     -moz-transition: width 0.5s;
     -webkit-transition: width 0.5s;
@@ -1522,6 +1523,7 @@ span.sAdminButton-Gray{
     color: #26292d;
     font: 400 15px / 22px Roboto;
     background-color: #f2f2f2;
+    overflow: auto;
 }
 .sChatMessage > div{
     padding: 0px 21px 0px 21px;
