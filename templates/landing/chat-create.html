@@ -89,6 +89,9 @@
           <div class="sChatMainWrapper">
               <div class="sFloat-L">
                   <label for="add_header">Тема</label>
+                  {% if user.is_staff %}
+                    <label for="add_wmId">ID вебмастера</label>
+                  {% endif %}
                   <label for="add_department">Отдел</label>
                   <label for="add-text">Сообщение</label>
                   <label for="add-files" style="margin-top: 140px;">Вложения</label>
@@ -97,6 +100,15 @@
                   <div>
                       <input form="createChat" id="add_header" name="header" value="" maxlength="100" required="" type="text">
                   </div>
+                  {% if user.is_staff %}
+                    <div style="width: 185px; overflow: hidden;">
+                      <select form="createChat" id="add_wmId" name="to_user_pk" style="background: #FFF;">
+                        {% for pk, name in users_data %} 
+                        <option value="{{ pk }}">{{ pk }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</option>
+                        {% endfor %} 
+                      </select>
+                    </div>
+                  {% endif %}
                   <div class="sNone">
                       <label class="sFloat-L" style="padding-right:29px;">Служба поддержки
                         <input form="createChat" id="add_department_sup" name="department" value="SUP" style="opacity:0; display:none; margin-left:9999px;" type="radio">

@@ -84,7 +84,11 @@
       <div class="sChatUpdateStatus">
         <div>
             <span>Отправлен</span>
-            <span>Отдел</span>
+            {% if user.is_staff %}
+              <span>ID вебмастера</span>
+            {% else %}
+              <span>Отдел</span>
+            {% endif %}
             <span>Состояние</span>
         </div>
         <div>
@@ -163,7 +167,7 @@
                 </div>
                 <div style="padding-top:17px;">
                   {% for file in message.files %}      
-                    <a href="{{ file.file_store.url }}" style="color: #008bd4; font: 400 14px Roboto;" target="_blank">{{ file.file_store.name }}</a>
+                    <a href="{{ file.file_store.url }}" style="color: #008bd4; font: 400 14px Roboto;" target="_blank">{{ file.file_name }}</a>
                     <br/>
                   {% endfor %}
                   {{ message.message.text }}

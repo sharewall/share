@@ -118,7 +118,6 @@ a { text-decoration: none!important; }
 }
 .sContainer{
     /*min-width: 1171px;*/
-
     width: 1171px;
     transition: width 0.5s;
     -moz-transition: width 0.5s;
@@ -1014,7 +1013,7 @@ span[data-sn="li"] {
 span[data-sn="lj"] {
     background-position: -287px 0px;
 }
-.sAreaSelectWrapper select{
+.sAreaSelectWrapper select, .sChatMainWrapper select{
     background: transparent;
     width: 195px;
     height: 28px;
@@ -1368,8 +1367,8 @@ span.sAdminButton-Gray{
     height: 423px;
 }
 .sChatMainWrapper > div:first-of-type{
-    width: 99px;
-    margin-left: 200px;
+    width: 149px;
+    margin-left: 150px;
     text-align: right;
 }
 .sChatMainWrapper > div:not(:last-of-type){
@@ -1524,6 +1523,7 @@ span.sAdminButton-Gray{
     color: #26292d;
     font: 400 15px / 22px Roboto;
     background-color: #f2f2f2;
+    overflow: auto;
 }
 .sChatMessage > div{
     padding: 0px 21px 0px 21px;

@@ -36,10 +36,16 @@ def chat(request):
     title = 'Мои тикеты'
     header = title
 
-    if request.user.is_staff and :
-
+    if request.user.is_staff and request.session.get('profile', False):
+        chats_from_user = Chat.objects.filter(user__pk=request.session.get('profile').get('pk'))
+        chats_to_user = Chat.objects.filter(to_user_pk=request.session.get('profile').get('pk'))
+        chats = list(chain(chats_from_user, chats_to_user))
+        chats = Chat.objects.filter(Q(user__pk=request.session.get('profile').get('pk')) or Q(to_user_pk=request.session.get('profile').get('pk')))
     else:
-        chats = Chat.objects.filter(user=request.user)
+        chats_from_user = Chat.objects.filter(user=request.user)
+        chats_to_user = Chat.objects.filter(to_user_pk=request.user.pk)
+        chats = list(chain(chats_from_user, chats_to_user))
+        #chats = Chat.objects.filter(Q(user=request.user) or Q(to_user_pk=request.user.pk))
 
     return render(request, template_name,
     {
@@ -64,7 +70,7 @@ def chat_update(request, pk):
 
         try:
             if request.user.is_staff:
-                chat = Chat.objects.get(pk=pk)
+                chat = Chat.objects.get(pk=pk).select_related('user')
             else:
                 chat = Chat.objects.get(pk=pk, user=request.user)
 
@@ -103,6 +109,7 @@ def chat_create(request):
     template_name = 'landing/chat-create.html'
     title = 'Открыть тикет'
     header = title
+    users_data = []
 
     if request.method == 'POST':
 
@@ -111,7 +118,14 @@ def chat_create(request):
         department = request.POST.get('department')
         text = request.POST.get('text')
 
-        chat = Chat.objects.create(user=request.user, header=header, text=text, department=department, status='ACT')
+        if request.user.is_staff:
+            to_user_pk = request.POST.get('to_user_pk', False)
+            if to_user_pk:
+                chat = Chat.objects.create(user=request.user, to_user_pk=to_user_pk, header=header, text=text, department=department, status='ACT')
+            else:
+                chat = Chat.objects.create(user=request.user, header=header, text=text, department=department, status='ACT')
+        else:
+            chat = Chat.objects.create(user=request.user, header=header, text=text, department=department, status='ACT')
 
         chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=request.user.username, email=request.user.email, text=text)
 
@@ -120,9 +134,13 @@ def chat_create(request):
 
         return HttpResponseRedirect(reverse('chat-all'))
 
+    if request.user.is_staff:
+        users_data = sorted(list(User.objects.values_list('pk', 'username')))
+
     return render(request, template_name,
     {
-        "page": { "title": title, "header": header }
+        "page": { "title": title, "header": header },
+        'users_data': users_data
     })
 
 @login_required

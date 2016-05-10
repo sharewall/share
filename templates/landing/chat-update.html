@@ -84,12 +84,20 @@
       <div class="sChatUpdateStatus">
         <div>
             <span>Отправлен</span>
-            <span>Отдел</span>
+            {% if user.is_staff %}
+              <span>ID вебмастера</span>
+            {% else %}
+              <span>Отдел</span>
+            {% endif %}
             <span>Состояние</span>
         </div>
         <div>
             <span>{{ chat.showCreateDate }}</span>
-            <span>{{ chat.showDepartment }}</span>
+            {% if user.is_staff %}
+              <span>{{ chat.user.pk }}</span>
+            {% else %}
+              <span>{{ chat.showDepartment }}</span>
+            {% endif %}
             <span>{{ chat.showStatus }}</span>
         </div>
       </div>
