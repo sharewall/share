@@ -101,10 +101,10 @@
                       <input form="createChat" id="add_header" name="header" value="" maxlength="100" required="" type="text">
                   </div>
                   {% if user.is_staff %}
-                    <div class="sFloat-L sInputWebmasterSearchWrapper" style="display: inline-block; margin-bottom: 0px!important; height:50px;">
-                        <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" placeholder="Поиск по ID/логину" type="text">
+                    <div class="sNone sFloat-L sInputWebmasterSearchWrapper" style="display: inline-block; margin-bottom: 0px!important; height:50px;">
+                        <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" placeholder="Поиск по ID/логину" type="text" style="">
                         
-                        <span class="sSearchIcon" style="bottom: 87%!important;" onclick="eventSearch()"></span>
+                        <span class="sSearchIcon" style="bottom: 93%!important;" onclick="eventSearch()"></span>
                     </div>
                     <div class="sFloat-R" style="width: 185px; overflow: hidden; display: inline-block; margin-right: 4px; background: url({% static "sharewall-template/images/select-area-arrow.png" %})no-repeat 95% #fff; line-height: 33px; border-radius: 7px; margin-top: 10px;">
                       <select form="createChat" id="add_wmId" name="to_user_pk">
