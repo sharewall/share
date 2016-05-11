@@ -1117,7 +1117,7 @@ span[data-sn="lj"] {
     left: 101%;
     cursor: pointer;
 }
-.sTableAreasField > span.sAdminButton{
+.sTableAreasField > .sAdminButton{
     cursor:pointer; 
     height: 39px;
     width: 135px;
@@ -1128,10 +1128,10 @@ span[data-sn="lj"] {
     color: #ffffff;
     font: 400 16px Roboto;
 }
-span.sAdminButton-Yellow{
+.sAdminButton-Yellow{
     background: url(../images/admin-button-yellow.png) no-repeat;
 }
-span.sAdminButton-Gray{
+.sAdminButton-Gray{
     background: url(../images/admin-button-gray2.png) no-repeat;
 }
 .sInputDateWrapper > span.sCalendarIcon{

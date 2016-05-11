@@ -60,7 +60,7 @@
                 <div class="sTableAreasField" style="width:539px;">
                   <a href="/admin/profile/{{ cab.user.pk }}" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 40px 0 50px;">Посмотреть профиль</a>
                   <!--<span class="sAdminButton sAdminButton-Yellow">Написать</span>-->
-                  <a href="{% url "chat-create" %}" target="_blank" class="sAdminButton sAdminButton-Yellow">Написать</a>
+                  <a href="{% url "chat-create" %}?to={{ cab.user.pk }}" target="_blank" class="sAdminButton sAdminButton-Yellow">Написать</a>
                   {% if cab.user.is_staff %}
                   {% elif cab.user.is_active %}
                       <span data-id="{{ cab.pk }}" data-status="false" onclick="eventChangeStatus(this)" class="sAdminButton sAdminButton-Gray">Забанить</span>

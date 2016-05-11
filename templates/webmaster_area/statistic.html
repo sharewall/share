@@ -37,7 +37,7 @@
               <div class="sAreaChoices-Line">
                 {% if user.is_staff and not request.session.profile %}
                 <span class="sFloat-L" style="cursor:default;">ID вебмастера</span>
-                <div class="sFloat-L sAreaSelectWrapper" style="margin-left:20px; width:50px;">
+                <div class="sFloat-L sAreaSelectWrapper" style="margin-left:20px;">
                   <select name="webmaster_id">
                     {% for pk, name in users_data %} 
                     <option value="{{ pk }}">{{ pk }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</option>

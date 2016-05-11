@@ -1028,10 +1028,10 @@ span[data-sn="lj"] {
     width: 175px;
     height: 28px;
     overflow: hidden;
-    background: url(../images/select-area-arrow.png) no-repeat right #fff;
+    background: url(../images/select-area-arrow.png) no-repeat 95% #fff;
     color: #5d646e;
     font: 400 14px Roboto;
-    border-right: 6px solid #ffffff;
+   /*border-right: 6px solid #ffffff;*/
     position: relative;
     top: 16px;
 }
