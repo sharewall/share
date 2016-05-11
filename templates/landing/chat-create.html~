@@ -94,7 +94,7 @@
                   {% endif %}
                   <label for="add_department">Отдел</label>
                   <label for="add-text">Сообщение</label>
-                  <label for="add-files" style="margin-top: 140px;">Вложения</label>
+                  <label for="add-files" style="margin-top: 95%;">Вложения</label>
               </div>
               <div class="sFloat-L">
                   <div>
@@ -116,14 +116,13 @@
                     <div class="sClear-Both"></div>
                   {% endif %}
                   <div class="sNone">
-                      <label class="sFloat-L" style="padding-right:29px;">Служба поддержки
                         <input form="createChat" id="add_department_sup" name="department" value="SUP" style="opacity:0; display:none; margin-left:9999px;" type="radio">
                         <label for="add_department_sup" class="sBSInput"></label>
-                      </label>
-                      <label class="sFloat-L">Биллинг
+                        <label for="add_department_sup" class="sFloat-L" style="padding-right:29px;">Служба поддержки</label>
+
                         <input form="createChat" id="add_department_bil" name="department" value="BIL" style="opacity:0; display:none; margin-left:9999px;" type="radio">
                         <label for="add_department_bil" class="sBSInput"></label>
-                      </label>
+                        <label for="add_department_bil" class="sFloat-L">Биллинг</label>
                   </div>
                   <div>
                       <textarea required="" id="add_text" name="text" form="createChat"></textarea>

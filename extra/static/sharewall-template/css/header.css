@@ -70,6 +70,9 @@ a { text-decoration: none!important; }
 }
 .sClear-Both{
     clear: both;
+    font-size: 0;
+    height: 0px;
+    overflow: hidden;
 }
 .sFormPad-Wrapper > .sDescription2{
     width: 395px;
@@ -1015,7 +1018,7 @@ span[data-sn="lj"] {
 }
 .sAreaSelectWrapper select, .sChatMainWrapper select{
     background: transparent;
-    width: 195px;
+    width: 215px;
     height: 28px;
     padding: 5px;
     padding-left: 8px;
