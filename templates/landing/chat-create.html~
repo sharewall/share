@@ -90,7 +90,7 @@
               <div class="sFloat-L">
                   <label for="add_header">Тема</label>
                   {% if user.is_staff %}
-                    <label for="add_wmId">ID вебмастера</label>
+                    <label for="sInputWebmasterSearch">ID вебмастера</label>
                   {% endif %}
                   <label for="add_department">Отдел</label>
                   <label for="add-text">Сообщение</label>
@@ -124,6 +124,7 @@
                         <label for="add_department_bil" class="sBSInput"></label>
                         <label for="add_department_bil" class="sFloat-L">Биллинг</label>
                   </div>
+                  <div class="sClear-Both"></div>
                   <div>
                       <textarea required="" id="add_text" name="text" form="createChat"></textarea>
                   </div>
@@ -158,6 +159,8 @@
 <script>
     
     $(function(){        
+
+        $('.sInputWebmasterSearch').val('');
     
         $('#add_files').change(function(){
             $files = $(this.files);
@@ -209,5 +212,45 @@
 
     });
    
+        function eventSearch(){
+            var searchPattern = $('.sInputWebmasterSearch').val();
+            console.log(searchPattern);
+
+            $.ajax({ 
+              url: "/admin/wm-by-id/", 
+              data: {
+                "pattern": searchPattern
+              }, 
+              beforeSend: function(){
+                $('div.sBusyOverlay').show();
+              },
+              success: function(r){ 
+                if(r.answer='ok'){ 
+                 console.log(r.webmasters);
+
+                 $select_wmid = $('select[name="add_wmId"]').empty();
+
+                 if(r.webmasters.length < 1){
+                   $('.sStatistic').hide();
+                 }
+                 else{
+                   r.webmasters.forEach(function(v,i){  
+                     $select_wmid.append('<option value="'+v[0]+'">'+v[0]+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+v[1]+'</option>');
+                   }); 
+                    
+                   $select_wmid.find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change');
+
+                   $('.sStatistic').show();
+                 }
+
+                } 
+              },
+              complete: function(){
+                $('div.sBusyOverlay').hide();
+              }
+            });
+
+        }
+
 </script>
 {% endblock %}

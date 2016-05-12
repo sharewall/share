@@ -109,6 +109,8 @@
             var _lpd;
 
             $(function(){
+                $('.sInputWebmasterSearch').val('');
+
                 {% if user.is_staff and request.session.profile and not request.session.profile.is_staff and areas.count < 1 or not user.is_staff and areas.count < 1 %}
                  $('div.sBusyOverlay2#isEmpty').show();
                 {% endif %}
@@ -130,6 +132,7 @@
                 $('.sListConstructors > span:first-of-type()').click();
 
                 {% if user.is_staff and not request.session.profile %}
+
                   $('select[name="webmaster_id"]').change(function(){ 
                       var selected_id_val = $(this).find('option:selected').val();
 
@@ -166,6 +169,7 @@
                       });
 
                   });
+
                 {% endif %}
 
                 $('select[name="webmaster_area"]').change(function(){ 
@@ -331,6 +335,46 @@
               $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
 
              }
+
+            function eventSearch(){
+                var searchPattern = $('.sInputWebmasterSearch').val();
+                console.log(searchPattern);
+
+                $.ajax({ 
+                  url: "/admin/wm-by-id/", 
+                  data: {
+                    "pattern": searchPattern
+                  }, 
+                  beforeSend: function(){
+                    $('div.sBusyOverlay').show();
+                  },
+                  success: function(r){ 
+                    if(r.answer='ok'){ 
+                     console.log(r.webmasters);
+
+                     $select_wmid = $('select[name="webmaster_id"]').empty();
+
+                     if(r.webmasters.length < 1){
+                       $('.sStatistic').hide();
+                     }
+                     else{
+                       r.webmasters.forEach(function(v,i){  
+                         $select_wmid.append('<option value="'+v[0]+'">'+v[0]+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+v[1]+'</option>');
+                       }); 
+                        
+                       $select_wmid.find('option:nth-of-type(1)').prop('selected',true).closest('select').trigger('change');
+
+                       $('.sStatistic').show();
+                     }
+
+                    } 
+                  },
+                  complete: function(){
+                    $('div.sBusyOverlay').hide();
+                  }
+                });
+
+            }
 
         </script>
 

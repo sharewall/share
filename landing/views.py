@@ -213,6 +213,36 @@ def admin_webmasters(request):
     return HttpResponseRedirect(reverse('landing-login'))
 
 @login_required
+def admin_wm_by_id(request):
+
+    if request.user.is_staff:
+        answer = ''
+        request_pattern = request.GET.get('pattern', '')
+        webmasters = []
+        
+        if request_pattern == '':
+            webmasters = sorted(list(User.objects.all().values_list('pk', 'username')))
+            answer = 'ok'
+        else:
+            try:
+                int(request_pattern)
+                temp_1 = User.objects.filter(pk__icontains=request_pattern).values_list('pk', 'username')
+            except:
+                temp_1 = []
+
+            try:
+                temp_2 = User.objects.filter(username__icontains=request_pattern).values_list('pk', 'username')
+
+                webmasters = sorted(list(chain(temp_1, temp_2)))
+                answer = 'ok'
+            except:
+                answer = 'error'
+
+        return JsonResponse({"answer": answer, "webmasters": webmasters})
+
+    return HttpResponseRedirect(reverse('landing-login'))
+
+@login_required
 def admin_area_by_id(request):
 
     if request.user.is_staff and request.GET.get('wmid', False):

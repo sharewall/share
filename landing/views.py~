@@ -40,7 +40,7 @@ def chat(request):
         chats_from_user = Chat.objects.filter(user__pk=request.session.get('profile').get('pk'))
         chats_to_user = Chat.objects.filter(to_user_pk=request.session.get('profile').get('pk'))
         chats = list(chain(chats_from_user, chats_to_user))
-        chats = Chat.objects.filter(Q(user__pk=request.session.get('profile').get('pk')) or Q(to_user_pk=request.session.get('profile').get('pk')))
+        #chats = Chat.objects.filter(Q(user__pk=request.session.get('profile').get('pk')) or Q(to_user_pk=request.session.get('profile').get('pk')))
     else:
         chats_from_user = Chat.objects.filter(user=request.user)
         chats_to_user = Chat.objects.filter(to_user_pk=request.user.pk)
@@ -209,6 +209,36 @@ def admin_webmasters(request):
             "all_cabinets": all_cabinets,
             "q": get_query_filter
         })
+
+    return HttpResponseRedirect(reverse('landing-login'))
+
+@login_required
+def admin_wm_by_id(request):
+
+    if request.user.is_staff:
+        answer = ''
+        request_pattern = request.GET.get('pattern', '')
+        webmasters = []
+        
+        if request_pattern == '':
+            webmasters = sorted(list(User.objects.all().values_list('pk', 'username')))
+            answer = 'ok'
+        else:
+            try:
+                int(request_pattern)
+                temp_1 = User.objects.filter(pk__exact=request_pattern).values_list('pk', 'username')
+            except:
+                temp_1 = []
+
+            try:
+                temp_2 = User.objects.filter(username__icontains=request_pattern).values_list('pk', 'username')
+
+                webmasters = sorted(list(chain(temp_1, temp_2)))
+                answer = 'ok'
+            except:
+                answer = 'error'
+
+        return JsonResponse({"answer": answer, "webmasters": webmasters})
 
     return HttpResponseRedirect(reverse('landing-login'))
 
