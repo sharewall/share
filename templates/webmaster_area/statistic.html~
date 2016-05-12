@@ -36,8 +36,14 @@
               </div>
               <div class="sAreaChoices-Line">
                 {% if user.is_staff and not request.session.profile %}
+                <div class="sNone sFloat-L sInputWebmasterSearchWrapper" style="display: inline-block; margin-bottom: 0px!important; height:50px;">
+                    <input form="SearchWebmaster" name="q" class="sInputWebmasterSearch" id="sInputWebmasterSearch" placeholder="Поиск по ID/логину" type="text" style="">
+                    
+                    <span class="sSearchIcon" style="bottom: 93%!important;" onclick="eventSearch()"></span>
+                </div>
+
                 <span class="sFloat-L" style="cursor:default;">ID вебмастера</span>
-                <div class="sFloat-L sAreaSelectWrapper" style="margin-left:20px; width:50px;">
+                <div class="sFloat-L sAreaSelectWrapper" style="margin-left:20px;">
                   <select name="webmaster_id">
                     {% for pk, name in users_data %} 
                     <option value="{{ pk }}">{{ pk }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</option>
