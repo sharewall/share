@@ -1,5 +1,6 @@
 from django.db import models
 from cabinet_webmaster.models import CabinetWebmasterModel
+from django.contrib.auth.models import User
 
 class BtnsImages(models.Model):
     name = models.CharField('name image', max_length=200)
@@ -16,6 +17,40 @@ class BtnsImages(models.Model):
     def __str__(self):
         return str('Name: %s' % self.name + ' type: %s' % self.type_image)
 
+class AdvertBtnImage(models.Model):
+    name = models.CharField('name image', max_length=100)
+    path = models.CharField('path to image', max_length=200)
+
+    def __str__(self):
+        return str('Name: %s' % self.name)
+
+class Advert(models.Model):
+    cabinet_webmaster = models.OneToOneField(CabinetWebmasterModel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="advert")
+    buttons_constructor = models.ForeignKey('ButtonsConstructorModel', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related buttons constructor", related_name="advert")
+    btn_image = models.ForeignKey('AdvertBtnImage', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related advert btn image", related_name="advert")
+
+    BUY = 'BUY' # Show btn and wait click event
+    SHOW = 'SHO' # Hide btn, auto show advert after delay(fix value)
+    AD_TYPE_CHOICES=(
+        (BUY,'Купить'),
+        (SHOW,'Выходящая реклама'),
+    )
+    ad_type = models.CharField(max_length=3, choices=AD_TYPE_CHOICES, default=BUY)
+
+    TIZER = 'TIZ' # ?
+    MEDIA = 'MED' # Banner
+    AD_ALLOW_CHOICES=(
+        (TIZER,'Тизеры'),
+        (MEDIA,'Медийная'),
+    )
+    ad_allow = models.CharField(max_length=3, choices=AD_ALLOW_CHOICES, default=MEDIA)
+
+    show_counter = models.IntegerField('show counter', default=0)
+    click_counter = models.IntegerField('click counter', default=0)
+
+    def __str__(self):
+        return str('PK: %s' % self.pk)
+
 class SocialNetworks(models.Model):
     shortcut = models.CharField('shortcut for network', max_length=2)
     url = models.URLField('url for network', null=False, blank=False, default='')
@@ -27,7 +62,7 @@ class SocialNetworks(models.Model):
 
 class ButtonsConstructorModel(models.Model):
     cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="buttons_constructor")
-    btns_images = models.ForeignKey(BtnsImages, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
+    btns_images = models.ForeignKey(BtnsImages, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
     name_constructor = models.CharField("name_constructor", max_length=50, default="Default constructor")
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
