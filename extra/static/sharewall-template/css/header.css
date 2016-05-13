@@ -863,11 +863,16 @@ div.sDescription > p.Step-2{
     margin-top: 0px;
 }
 .sCodeDescription > .sSaveConfig-Big{
-    width: 286px;
+    /*width: 286px;
     height: 76px;
-    background: url(../images/copy-code-button-big-yellow.png);
+    background: url(../images/copy-code-button-big-yellow.png);*/
+    width: 334px;
+    height: 76px;
+    background: url(../images/big-yellow-btn.png);
     display: inline-block;
     cursor: pointer;
+    color: rgb(255, 255, 255);
+    font: 400 20px/65px Roboto;
 }
 .sCodeDescription > p.sNote > a{
     color: rgb(47, 171, 246);

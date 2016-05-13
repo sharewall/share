@@ -203,7 +203,7 @@
                       <div class="sClear-Both"></div>
                       <div class="sCodeDescription">
                           <p>Скопируйте и установите этот код в HTML-верстку вашего сайта в том месте, где хотите расположить социальные кнопки</p>
-                          <span onclick="copyToClipboard()" class="sSaveConfig-Big"></span>
+                          <span onclick="formSubmit()" class="sSaveConfig-Big">Сохранить конфигурацию</span>
                           <p class="sNote">Публикуя код, вы принимаете 
                               <a href="javascript: return false;">пользовательское соглашение</a>
                           </p>
@@ -243,7 +243,7 @@
             });
             $('div.sNext > span[data-next]').click(function(){ $cStep = $('.sStepPad > div.sActive').next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').next('div').toggleClass('sHideAndSeek').prev('div').toggleClass('sHideAndSeek'); 
-            StepForward($cStep);
+            //StepForward($cStep);
             });  
             $('div.sNext > span[data-prev]').click(function(){ $cStep = $('.sStepPad > div.sActive').prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').prev('div').toggleClass('sHideAndSeek').next('div').toggleClass('sHideAndSeek');       
