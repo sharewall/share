@@ -997,6 +997,15 @@ div.sDescription > p.Step-2{
 .sBSNode-8{
     background-image: url("../images/btns-sprite-8.png")!important;
 }
+.sBSNode-9{
+    background-image: url("../images/btns-sprite-9.png")!important;
+}
+.sBSNode-10{
+    background-image: url("../images/btns-sprite-10.png")!important;
+}
+.sBSNode-11{
+    background-image: url("../images/btns-sprite-11.png")!important;
+}
 span[data-sn="tw"] {
     background-position: 0px 0px;
 }
