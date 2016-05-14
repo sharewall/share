@@ -629,6 +629,9 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     padding-left: 20px;
     margin-right: 12px;
 }
+.sTab{
+  cursor: pointer!important;
+}
 .sBtnConstructor > span.sTab.sActive{
     color:#FFF;
     background-color: #ffae00;
@@ -720,14 +723,22 @@ h2.sH2{
 .sFormPad-Wrapper > .sNext2{
     padding-left: 268px;
 }
-.sFormPad-Wrapper > .sShowBtns{
-    background: url(../images/showbtns-bg.png);
+.sFormPad-Wrapper > .sShowBtns,
+.sAdvertWrapper .sShowBtns{
+    background: url(../images/showbtns-bg.png)no-repeat;
     height: 262px;
     width: 828px;
     text-align: center;
     overflow: auto;
 }
-.sShowBtns > #sharewallContainer{
+.sAdvertWrapper .sShowBtns{
+    width: 675px;
+    height: 258px;
+    background-size: 675px 258px;
+}
+.sShowBtns > #sharewallContainer,
+.sAdvertWrapper #sharewallContainer-Adv
+{
     padding-top: 110px;
 }
 .FormPad > div.sDescription > p{
@@ -750,22 +761,30 @@ h2.sH2{
     text-align: center;
 }
 .sToolsBar > .sLocationChoices-Wrapper > div:not(.sClear-Both),
-.sToolsBar > .sCounterChoices-Wrapper > div:not(.sClear-Both){
+.sToolsBar > .sCounterChoices-Wrapper > div:not(.sClear-Both),
+.sAdvertTypeWrapper,
+.sAdvertAllowWrapper{
     background: url(../images/location-choices.png);
     width: 315px;
     height: 46px;
 }
 .sLocationChoices-Wrapper > div > span.sActive,
-.sCounterChoices-Wrapper > div > span.sActive{
+.sCounterChoices-Wrapper > div > span.sActive,
+.sAdvertTypeWrapper > span.sActive,
+.sAdvertAllowWrapper > span.sActive{
     background: url(../images/location-choices-active.png);
     color: #ffffff;
 }
 .sLocationChoices-Wrapper > div > span.sActive:nth-of-type(2),
-.sCounterChoices-Wrapper > div > span.sActive:nth-of-type(2){
+.sCounterChoices-Wrapper > div > span.sActive:nth-of-type(2),
+.sAdvertTypeWrapper > span.sActive:nth-of-type(2),
+.sAdvertAllowWrapper > span.sActive:nth-of-type(2){
     background: url(../images/location-choices-active-right.png);
 }
 .sLocationChoices-Wrapper > div > span,
-.sCounterChoices-Wrapper > div > span{
+.sCounterChoices-Wrapper > div > span,
+.sAdvertTypeWrapper > span,
+.sAdvertAllowWrapper > span{
     color: #32353c;
     font: 400 18px / 22px Roboto;
     line-height: 46px;
@@ -773,6 +792,11 @@ h2.sH2{
     cursor: pointer;
     display: inline-block;
     width: 155px;
+}
+.sAdvertTypeWrapper > span,
+.sAdvertAllowWrapper > span{
+    font: 400 15px/42px Roboto; 
+    text-align: center;
 }
 .sToolsBar > .sSizeChoices-Wrapper{
     width: 652px;
@@ -805,6 +829,12 @@ h2.sH2{
 div.sDescription > p.Step-2{
     color: #616d79;
     font: 400 20px / 22px Roboto;
+}
+div.sDescription > .sAdvert-p{
+    color: #616d79;
+    font: 400 20px / 22px Roboto;
+    margin-top: 3px;
+    margin-bottom: 13px;
 }
 .sBSExample, .sSNExample{
     padding-top: 46px;   
@@ -850,11 +880,19 @@ div.sDescription > p.Step-2{
     margin-top: 12px;
     padding: 10px;
 }
+.sCopyCodeWrapper-Adv{
+    background: url(../images/copy-code-1.png) no-repeat;
+    background-size: 675px;
+    text-align: center;
+}
 .sCodeDescription{
     height: 227px;
     text-align: center;
 }
-.sCodeDescription > p:first-of-type{
+.sAdvertWrapper .sCodeDescription {
+    height: 117px;
+}
+not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     padding:0px 160px 0px 160px;
 }
 .sCodeDescription > p.sNote{
@@ -862,7 +900,8 @@ div.sDescription > p.Step-2{
     font: 400 13px Roboto;
     margin-top: 0px;
 }
-.sCodeDescription > .sSaveConfig-Big{
+.sCodeDescription > .sSaveConfig-Big,
+.sSaveConfig-Big{
     /*width: 286px;
     height: 76px;
     background: url(../images/copy-code-button-big-yellow.png);*/
@@ -1051,6 +1090,7 @@ span[data-sn="lj"] {
    /*border-right: 6px solid #ffffff;*/
     position: relative;
     top: 16px;
+    border-radius: 5px;
 }
 .sBSTreeWrapper > span[data-logo] {
     width: 41px;
@@ -1557,4 +1597,76 @@ span[data-sn="lj"] {
 }
 .sChatMessage[data-client="false"] > div:nth-child(1){
     background-color: #6d6e70;
+}
+.sAdvertWrapper{
+    display: none;
+    background-color: #f3f3f3;
+    height: 559px;
+    color: #32353c;
+    font: 400 15px / 22px Roboto;
+    padding: 23px 41px 23px 23px;
+}
+.sAdvertBtnImageWrapper{
+    margin-top: 16px;
+    margin-bottom: 47px;
+}
+.sBtnImage-D{
+    background-color: #ffffff;
+    width: 64px;
+    height: 38px;
+    display: inline-block;
+    cursor: pointer;
+}
+.sBtnImage-D.sActive{
+    background-color: #2fabf6;
+}
+.sBtnImage-D > span{
+    width: 36px;
+    height: 36px;
+    display: block;
+    margin-left: 13px;
+    margin-top: 1px;
+}
+.sBtnImage-D > span[data-value="1"]{
+    background: url(../images/ad-btn-value-1.png)no-repeat;
+}
+.sBtnImage-D > span[data-value="2"]{
+    background: url(../images/ad-btn-value-2.png)no-repeat;
+}
+.sBtnImage-D > span[data-value="3"]{
+    background: url(../images/ad-btn-value-3.png)no-repeat;
+}
+.sBtnImage-D > span[data-value="4"]{
+    background: url(../images/ad-btn-value-4.png)no-repeat;
+}
+.sBtnImage-D > span[data-value="5"]{
+    background: url(../images/ad-btn-value-5.png)no-repeat;
+}
+.sAdvertTypeWrapper,
+.sAdvertAllowWrapper{
+    margin-top: 8px;
+    margin-bottom: 27px;
+}
+#sAdvBtn{
+    /*display: inline-block;*/
+    width: 40px;
+    height: 40px;
+    display: none;
+    margin-right: 15px;
+    cursor: pointer;
+}
+#sAdvBtn[data-img="1"]{
+    background: url(../images/advert-btn-1.png)no-repeat; 
+}
+#sAdvBtn[data-img="2"]{
+    background: url(../images/advert-btn-2.png)no-repeat; 
+}
+#sAdvBtn[data-img="3"]{
+    background: url(../images/advert-btn-3.png)no-repeat; 
+}
+#sAdvBtn[data-img="4"]{
+    background: url(../images/advert-btn-4.png)no-repeat; 
+}
+#sAdvBtn[data-img="5"]{
+    background: url(../images/advert-btn-5.png)no-repeat; 
 }

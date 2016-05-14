@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect
 from buttons_constructor.forms import ButtonsConstructorForm
-from buttons_constructor.models import ButtonsConstructorModel, BtnsImages, SocialNetworks
+from buttons_constructor.models import ButtonsConstructorModel, BtnsImages, SocialNetworks, AdvertBtnImage, Advert
 from webmaster_area.models import WebmasterAreaModel
 from django.contrib.auth.models import User
 
@@ -118,7 +118,9 @@ def create(request):
 
                     try:
                         wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
+
                         old_btn_const_pk = wm_area.buttons_constructor.pk
+
                         wm_area.buttons_constructor = buttons_constructor
                         wm_area.save()
 
@@ -127,6 +129,7 @@ def create(request):
                         pass
                 else:
                     wm_area_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+
                     old_btns_pk_list = []
 
                     try:
@@ -157,5 +160,6 @@ def create(request):
         #'areas': list_distinct,
         'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
         'btns_images': BtnsImages.objects.all(),
-        'social_networks': SocialNetworks.objects.all()
+        'social_networks': SocialNetworks.objects.all(),
+        'adv_btn_image': AdvertBtnImage.objects.all()
     })
