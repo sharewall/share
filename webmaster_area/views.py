@@ -133,7 +133,10 @@ def detailmain(request):
     isEmpty = True
     temp_statistic = {
         'shares': 0,
-        'socials': 0
+        'socials': 0,
+        'shows': 0,        
+        'clicks': 0,        
+        'money': 0
     }
     statistic = {
         'shares': 0,        
@@ -343,18 +346,26 @@ def detailmain(request):
             statistic['clicks'] += temp_statistic['clicks']
             statistic['money'] += temp_statistic['money']
         else:
-            for share, social, shows, clicks, money in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
+            shows = []
+            clicks = []
+            money = []
+
+            for share, social, showsT, clicksT, moneyT in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
                 if share > statistic['shares']:
                     statistic['shares'] = share
                 if social > statistic['socials']:
                     statistic['socials'] = social
                 #Adv
-                if shows > statistic['shows']:
-                    statistic['shows'] = shows
-                if clicks > statistic['clicks']:
-                    statistic['clicks'] = clicks
-                if money > statistic['money']:
-                    statistic['money'] = money
+                shows.append(showsT)
+                clicks.append(clicksT)
+                money.append(moneyT)
+
+                if showsT > statistic['shows']:
+                    statistic['shows'] = showsT
+                if clicksT > statistic['clicks']:
+                    statistic['clicks'] = clicksT
+                if moneyT > statistic['money']:
+                    statistic['money'] = moneyT
 
     return render(request, template_name,
     {
@@ -364,7 +375,7 @@ def detailmain(request):
         'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
         'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
         'dates': dates,
-        'shows': shows,
+        'shows': [0,0,0,0],
         'shares': shares,
         'socials': socials,
         'clicks': clicks,
