@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 from django.db import models
 from buttons_constructor.models import SocialNetworks, ButtonsConstructorModel
-#ButtonsConstructorModel, SocialNetworks
+from cabinet_webmaster.models import CabinetWebmasterModel
 
 class AreaCategory(models.Model):
     name = models.CharField("name", max_length=200)
@@ -72,6 +72,11 @@ class AreaToday(models.Model):
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
     today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
+    today_money = models.FloatField("today money in rub", default=0.0)
+    today_show_counter = models.IntegerField('today show counter', default=0)
+    today_click_counter = models.IntegerField('today click counter', default=0)
+    
     db_table = 'AreaToday'
     
     def __str__(self):
@@ -82,7 +87,11 @@ class AreaToday(models.Model):
 
     def save(self, *args, **kwargs):
         #self.webmaster_area.total_share_counter = self.today_share_counter
-        #self.webmaster_area.save()
+        cab_pk = self.webmaster_area.buttons_constructor.cabinet_webmaster.pk #.money = self.today_money
+        cabinet_webmaster = CabinetWebmasterModel.objects.get(pk=cab_pk)
+        cabinet_webmaster = self.money
+        cabinet_webmaster.save()
+        #self.webmaster_area.buttons_constructor.cabinet_webmaster.money.save()
         super(AreaToday, self).save(*args, **kwargs)
 
 class PageDetail(models.Model):

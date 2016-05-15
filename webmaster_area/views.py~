@@ -151,7 +151,7 @@ def detailmain(request):
         #areas = WebmasterAreaModel.objects.all()
         for_1 = True
         area_first = WebmasterAreaModel.objects.first()
-        statistic['money'] = CabinetWebmasterModel.objects.aggregate(Sum('money')).get('money__sum', 0)
+        #statistic['money'] = CabinetWebmasterModel.objects.aggregate(Sum('money')).get('money__sum', 0)
     elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
@@ -197,6 +197,11 @@ def detailmain(request):
         temp_statistic['shares'] = 0
         temp_statistic['socials'] = 0
 
+        #Adv
+        temp_statistic['shows'] = 0
+        temp_statistic['clicks'] = 0
+        temp_statistic['money'] = 0
+
         if for_1:
             area_per_day_list = AreaToday.objects.all()#.select_related('webmaster_area')
         elif dates_range_start and dates_range_end:
@@ -207,6 +212,7 @@ def detailmain(request):
         if not for_1 and area_per_day_list.last():
             last_day = area_per_day_list.last()
 
+            #TODO: need update Adv
             if datetime.datetime.now().date() == last_day.date:
                 page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
 
@@ -268,18 +274,32 @@ def detailmain(request):
                 int(a.today_social_counter.split(',')[7])
             )
 
+            #Adv
+            temp_today_shows_counter = a.today_show_counter
+            temp_today_clicks_counter = a.today_click_counter
+            temp_today_money_counter = a.today_money
+
             if for_1:
                 try:
                     temp_index = next(index for (index, d) in enumerate(temp_area_per_day_statistic) if d['date'] == a.date)
 
                     temp_area_per_day_statistic[temp_index]['share'] += temp_today_share_counter
                     temp_area_per_day_statistic[temp_index]['social'] += temp_today_social_counter
+
+                    #Adv
+                    temp_area_per_day_statistic[temp_index]['shows'] += temp_today_shows_counter
+                    temp_area_per_day_statistic[temp_index]['clicks'] += temp_today_clicks_counter
+                    temp_area_per_day_statistic[temp_index]['money'] += temp_today_money_counter
                 except:
                     temp_area_per_day_statistic.append({
                         #'pk' : a.webmaster_area.pk,
                         'date' : a.date,
                         'share' : temp_today_share_counter,
-                        'social' : temp_today_social_counter
+                        'social' : temp_today_social_counter,
+                        #Adv
+                        'shows': temp_today_shows_counter,
+                        'clicks': temp_today_clicks_counter,
+                        'money': temp_today_money_counter
                     })
             else:
                 if temp_today_share_counter > temp_statistic['shares']:
@@ -288,24 +308,53 @@ def detailmain(request):
                 if temp_today_social_counter > temp_statistic['socials']:
                     temp_statistic['socials'] = temp_today_social_counter
 
+                #Adv
+                if temp_today_shows_counter > temp_statistic['shows']:
+                    temp_statistic['shows'] = temp_today_shows_counter
+
+                if temp_today_clicks_counter > temp_statistic['clicks']:
+                    temp_statistic['clicks'] = temp_today_clicks_counter
+
+                if temp_today_money_counter > temp_statistic['money']:
+                    temp_statistic['money'] = temp_today_money_counter
+
             if not temp_areaPDay_date in dates:
                 dates.append(temp_areaPDay_date)
                 shares.append(temp_today_share_counter)
                 socials.append(temp_today_social_counter)
+                #Adv
+                shows.append(temp_today_shows_counter)
+                clicks.append(temp_today_clicks_counter)
+                money.append(temp_today_money_counter)
             else:
                 shares[dates.index(temp_areaPDay_date)] += temp_today_share_counter
                 socials[dates.index(temp_areaPDay_date)] += temp_today_social_counter
+                #Adv
+                shows[dates.index(temp_areaPDay_date)] += temp_today_shows_counter
+                clicks[dates.index(temp_areaPDay_date)] += temp_today_clicks_counter
+                money[dates.index(temp_areaPDay_date)] += temp_today_money_counter
 
         #TODO: save for each area
         if not for_1:
             statistic['shares'] += temp_statistic['shares']
             statistic['socials'] += temp_statistic['socials']
+            #Adv
+            statistic['shows'] += temp_statistic['shows']
+            statistic['clicks'] += temp_statistic['clicks']
+            statistic['money'] += temp_statistic['money']
         else:
-            for share, social in [[t['share'], t['social']] for t in temp_area_per_day_statistic]:
+            for share, social, shows, clicks, money in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
                 if share > statistic['shares']:
                     statistic['shares'] = share
                 if social > statistic['socials']:
                     statistic['socials'] = social
+                #Adv
+                if shows > statistic['shows']:
+                    statistic['shows'] = shows
+                if clicks > statistic['clicks']:
+                    statistic['clicks'] = clicks
+                if money > statistic['money']:
+                    statistic['money'] = money
 
     return render(request, template_name,
     {

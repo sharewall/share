@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 from django.db import models
 from buttons_constructor.models import SocialNetworks, ButtonsConstructorModel
-#ButtonsConstructorModel, SocialNetworks
+from cabinet_webmaster.models import CabinetWebmasterModel
 
 class AreaCategory(models.Model):
     name = models.CharField("name", max_length=200)
@@ -87,7 +87,11 @@ class AreaToday(models.Model):
 
     def save(self, *args, **kwargs):
         #self.webmaster_area.total_share_counter = self.today_share_counter
-        #self.webmaster_area.save()
+        #cab_pk = self.webmaster_area.buttons_constructor.cabinet_webmaster.pk #.money = self.today_money
+        #cabinet_webmaster = CabinetWebmasterModel.objects.get(pk=cab_pk)
+        #cabinet_webmaster = self.money
+        #cabinet_webmaster.save()
+        #self.webmaster_area.buttons_constructor.cabinet_webmaster.money.save()
         super(AreaToday, self).save(*args, **kwargs)
 
 class PageDetail(models.Model):

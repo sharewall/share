@@ -19,7 +19,7 @@ class CabinetWebmasterModel(models.Model):
 
 class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat")
-    #to_user_pk = models.IntegerField('to_user_pk', blank=True, null=True)
+    to_user_pk = models.IntegerField('to_user_pk', blank=True, null=True)
     header = models.CharField('message_header', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
     date_create = models.DateTimeField('date_create', auto_now_add=True)#DateField
