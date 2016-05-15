@@ -3,20 +3,20 @@ import urllib.request
 from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
-from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
-from buttons_constructor.models import SocialNetworks, BtnsImages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404, render, redirect
-from webmaster_area.forms import WebmasterAreaForm, AreaCategory
-from buttons_constructor.models import ButtonsConstructorModel, BtnsImages
-from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
+from webmaster_area.forms import WebmasterAreaForm, AreaCategory
+from buttons_constructor.models import BtnsImages, AdvertBtnImage, Advert, SocialNetworks, ButtonsConstructorModel
+from cabinet_webmaster.models import CabinetWebmasterModel
+from bs4 import BeautifulSoup
 from itertools import chain
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.core.validators import URLValidator
 
 class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
@@ -151,6 +151,7 @@ def detailmain(request):
         #areas = WebmasterAreaModel.objects.all()
         for_1 = True
         area_first = WebmasterAreaModel.objects.first()
+        #statistic['money'] = CabinetWebmasterModel.objects.aggregate(Sum('money')).get('money__sum', 0)
     elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
@@ -183,15 +184,6 @@ def detailmain(request):
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
 
             dates_range_end = datetime.datetime.now().date()
-            '''
-            if for_1:
-                dates_range_end = datetime.datetime.now().date()
-                #pass
-            else:
-                temp_areaToday = temp_areaTodayList.last()
-                dates_range_end = temp_areaToday.date#.strftime("%d.%m.%Y")
-                #pass
-            '''
         else:
             dates_range_start = datetime.datetime.now().date()
             dates_range_end = datetime.datetime.now().date()

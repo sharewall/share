@@ -72,6 +72,11 @@ class AreaToday(models.Model):
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
     today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
+    today_money = models.FloatField("today money in rub", default=0.0)
+    today_show_counter = models.IntegerField('today show counter', default=0)
+    today_click_counter = models.IntegerField('today click counter', default=0)
+    
     db_table = 'AreaToday'
     
     def __str__(self):

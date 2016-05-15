@@ -128,26 +128,19 @@ def create(request):
                         old_btn_const = wm_area.buttons_constructor
 
                         try:
-                            if old_btn_const.advert.exists():
-                                if request_need_advert:
-                                    old_advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=old_btn_const.pk)
-                                    #new_advert = Advert.objects.create(buttons_constructor=buttons_constructor, cabinet_webmaster=cabinet_webmaster)
+                            if request_need_advert:
+                                try:
+                                    advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=old_btn_const.pk)
 
-                                    old_advert.buttons_constructor = buttons_constructor
-                                    old_advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
-                                    old_advert.ad_type = request.POST.get('ad_type', 'SHO')
-                                    old_advert.ad_allow = request.POST.get('ad_allow', 'MED')
+                                    advert.buttons_constructor = buttons_constructor
+                                except:
+                                    advert = Advert.objects.create(buttons_constructor=buttons_constructor, cabinet_webmaster=cabinet_webmaster)
 
-                                    old_advert.save()
-                            else:
-                                if request_need_advert:
-                                    new_advert = Advert.objects.create(buttons_constructor=buttons_constructor, cabinet_webmaster=cabinet_webmaster)
+                                advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
+                                advert.ad_type = request.POST.get('ad_type', 'SHO')
+                                advert.ad_allow = request.POST.get('ad_allow', 'MED')
 
-                                    new_advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
-                                    new_advert.ad_type = request.POST.get('ad_type', 'SHO')
-                                    new_advert.ad_allow = request.POST.get('ad_allow', 'MED')
-
-                                    new_advert.save()
+                                advert.save()
                         except:
                             pass
 
@@ -165,6 +158,23 @@ def create(request):
                     try:
                         for w in wm_area_list:
                             if w.buttons_constructor.pk not in old_btns_pk_list:
+                                try:
+                                    if request_need_advert:
+                                        try:
+                                            advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=old_btn_const.pk)
+
+                                            advert.buttons_constructor = buttons_constructor
+                                        except:
+                                            advert = Advert.objects.create(buttons_constructor=buttons_constructor, cabinet_webmaster=cabinet_webmaster)
+
+                                        advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
+                                        advert.ad_type = request.POST.get('ad_type', 'SHO')
+                                        advert.ad_allow = request.POST.get('ad_allow', 'MED')
+
+                                        advert.save()
+                                except:
+                                    pass
+
                                 old_btns_pk_list.append(w.buttons_constructor.pk)
 
                             w.buttons_constructor = buttons_constructor
