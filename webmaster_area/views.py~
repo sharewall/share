@@ -1,8 +1,8 @@
 import datetime, json, os, re, sys, requests
-import urllib.request
+import urllib.request, uuid, urllib3, json
 from urllib.parse import urlparse
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -275,9 +275,9 @@ def detailmain(request):
             )
 
             #Adv
-            temp_today_shows_counter = a.today_show_counter
-            temp_today_clicks_counter = a.today_click_counter
-            temp_today_money_counter = a.today_money
+            temp_today_shows_counter = int(a.today_show_counter)
+            temp_today_clicks_counter = int(a.today_click_counter)
+            temp_today_money_counter = float(a.today_money)
 
             if for_1:
                 try:
@@ -865,10 +865,102 @@ def setcounterprivate(url):
 
     return '-1'
 
+def getAdvert(request, cook):
+    request_referer = request.META.get('HTTP_REFERER')
+    parsed_referer = urlparse(request_referer).netloc
+
+    wma_object = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(url=parsed_referer).last()
+
+    if wma_object:
+        answer = {}
+
+        try:
+            area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
+        except:
+            area_today = None
+
+        request_ip = request.META.get('REMOTE_ADDR', '')
+        request_userAgent = request.META.get('HTTP_USER_AGENT', '')
+        request_advCook = cook#request.POST.get('advCook', 'xyz123')
+
+        pool = urllib3.PoolManager()
+
+        url = 'myclk.net/rtb/bid?partner=sharewall'
+        data = '{"cur": ["RUB"], \
+            "device":{\
+                "ip": "%s", "ua": "%s" \
+            },\
+            "id": "1453290563728",\
+            "tmax": 120,\
+            "imp": [{\
+                "id": "1",\
+                "banner": {\
+                    "h": 400,\
+                    "pos": 0,\
+                    "w": 240\
+                },\
+                "bidfloor": 0,\
+                "bidfloorcur": "RUB"\
+            }],\
+            "site": {\
+                "id": "%s",\
+                "page": "%s",\
+                "ref": ""\
+            },\
+            "user":{\
+                "id": "%s"\
+            }\
+        }'%(request_ip, request_userAgent, wma_object.pk, request_referer, request_advCook)#.format(ip=request_ip, agent=request_userAgent)
+
+        r = pool.urlopen(
+            'POST', 
+            url, 
+            headers={'Content-Type': 'application/json'},
+            body=data
+        )
+
+        advert_response = r.data.decode('utf-8')
+        advert_json = json.loads(advert_response)
+
+        advert_json_adm = advert_json['seatbid'][0]['bid'][0]['adm']
+        advert_json_price = advert_json['seatbid'][0]['bid'][0]['price']
+        advert_json_nurl = advert_json['seatbid'][0]['bid'][0]['nurl']
+
+        pattern_auc_price = '${AUCTION_PRICE}'
+        index_price = advert_json_nurl.index(pattern_auc_price)
+
+        nurl_url = advert_json_nurl[:index_price] + str(advert_json_price)
+
+        r = pool.urlopen('GET', nurl_url)
+
+        answer = {
+            'adm': advert_json_adm,
+            #'nurl_response': r.data.decode('utf-8'),
+            #'nurl_url': nurl_url,
+            #'request_ip': request_ip,
+            #'useragent': request_userAgent,
+            #'area_pk': wma_object.pk,
+            #'request_page': request_referer,
+            #'request_advCook': request_advCook,
+            #'data': data,
+            #'advert': advert_response,
+            #'advert_json': advert_json,
+            #'advert_json_adm': advert_json['seatbid'][0]['bid'][0]['adm'],
+            #'advert_json_price': advert_json['seatbid'][0]['bid'][0]['price'],
+            #'advert_json_nurl': advert_json['seatbid'][0]['bid'][0]['nurl'],
+            }
+
+        return HttpResponse('sharewallAdvResponse('+json.dumps(answer)+');')
+
+    return HttpResponse('bad id')
+    #return JsonResponse({ })
+
 def checkconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
-    wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
+
+    wma_object = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(url=parsed_referer).last()
+
     if wma_object:
         answer = ''
         history_referrer = request.GET.get('referrer', 'none referrer')
@@ -972,7 +1064,7 @@ def getconfig(request):
     request_referer = request.META.get('HTTP_REFERER')
     parsed_referer = urlparse(request_referer).netloc
 
-    wma_object = WebmasterAreaModel.objects.filter(url=parsed_referer).last()
+    wma_object = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(url=parsed_referer).last()
     if wma_object:
 
         list_sn = SocialNetworks.objects.all()
@@ -986,7 +1078,15 @@ def getconfig(request):
                 list_sn_unic[s.shortcut] = s
 
         SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+
+        #buttons_constructor
         btncr = wma_object.buttons_constructor
+
+        #Advert
+        try:
+            advert = Advert.objects.get(buttons_constructor=btncr)
+        except:
+            advert = None
 
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
@@ -994,6 +1094,38 @@ def getconfig(request):
         answer += '    $("div#sharewallContainer").html(\'\');'
         if btncr.location_buttons == "VE":
             answer += '$("div#sharewallContainer").css("float","left");'
+
+        #Adv
+        if advert:
+            answer += 'w.sharewallAdvResponse = function(r){\
+                        console.log(r);\
+                        $("div#sharewallAdvertContainer").html(r.adm).show();\
+                      };'
+
+            answer += 'var advCook = d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallAdvrr\s*\=\s*([^;]*).*$)|^.*$/, "$1");\
+                        if(advCook == ""){\
+                            var date_expires = new Date(new Date().setFullYear(new Date().getFullYear()+1));'
+            answer += 'advCook = "{0}";'.format(uuid.uuid4())
+            answer += 'document.cookie = "_sharewallAdvrr="+advCook+"; path=/; expires="+date_expires.toGMTString();\
+                        }'
+                       
+            answer += '$("body").append(\'<img src="http://sync.mecash.ru/uid/match?partner=sharewall&id=\'+advCook+\'" style="width: 1px; height: 1px; opacity: 0; position: absolute;" />\');'
+
+            if advert.ad_type == 'BUY':
+                answer += '$("div#sharewallContainer").append(\'<span id="sAdvBtn" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+advert.btn_image.path+'); background-repeat: no-repeat; background-position: 50% 50%; cursor: pointer;"></span>\''
+                if btncr.location_buttons == "VE":
+                    answer += '+\'<br/>\''
+                answer += ');'
+                answer += '$("div#sharewallContainer > #sAdvBtn").click(function(){\
+                            console.log("advert click");\
+                            $.ajax({ url: "http://sharewall.ru/webmaster-area/getadvert/"+advCook, type: "POST", dataType: "jsonp" });\
+                           });'
+            else:
+                answer += 'w.setTimeout(function(){\
+                            console.log("advert setTimeout=3000");\
+                            $.ajax({ url: "http://sharewall.ru/webmaster-area/getadvert/"+advCook, type: "POST", dataType: "jsonp" });\
+                           },3000);'
+
         for sn in btncr.social_networks.split(','):
             answer += 'var new_href = "";'
             if sn == 'vk':
@@ -1051,7 +1183,7 @@ def getconfig(request):
         if btncr.with_counter:
             if btncr.location_buttons == "VE":
                 answer += '$("div#sharewallContainer").append("<br/>");'
-            answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; height:41px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:41px; vertical-align: top; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png); background-repeat: no-repeat; background-position: 50% 60%;">0</span>\');'
+            answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; height:41px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:41px; vertical-align: top; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png); background-repeat: no-repeat; background-position: 50% 60%; cursor: default;">0</span>\');'
 
         answer += '    $("body").append("<div id=\'sharewallSNC\' style=\'display: none\'></div>");'
         for s in SOCIAL_DEFAULT.split(","):
