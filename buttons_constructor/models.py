@@ -25,8 +25,8 @@ class AdvertBtnImage(models.Model):
         return str('Name: %s' % self.name)
 
 class Advert(models.Model):
-    cabinet_webmaster = models.OneToOneField(CabinetWebmasterModel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="advert")
-    buttons_constructor = models.ForeignKey('ButtonsConstructorModel', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related buttons constructor", related_name="advert")
+    cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="advert")
+    buttons_constructor = models.OneToOneField('ButtonsConstructorModel', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related buttons constructor", related_name="advert")
     btn_image = models.ForeignKey('AdvertBtnImage', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related advert btn image", related_name="advert")
 
     BUY = 'BUY' # Show btn and wait click event
@@ -35,7 +35,7 @@ class Advert(models.Model):
         (BUY,'Купить'),
         (SHOW,'Выходящая реклама'),
     )
-    ad_type = models.CharField(max_length=3, choices=AD_TYPE_CHOICES, default=BUY)
+    ad_type = models.CharField(max_length=3, choices=AD_TYPE_CHOICES, default=SHOW)
 
     TIZER = 'TIZ' # ?
     MEDIA = 'MED' # Banner

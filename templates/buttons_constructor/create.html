@@ -60,7 +60,7 @@
                     <input name="btn_image" value="1" form="createConst" hidden>
                     <input name="ad_type" value="SHO" form="createConst" hidden>
                     <input name="ad_allow" value="MED" form="createConst" hidden>
-                    <input name="advert" value="0" form="createConst" hidden>
+                    <input name="advert" value="1" hidden>
                     
                     <span>Выберите вид кнопки "Купить"</span>
                     <div class="sAdvertBtnImageWrapper">
@@ -403,7 +403,7 @@
             $('input[name="btn_image"]').val('1');
             $('input[name="ad_type"]').val('SHO');
             $('input[name="ad_allow"]').val('MED');
-            $('input[name="advert"]').val('0');
+            //$('input[name="advert"]').val('0');
             $('.sBtnImage-D:first-of-type()').click();
 
         });
@@ -414,7 +414,7 @@
             
         function formSubmitAdv(){
           //console.log($('#createConst').serialize());
-          $('input[name="advert"]').val('1');
+          $('input[name="advert"]').attr('form', 'createConst'); //val('1');
           $('form input[type="submit"]').click();
         }
             

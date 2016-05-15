@@ -100,8 +100,11 @@ def create(request):
             profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
 
         if buttons_constructor_form.is_valid():
+
             buttons_constructor = buttons_constructor_form.save()
-            buttons_constructor.cabinet_webmaster = profile_user.cabinet_webmaster if profile_user is not None else request.user.cabinet_webmaster
+            cabinet_webmaster = profile_user.cabinet_webmaster if profile_user is not None else request.user.cabinet_webmaster
+
+            buttons_constructor.cabinet_webmaster = cabinet_webmaster
 
             cleaned_social_networks = ''
             for s in buttons_constructor_form.cleaned_data.get('social_networks'):
@@ -112,23 +115,49 @@ def create(request):
 
             buttons_constructor.save()
 
+            #Advert-isNeed
+            request_need_advert = request.POST.get('advert', False) 
+
             wm_area_pk_post = request.POST.get('webmaster_area','')
             if wm_area_pk_post:
                 if wm_area_pk_post != 'all':
 
                     try:
-                        wm_area = WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
+                        wm_area = WebmasterAreaModel.objects.select_related('buttons_constructor').get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.select_related('buttons_constructor').get(pk=wm_area_pk_post, buttons_constructor__cabinet_webmaster__user=request.user)
 
-                        old_btn_const_pk = wm_area.buttons_constructor.pk
+                        old_btn_const = wm_area.buttons_constructor
+
+                        try:
+                            if old_btn_const.advert.exists():
+                                if request_need_advert:
+                                    old_advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=old_btn_const.pk)
+
+                                    old_advert.buttons_constructor = buttons_constructor
+                                    old_advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
+                                    old_advert.ad_type = request.POST.get('ad_type', 'SHO')
+                                    old_advert.ad_allow = request.POST.get('ad_allow', 'MED')
+
+                                    old_advert.save()
+                            else:
+                                if request_need_advert:
+                                    new_advert = Advert.objects.create(buttons_constructor=buttons_constructor, cabinet_webmaster=cabinet_webmaster)
+
+                                    new_advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
+                                    new_advert.ad_type = request.POST.get('ad_type', 'SHO')
+                                    new_advert.ad_allow = request.POST.get('ad_allow', 'MED')
+
+                                    new_advert.save()
+                        except:
+                            pass
 
                         wm_area.buttons_constructor = buttons_constructor
                         wm_area.save()
 
-                        ButtonsConstructorModel.objects.get(pk=old_btn_const_pk).delete()
+                        ButtonsConstructorModel.objects.get(pk=old_btn_const.pk).delete()
                     except:
                         pass
                 else:
-                    wm_area_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
+                    wm_area_list = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(buttons_constructor__cabinet_webmaster__user=profile_user) if profile_user is not None else WebmasterAreaModel.objects.select_related('buttons_constructor').filter(buttons_constructor__cabinet_webmaster__user=request.user)
 
                     old_btns_pk_list = []
 
@@ -145,6 +174,7 @@ def create(request):
                     except:
                         pass
 
+                #return HttpResponse(resp)
                 return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/') if profile_user is not None else HttpResponseRedirect('/')
 
     areas = None
