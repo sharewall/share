@@ -741,6 +741,10 @@ h2.sH2{
 {
     padding-top: 110px;
 }
+#sharewallContainer [style*="display: none"]+br,
+#sharewallContainer-Adv [style*="display: none"]+br{
+    display: none;
+}
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
 }
@@ -1007,8 +1011,6 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     height: 41px;
     display: inline-block;
     margin-right: 15px;
-    /**/
-    background-image: url("../images/btns-sprite-3.png");
     background-repeat: no-repeat;
     padding-top: 2px;
 }
@@ -1096,7 +1098,6 @@ span[data-sn="lj"] {
     width: 41px;
     height: 41px;
     display: inline-block;
-    background-image: url("../images/btns-logo-sharewall-blue.png");
     background-repeat: no-repeat;
     background-position: 50% 50%;
     padding-top: 6px;

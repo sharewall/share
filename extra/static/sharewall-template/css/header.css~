@@ -741,6 +741,10 @@ h2.sH2{
 {
     padding-top: 110px;
 }
+#sharewallContainer [style*="display: none"]+br,
+#sharewallContainer-Adv [style*="display: none"]+br{
+    display: none;
+}
 .FormPad > div.sDescription > p{
     font: 400 15px / 22px Roboto;
 }
@@ -1043,7 +1047,7 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     background-image: url("../images/btns-sprite-10.png")!important;
 }
 .sBSNode-11{
-    background-image: url("../images/btns-sprite-11-new.png")!important;
+    background-image: url("../images/btns-sprite-11.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -1669,4 +1673,22 @@ span[data-sn="lj"] {
 }
 #sAdvBtn[data-img="5"]{
     background: url(../images/advert-btn-5.png)no-repeat; 
+}
+.sAdvertAllowWrapper-Detail{
+    width: 315px;   
+    text-align: center;
+    cursor: pointer;
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both){
+    background-color: #ffffff;
+    height: 107px;
+    width: 152px;   
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span{
+    height: 35px;
+    display: block;
+    line-height: 35px;
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span.sActive{
+    background-color: #dddcdc;
 }

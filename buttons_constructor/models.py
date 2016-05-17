@@ -72,14 +72,18 @@ class ButtonsConstructorModel(models.Model):
     cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.CASCADE, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="buttons_constructor")
     btns_images = models.ForeignKey(BtnsImages, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
     name_constructor = models.CharField("name_constructor", max_length=50, default="Default constructor")
+
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
+
     for s in sn_list:
         if not s.shortcut in SOCIAL_DEFAULT:
             SOCIAL_DEFAULT += s.shortcut + ','
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+
     social_networks = models.CharField(max_length=300, default=SOCIAL_DEFAULT)
     with_counter = models.BooleanField(default=True)
+
     CIRCLE = 'CI'
     SQUARE = 'SQ'
     FORM_CHOICES=(
@@ -87,6 +91,7 @@ class ButtonsConstructorModel(models.Model):
         (SQUARE,'Square'),
     )
     form_buttons = models.CharField(max_length=2, choices=FORM_CHOICES, default=CIRCLE)
+
     HORIZONTAL = 'HO'
     VERTICAL = 'VE'
     LOCATION_CHOICES=(
@@ -94,6 +99,7 @@ class ButtonsConstructorModel(models.Model):
         (VERTICAL,'Vertical'),
     )
     location_buttons = models.CharField(max_length=2, choices=LOCATION_CHOICES, default=HORIZONTAL)
+
     BIG = 'BIG'
     MEDIUM = 'MED'
     SMALL = 'SML'
@@ -102,7 +108,8 @@ class ButtonsConstructorModel(models.Model):
         (MEDIUM,'Medium'),
         (SMALL,'Small'),
     )
-    size_buttons = models.CharField(max_length=3, choices=SIZE_CHOICES, default=MEDIUM)
+    size_buttons = models.CharField(max_length=3, choices=SIZE_CHOICES, default=BIG)
+
     mobile_view = models.BooleanField(default=False)
     with_background = models.BooleanField(default=False)
     background_color = models.TextField(default='rgb(255, 255, 255)')

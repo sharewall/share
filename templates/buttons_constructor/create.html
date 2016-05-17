@@ -176,7 +176,7 @@
                               <span data-sn="ma" class="sBSNode sBSNode-{{ b.pk }}"></span>
                               <span data-sn="li" class="sBSNode sBSNode-{{ b.pk }}"></span>
                               <span data-sn="lj" class="sBSNode sBSNode-{{ b.pk }}"></span>
-                              <span data-logo="e" class="sBSNode"></span>
+                              <span data-logo="e" class="sBSNode sBSNode-{{ b.pk }}"></span>
                           </div>
                           {% endfor %}
                       </div>
@@ -229,9 +229,9 @@
                       </div>
                       <div class="sToolsBar">
                           <div class="sSizeChoices-Wrapper">
-                              <input form="createConst" hidden="hidden" name="size_buttons" type="text" value="MED">
-                              <span onclick="setSize(this)" data-size="BIG">Большие</span>
-                               <span class="sActive" onclick="setSize(this)" data-size="MED">Средние</span>
+                               <input form="createConst" hidden="hidden" name="size_buttons" type="text" value="BIG">
+                               <span class="sActive" onclick="setSize(this)" data-size="BIG">Большие</span>
+                               <span onclick="setSize(this)" data-size="MED">Средние</span>
                                <span onclick="setSize(this)" data-size="SML">Мелкие</span>
                           </div>
                           <div class="sLocationChoices-Wrapper">
@@ -476,6 +476,7 @@
                     $("#sharewallContainer").css("padding-top", "0px");
                     
                     $("<br />").insertAfter("#sharewallContainer-Adv > a"); 
+                    $("<br />").insertAfter("#sharewallContainer-Adv > span:nth-child(1)"); 
                     $("#sharewallContainer-Adv").css("padding-top", "0px");
                 }
                 else{

@@ -885,6 +885,7 @@ def getAdvert(request, cook):
     if wma_object:
         answer = {}
 
+        #TODO: create new areaToday
         '''
         try:
             wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
@@ -893,87 +894,101 @@ def getAdvert(request, cook):
         '''
 
         try:
-            area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
+            advert = Advert.objects.get(buttons_constructor__pk = wma_object.buttons_constructor.pk)
         except:
-            area_today = None
+            advert = None
 
-        request_ip = request.META.get('REMOTE_ADDR', '')
-        request_userAgent = request.META.get('HTTP_USER_AGENT', '')
-        request_advCook = cook#request.POST.get('advCook', 'xyz123')
+        if advert:
 
-        pool = urllib3.PoolManager()
+            if len(advert.get_ad_allow_display().split('x')) > 1:
 
-        url = 'myclk.net/rtb/bid?partner=sharewall'
-        data = '{"cur": ["RUB"], \
-            "device":{\
-                "ip": "%s", "ua": "%s" \
-            },\
-            "id": "1453290563728",\
-            "tmax": 120,\
-            "imp": [{\
-                "id": "1",\
-                "banner": {\
-                    "h": 400,\
-                    "pos": 0,\
-                    "w": 240\
-                },\
-                "bidfloor": 0,\
-                "bidfloorcur": "RUB"\
-            }],\
-            "site": {\
-                "id": "%s",\
-                "page": "%s",\
-                "ref": ""\
-            },\
-            "user":{\
-                "id": "%s"\
-            }\
-        }'%(request_ip, request_userAgent, wma_object.pk, request_referer, request_advCook)#.format(ip=request_ip, agent=request_userAgent)
+                banner_w = advert.get_ad_allow_display().split('x')[0]
+                banner_h = advert.get_ad_allow_display().split('x')[1]
 
-        r = pool.urlopen(
-            'POST', 
-            url, 
-            headers={'Content-Type': 'application/json'},
-            body=data
-        )
+                try:
+                    area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
+                except:
+                    area_today = None
 
-        advert_response = r.data.decode('utf-8')
-        advert_json = json.loads(advert_response)
+                request_ip = request.META.get('REMOTE_ADDR', '')
+                request_userAgent = request.META.get('HTTP_USER_AGENT', '')
+                request_advCook = cook
 
-        advert_json_adm = advert_json['seatbid'][0]['bid'][0]['adm']
-        advert_json_price = advert_json['seatbid'][0]['bid'][0]['price']
-        advert_json_nurl = advert_json['seatbid'][0]['bid'][0]['nurl']
+                pool = urllib3.PoolManager()
 
-        pattern_auc_price = '${AUCTION_PRICE}'
-        index_price = advert_json_nurl.index(pattern_auc_price)
+                url = 'myclk.net/rtb/bid?partner=sharewall'
+                data = '{"cur": ["RUB"], \
+                    "device":{\
+                        "ip": "%s", "ua": "%s" \
+                    },\
+                    "id": "1453290563728",\
+                    "tmax": 120,\
+                    "imp": [{\
+                        "id": "1",\
+                        "banner": {\
+                            "h": %d,\
+                            "pos": 0,\
+                            "w": %d\
+                        },\
+                        "bidfloor": 0,\
+                        "bidfloorcur": "RUB"\
+                    }],\
+                    "site": {\
+                        "id": "%s",\
+                        "page": "%s",\
+                        "ref": ""\
+                    },\
+                    "user":{\
+                        "id": "%s"\
+                    }\
+                }'%(request_ip, request_userAgent, int(banner_h), int(banner_w), wma_object.pk, request_referer, request_advCook)#.format(ip=request_ip, agent=request_userAgent)
 
-        nurl_url = advert_json_nurl[:index_price] + str(advert_json_price)
+                r = pool.urlopen(
+                    'POST', 
+                    url, 
+                    headers={'Content-Type': 'application/json'},
+                    body=data
+                )
 
-        r = pool.urlopen('GET', nurl_url)
+                advert_response = r.data.decode('utf-8')
+                #return HttpResponse('sharewallAdvResponse('+advert_response+');')
+                advert_json = json.loads(advert_response)
+                #return HttpResponse('sharewallAdvResponse('+advert_json+');')
 
-        if area_today:
-            area_today.today_show_counter += 1
-            area_today.today_money += float(advert_json_price)
-            area_today.save()
+                advert_json_adm = advert_json['seatbid'][0]['bid'][0]['adm']
+                advert_json_price = advert_json['seatbid'][0]['bid'][0]['price']
+                advert_json_nurl = advert_json['seatbid'][0]['bid'][0]['nurl']
 
-        answer = {
-            'adm': advert_json_adm,
-            #'nurl_response': r.data.decode('utf-8'),
-            #'nurl_url': nurl_url,
-            #'request_ip': request_ip,
-            #'useragent': request_userAgent,
-            #'area_pk': wma_object.pk,
-            #'request_page': request_referer,
-            #'request_advCook': request_advCook,
-            #'data': data,
-            #'advert': advert_response,
-            #'advert_json': advert_json,
-            #'advert_json_adm': advert_json['seatbid'][0]['bid'][0]['adm'],
-            #'advert_json_price': advert_json['seatbid'][0]['bid'][0]['price'],
-            #'advert_json_nurl': advert_json['seatbid'][0]['bid'][0]['nurl'],
-            }
+                pattern_auc_price = '${AUCTION_PRICE}'
+                index_price = advert_json_nurl.index(pattern_auc_price)
 
-        return HttpResponse('sharewallAdvResponse('+json.dumps(answer)+');')
+                nurl_url = advert_json_nurl[:index_price] + str(advert_json_price)
+
+                r = pool.urlopen('GET', nurl_url)
+
+                if area_today:
+                    area_today.today_show_counter += 1
+                    area_today.today_money += float(advert_json_price / 1000)
+                    area_today.save()
+
+                answer = {
+                    'adm': advert_json_adm,
+                    #'nurl_response': r.data.decode('utf-8'),
+                    #'nurl_url': nurl_url,
+                    #'request_ip': request_ip,
+                    #'useragent': request_userAgent,
+                    #'area_pk': wma_object.pk,
+                    #'request_page': request_referer,
+                    #'request_advCook': request_advCook,
+                    #'data': data,
+                    #'advert': advert_response,
+                    #'advert_json': advert_json,
+                    #'advert_json_adm': advert_json['seatbid'][0]['bid'][0]['adm'],
+                    #'advert_json_price': advert_json['seatbid'][0]['bid'][0]['price'],
+                    #'advert_json_nurl': advert_json['seatbid'][0]['bid'][0]['nurl'],
+                    }
+
+                return HttpResponse('sharewallAdvResponse('+json.dumps(answer)+');')
 
     return HttpResponse('bad id')
     #return JsonResponse({ })
@@ -1121,7 +1136,11 @@ def getconfig(request):
         if advert:
             answer += 'w.sharewallAdvResponse = function(r){\
                         console.log(r);\
+                        if($("#sharewallAdvertContainer").length > 0){\
                         $("div#sharewallAdvertContainer").html(r.adm).show();\
+                        }else{\
+                        $("div#sharewallContainer").after("<div id=\'sharewallAdvertContainer\'></div>").next("#sharewallAdvertContainer").html(r.adm).show();\
+                        }\
                       };'
 
             answer += 'var advCook = d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallAdvrr\s*\=\s*([^;]*).*$)|^.*$/, "$1");\
