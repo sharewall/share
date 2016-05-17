@@ -1670,3 +1670,21 @@ span[data-sn="lj"] {
 #sAdvBtn[data-img="5"]{
     background: url(../images/advert-btn-5.png)no-repeat; 
 }
+.sAdvertAllowWrapper-Detail{
+    width: 315px;   
+    text-align: center;
+    cursor: pointer;
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both){
+    background-color: #ffffff;
+    height: 107px;
+    width: 152px;   
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span{
+    height: 35px;
+    display: block;
+    line-height: 35px;
+}
+.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span.sActive{
+    background-color: #dddcdc;
+}

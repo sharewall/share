@@ -1043,7 +1043,7 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     background-image: url("../images/btns-sprite-10.png")!important;
 }
 .sBSNode-11{
-    background-image: url("../images/btns-sprite-11.png")!important;
+    background-image: url("../images/btns-sprite-11-new.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -1659,14 +1659,14 @@ span[data-sn="lj"] {
     background: url(../images/advert-btn-1.png)no-repeat; 
 }
 #sAdvBtn[data-img="2"]{
-    background: url(../images/ad-btn-value-2.png)no-repeat; 
+    background: url(../images/advert-btn-2.png)no-repeat; 
 }
 #sAdvBtn[data-img="3"]{
-    background: url(../images/ad-btn-value-3.png)no-repeat; 
+    background: url(../images/advert-btn-3.png)no-repeat; 
 }
 #sAdvBtn[data-img="4"]{
-    background: url(../images/ad-btn-value-4.png)no-repeat; 
+    background: url(../images/advert-btn-4.png)no-repeat; 
 }
 #sAdvBtn[data-img="5"]{
-    background: url(../images/ad-btn-value-5.png)no-repeat; 
+    background: url(../images/advert-btn-5.png)no-repeat; 
 }

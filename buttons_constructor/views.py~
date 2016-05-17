@@ -161,7 +161,7 @@ def create(request):
                                 try:
                                     if request_need_advert:
                                         try:
-                                            advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=old_btn_const.pk)
+                                            advert = Advert.objects.select_related('buttons_constructor').get(buttons_constructor__pk=w.buttons_constructor.pk)
 
                                             advert.buttons_constructor = buttons_constructor
                                         except:

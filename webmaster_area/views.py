@@ -885,6 +885,13 @@ def getAdvert(request, cook):
     if wma_object:
         answer = {}
 
+        '''
+        try:
+            wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
+        except:
+            wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today())
+        '''
+
         try:
             area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
         except:
@@ -1016,7 +1023,6 @@ def checkconfig(request):
             #wma today!
             try:
                 wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
-
             except:
                 wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
 
@@ -1115,7 +1121,11 @@ def getconfig(request):
         if advert:
             answer += 'w.sharewallAdvResponse = function(r){\
                         console.log(r);\
+                        if($("#sharewallAdvertContainer").length > 0){\
                         $("div#sharewallAdvertContainer").html(r.adm).show();\
+                        }else{\
+                        $("div#sharewallContainer").after("<div id=\'sharewallAdvertContainer\'></div>").find("#sharewallAdvertContainer").html(r.adm).show();\
+                        }\
                       };'
 
             answer += 'var advCook = d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallAdvrr\s*\=\s*([^;]*).*$)|^.*$/, "$1");\

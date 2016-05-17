@@ -59,7 +59,7 @@
                 <div class="sAdvTools sFloat-L">
                     <input name="btn_image" value="1" form="createConst" hidden>
                     <input name="ad_type" value="SHO" form="createConst" hidden>
-                    <input name="ad_allow" value="MED" form="createConst" hidden>
+                    <input name="ad_allow" value="ME1" form="createConst" hidden>
                     <input name="advert" value="1" hidden>
                     
                     <span>Выберите вид кнопки "Купить"</span>
@@ -78,12 +78,26 @@
                     </div>
                     
                     <span>Тип разрешённой рекламы</span>
-                    <div class="sAdvertAllowWrapper">
+                    <div class="sAdvertAllowWrapper" style="margin-bottom: 0px;">
                       <span data-value="TIZ">Тизеры</span>
                       <span class="sActive" data-value="MED">Медийная</span>  
                     </div>
                     
-                    <span onclick="formSubmitAdv()" class="sSaveConfig-Big" style="font: 400 18px/65px Roboto; text-align: center;">Запустить рекламные компании</span>
+                    <div class="sAdvertAllowWrapper-Detail">
+                        <div class="sFloat-L" data-allow="TIZ" style="margin-left: 2px;">
+                            <span data-value="TI1">1 Блок</span>
+                            <span data-value="TI2">2 Блока</span>
+                            <span data-value="TI3">3 Блока</span>
+                        </div>
+                        <div class="sFloat-R" data-allow="MED" style="margin-right: 2px;">
+                            <span data-value="ME1">240x400</span>
+                            <span data-value="ME2">728x90</span>
+                            <span data-value="ME3">300x250</span>
+                        </div>
+                        <div class="sClear-Both"></div>
+                    </div>
+                    
+                    <span onclick="formSubmitAdv()" class="sSaveConfig-Big" style="font: 400 18px/65px Roboto; text-align: center; margin-left: -8px; margin-top: 25px;">Запустить рекламные компании</span>
                     
                 </div>
                   
@@ -395,16 +409,30 @@
               $this = $(this);
               var value = $this.data('value');
                 
-              $('input[name="ad_allow"]').val(value);
-                
               $this.addClass('sActive');
+
+              $('.sAdvertAllowWrapper-Detail > div:not(.sClear-Both)').hide();
+              $('.sAdvertAllowWrapper-Detail > div[data-allow="'+value+'"]').show().find('span:first-of-type()').click();
+                
+              //$('input[name="ad_allow"]').val(value);
+                
             });
             
-            $('input[name="btn_image"]').val('1');
-            $('input[name="ad_type"]').val('SHO');
-            $('input[name="ad_allow"]').val('MED');
-            //$('input[name="advert"]').val('0');
+            $('.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span').click(function(){
+                $('.sAdvertAllowWrapper-Detail > div:not(.sClear-Both) > span').removeClass('sActive');
+                
+                $this = $(this);
+                var value = $this.data('value');
+
+                $('input[name="ad_allow"]').val(value);
+
+                $this.addClass('sActive');
+            });
+            
+            // d.r
             $('.sBtnImage-D:first-of-type()').click();
+            $('.sAdvertTypeWrapper > span:nth-of-type(2)').click();
+            $('.sAdvertAllowWrapper > span:nth-of-type(2)').click();
 
         });
 

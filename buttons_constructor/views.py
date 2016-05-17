@@ -138,7 +138,7 @@ def create(request):
 
                                 advert.btn_image = AdvertBtnImage.objects.get(pk=int(request.POST.get('btn_image', 1)))
                                 advert.ad_type = request.POST.get('ad_type', 'SHO')
-                                advert.ad_allow = request.POST.get('ad_allow', 'MED')
+                                advert.ad_allow = request.POST.get('ad_allow', 'ME1')
 
                                 advert.save()
                         except:

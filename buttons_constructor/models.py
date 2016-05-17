@@ -37,13 +37,21 @@ class Advert(models.Model):
     )
     ad_type = models.CharField(max_length=3, choices=AD_TYPE_CHOICES, default=SHOW)
 
-    TIZER = 'TIZ' # ?
-    MEDIA = 'MED' # Banner
+    TIZER_1 = 'TI1'
+    TIZER_2 = 'TI2'
+    TIZER_3 = 'TI3'
+    MEDIA_1 = 'ME1'
+    MEDIA_2 = 'ME2'
+    MEDIA_3 = 'ME3'
     AD_ALLOW_CHOICES=(
-        (TIZER,'Тизеры'),
-        (MEDIA,'Медийная'),
+        (TIZER_1,'1 Блок'),
+        (TIZER_2,'2 Блока'),
+        (TIZER_3,'3 Блока'),
+        (MEDIA_1,'240x400'),
+        (MEDIA_2,'728x90'),
+        (MEDIA_3,'300x250'),
     )
-    ad_allow = models.CharField(max_length=3, choices=AD_ALLOW_CHOICES, default=MEDIA)
+    ad_allow = models.CharField(max_length=3, choices=AD_ALLOW_CHOICES, default=MEDIA_1)
 
     show_counter = models.IntegerField('show counter', default=0)
     click_counter = models.IntegerField('click counter', default=0)

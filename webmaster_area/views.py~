@@ -346,20 +346,26 @@ def detailmain(request):
             statistic['clicks'] += temp_statistic['clicks']
             statistic['money'] += temp_statistic['money']
         else:
-            for share, social, shows, clicks, money in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
+            shows = []
+            clicks = []
+            money = []
+
+            for share, social, showsT, clicksT, moneyT in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
                 if share > statistic['shares']:
                     statistic['shares'] = share
                 if social > statistic['socials']:
                     statistic['socials'] = social
                 #Adv
-                #shows.append(0)
+                shows.append(showsT)
+                clicks.append(clicksT)
+                money.append(moneyT)
 
-                if shows > statistic['shows']:
-                    statistic['shows'] = shows
-                if clicks > statistic['clicks']:
-                    statistic['clicks'] = clicks
-                if money > statistic['money']:
-                    statistic['money'] = money
+                if showsT > statistic['shows']:
+                    statistic['shows'] = showsT
+                if clicksT > statistic['clicks']:
+                    statistic['clicks'] = clicksT
+                if moneyT > statistic['money']:
+                    statistic['money'] = moneyT
 
     return render(request, template_name,
     {
@@ -879,6 +885,13 @@ def getAdvert(request, cook):
     if wma_object:
         answer = {}
 
+        '''
+        try:
+            wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
+        except:
+            wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today())
+        '''
+
         try:
             area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
         except:
@@ -1010,7 +1023,6 @@ def checkconfig(request):
             #wma today!
             try:
                 wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
-
             except:
                 wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
 

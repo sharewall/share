@@ -25,8 +25,8 @@ class AdvertBtnImage(models.Model):
         return str('Name: %s' % self.name)
 
 class Advert(models.Model):
-    cabinet_webmaster = models.OneToOneField(CabinetWebmasterModel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="advert")
-    buttons_constructor = models.ForeignKey('ButtonsConstructorModel', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related buttons constructor", related_name="advert")
+    cabinet_webmaster = models.ForeignKey(CabinetWebmasterModel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related cabinet webmaster", related_name="advert")
+    buttons_constructor = models.OneToOneField('ButtonsConstructorModel', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related buttons constructor", related_name="advert")
     btn_image = models.ForeignKey('AdvertBtnImage', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related advert btn image", related_name="advert")
 
     BUY = 'BUY' # Show btn and wait click event
@@ -37,13 +37,19 @@ class Advert(models.Model):
     )
     ad_type = models.CharField(max_length=3, choices=AD_TYPE_CHOICES, default=SHOW)
 
-    TIZER = 'TIZ' # ?
-    MEDIA = 'MED' # Banner
+    TIZER_1 = 'TI1'
+    TIZER_2 = 'TI2'
+    TIZER_3 = 'TI3'
+    MEDIA_1 = 'ME1'
+    MEDIA_2 = 'ME2'
+    MEDIA_3 = 'ME3'
     AD_ALLOW_CHOICES=(
-        (TIZER,'Тизеры'),
-        (MEDIA,'Медийная'),
+        (TIZER_1,'1 Блок'),
+        (TIZER_2,'2 Блока'),
+        (TIZER_3,'3 Блока'),
+        (MEDIA_1,'Медийная'),
     )
-    ad_allow = models.CharField(max_length=3, choices=AD_ALLOW_CHOICES, default=MEDIA)
+    ad_allow = models.CharField(max_length=3, choices=AD_ALLOW_CHOICES, default=MEDIA_1)
 
     show_counter = models.IntegerField('show counter', default=0)
     click_counter = models.IntegerField('click counter', default=0)
