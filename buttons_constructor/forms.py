@@ -29,7 +29,7 @@ class ButtonsConstructorForm(forms.ModelForm):
         (CIRCLE,'Circle'),
         (SQUARE,'Square'),
     )
-    form_buttons = forms.ChoiceField(max_length=2, choices=FORM_CHOICES, default=CIRCLE)
+    form_buttons = forms.ChoiceField(choices=FORM_CHOICES, required=False)
 
     page_url = forms.URLField(required=False)
     page_title = forms.CharField(max_length=200, required=False)

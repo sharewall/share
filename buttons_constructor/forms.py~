@@ -9,6 +9,7 @@ class ButtonsConstructorForm(forms.ModelForm):
         ('HO', 'Horizontal'),
         ('VE', 'Vertical'),
     )
+    location_buttons = forms.ChoiceField(choices=LOCATION_CHOICES, required=True)
 
     SOCIAL_NETWORKS_CHOICES = (
         ('vk','vkontakte'),
@@ -20,10 +21,15 @@ class ButtonsConstructorForm(forms.ModelForm):
         ('li','linkedin'),
         ('lj','livejournal'),
     )
-
     social_networks = forms.MultipleChoiceField(choices=SOCIAL_NETWORKS_CHOICES, widget=forms.CheckboxSelectMultiple())
 
-    location_buttons = forms.ChoiceField(choices=LOCATION_CHOICES, required=True)
+    CIRCLE = 'CI'
+    SQUARE = 'SQ'
+    FORM_CHOICES=(
+        (CIRCLE,'Circle'),
+        (SQUARE,'Square'),
+    )
+    form_buttons = forms.ChoiceField(max_length=2, choices=FORM_CHOICES, default=CIRCLE)
 
     page_url = forms.URLField(required=False)
     page_title = forms.CharField(max_length=200, required=False)
@@ -32,6 +38,7 @@ class ButtonsConstructorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ButtonsConstructorForm, self).__init__(*args, **kwargs)
         self.fields['btns_images'] = forms.ModelChoiceField(queryset=BtnsImages.objects.all())
+
     class Meta:
         model = ButtonsConstructorModel
-        fields = ('btns_images', 'with_counter', 'social_networks', 'location_buttons', 'page_url', 'page_title', 'page_description')
+        fields = ('btns_images', 'with_counter', 'social_networks', 'location_buttons', 'form_buttons', 'page_url', 'page_title', 'page_description')
