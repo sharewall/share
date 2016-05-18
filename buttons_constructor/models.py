@@ -5,12 +5,14 @@ from django.contrib.auth.models import User
 class BtnsImages(models.Model):
     name = models.CharField('name image', max_length=200)
     path = models.CharField('path to image', max_length=200)
+
     CIRCLE = 'CI'
     SQUARE = 'SQ'
     TYPES_IMAGES=(
         (CIRCLE,'Circle'),
         (SQUARE,'Square'),
     )
+
     type_image = models.CharField(max_length=2, choices=TYPES_IMAGES, default=CIRCLE)
     db_table = 'BtnsImages'
 
@@ -20,6 +22,7 @@ class BtnsImages(models.Model):
 class AdvertBtnImage(models.Model):
     name = models.CharField('name image', max_length=100)
     path = models.CharField('path to image', max_length=200)
+    bg_position = models.CharField('background position', max_length=100, default='background-position: -368px 0px;')
 
     def __str__(self):
         return str('Name: %s' % self.name)

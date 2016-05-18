@@ -1011,43 +1011,41 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     height: 41px;
     display: inline-block;
     margin-right: 15px;
-    /**/
-    background-image: url("../images/btns-sprite-3.png");
     background-repeat: no-repeat;
     padding-top: 2px;
 }
 .sBSNode-1{
-    background-image: url("../images/btns-sprite-1.png")!important;
+    background-image: url("../images/btns_sprite_ci_1.png")!important;
 }
 .sBSNode-2{
-    background-image: url("../images/btns-sprite-2.png")!important;
+    background-image: url("../images/btns_sprite_ci_2.png")!important;
 }
 .sBSNode-3{
-    background-image: url("../images/btns-sprite-3.png")!important;
+    background-image: url("../images/btns_sprite_ci_3.png")!important;
 }
 .sBSNode-4{
-    background-image: url("../images/btns-sprite-4.png")!important;
+    background-image: url("../images/btns_sprite_ci_4.png")!important;
 }
 .sBSNode-5{
-    background-image: url("../images/btns-sprite-5.png")!important;
+    background-image: url("../images/btns_sprite_ci_5.png")!important;
 }
 .sBSNode-6{
-    background-image: url("../images/btns-sprite-6.png")!important;
+    background-image: url("../images/btns_sprite_ci_6.png")!important;
 }
 .sBSNode-7{
-    background-image: url("../images/btns-sprite-7.png")!important;
+    background-image: url("../images/btns_sprite_ci_7.png")!important;
 }
 .sBSNode-8{
-    background-image: url("../images/btns-sprite-8.png")!important;
+    background-image: url("../images/btns_sprite_ci_8.png")!important;
 }
 .sBSNode-9{
-    background-image: url("../images/btns-sprite-9.png")!important;
+    background-image: url("../images/btns_sprite_ci_9.png")!important;
 }
 .sBSNode-10{
-    background-image: url("../images/btns-sprite-10.png")!important;
+    background-image: url("../images/btns_sprite_ci_10.png")!important;
 }
 .sBSNode-11{
-    background-image: url("../images/btns-sprite-11.png")!important;
+    background-image: url("../images/btns_sprite_ci_11.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -1100,10 +1098,9 @@ span[data-sn="lj"] {
     width: 41px;
     height: 41px;
     display: inline-block;
-    background-image: url("../images/btns-logo-sharewall-blue.png");
     background-repeat: no-repeat;
-    background-position: 50% 50%;
-    padding-top: 6px;
+    background-position: -328px 0px;
+    padding-top: 2px;
 }
 .sSNExample{
     width: 190px;
@@ -1653,26 +1650,27 @@ span[data-sn="lj"] {
 }
 #sAdvBtn{
     /*display: inline-block;*/
-    width: 40px;
-    height: 40px;
+    width: 41px;
+    height: 41px;
     display: none;
     margin-right: 15px;
     cursor: pointer;
+    margin-left: -3px;
 }
 #sAdvBtn[data-img="1"]{
-    background: url(../images/advert-btn-1.png)no-repeat; 
+    background-position: -368px 0px!important;
 }
 #sAdvBtn[data-img="2"]{
-    background: url(../images/advert-btn-2.png)no-repeat; 
+    background-position: -368px 0px!important;
 }
 #sAdvBtn[data-img="3"]{
-    background: url(../images/advert-btn-3.png)no-repeat; 
+    background-position: -368px 0px!important;
 }
 #sAdvBtn[data-img="4"]{
-    background: url(../images/advert-btn-4.png)no-repeat; 
+    background-position: -368px 0px!important;
 }
 #sAdvBtn[data-img="5"]{
-    background: url(../images/advert-btn-5.png)no-repeat; 
+    background-position: -368px 0px!important;
 }
 .sAdvertAllowWrapper-Detail{
     width: 315px;   

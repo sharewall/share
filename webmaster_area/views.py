@@ -1154,7 +1154,7 @@ def getconfig(request):
             answer += '$("body").append(\'<img src="http://sync.mecash.ru/uid/match?partner=sharewall&id=\'+advCook+\'" style="width: 1px; height: 1px; opacity: 0; position: absolute;" />\');'
 
             if advert.ad_type == 'BUY':
-                answer += '$("div#sharewallContainer").append(\'<span id="sAdvBtn" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+advert.btn_image.path+'); background-repeat: no-repeat; background-position: 50% 50%; cursor: pointer;"></span>\''
+                answer += '$("div#sharewallContainer").append(\'<span id="sAdvBtn" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+btncr.btns_images.path+'); background-repeat: no-repeat; '+advert.btn_image.bg_position+' cursor: pointer;"></span>\''
                 if btncr.location_buttons == "VE":
                     answer += '+\'<br/>\''
                 answer += ');'
@@ -1221,7 +1221,7 @@ def getconfig(request):
                 answer += '+\'<br>\''
             answer += ');'
 
-        answer += '$("div#sharewallContainer").append(\'<a target="_blank" href="//sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-logo-sharewall-blue.png); background-repeat: no-repeat; background-position: 50% 50%;"></a>\');'
+        answer += '$("div#sharewallContainer").append(\'<a target="_blank" href="//sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+btncr.btns_images.path+'); background-repeat: no-repeat; background-position: -328px 0px;"></a>\');'
         if btncr.with_counter:
             if btncr.location_buttons == "VE":
                 answer += '$("div#sharewallContainer").append("<br/>");'
