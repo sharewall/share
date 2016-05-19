@@ -358,7 +358,13 @@
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').prev('div').toggleClass('sHideAndSeek').next('div').toggleClass('sHideAndSeek');       
             });  
             
-            var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div><script src='//sharewall.ru/webmaster-area/getconfig'>"+"</scrip"+"t>");
+            var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div>");
+            document.getElementById('sCodeHere').appendChild(codeTextNode);
+
+            var br = document.createElement("br");
+            document.getElementById('sCodeHere').appendChild(br);
+
+            var codeTextNode = document.createTextNode("<script type='text/javascript'>(function (d){var js=d.createElement('script'); js.async=true; js.charset='utf-8'; js.src='//sharewall.ru/webmaster-area/getconfig'; d.getElementByTagName('head')[0].appendChild(js);}(document));"+"</scrip"+"t>");
             document.getElementById('sCodeHere').appendChild(codeTextNode);
             
             var codeTextNodeAdv = document.createTextNode('<div id="sharewallAdvertContainer"></div>');

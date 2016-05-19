@@ -334,12 +334,12 @@
               $this.find('input').attr('name','btns_images'); 
 
               var spriteNumber = $this.find('input').attr('value');
-              var tag = $this.data("form") == "CI" ? "ci" : "sq";
+              var tag = $('input[name="form_buttons"]').val() == "CI" ? "ci" : "sq";
                                                        
-              $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_ci_'+spriteNumber+'.png")');
+              $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
               
-              $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_ci_'+spriteNumber+'.png")');
-              $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_ci_'+spriteNumber+'.png")');
+              $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
+              $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
             });
             
             $('div.sSNTreeWrapper input').prop('checked','checked');
@@ -358,8 +358,14 @@
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').prev('div').toggleClass('sHideAndSeek').next('div').toggleClass('sHideAndSeek');       
             });  
             
-            var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div><script src='//sharewall.ru/webmaster-area/getconfig'>"+"</scrip"+"t>");
-            document.getElementById('sCodeHere').appendChild(codeTextNode);
+            //window.onload = function(){ 
+            var codeTextNode = document.createTextNode("<div id='sharewallContainer'></div>");
+              document.getElementById('sCodeHere').appendChild(codeTextNode);
+              var br = document.createElement("br");
+              document.getElementById('sCodeHere').appendChild(br);
+              var codeTextNode = document.createTextNode("<script type='text/javascript'>(function (d){var js=d.createElement('script'); js.async=true; js.charset='utf-8'; js.src='//sharewall.ru/webmaster-area/getconfig'; d.getElementByTagName('head')[0].appendChild(js);}(document));"+"</scrip"+"t>");
+              document.getElementById('sCodeHere').appendChild(codeTextNode);
+            //}
             
             var codeTextNodeAdv = document.createTextNode('<div id="sharewallAdvertContainer"></div>');
             document.getElementById('sCodeHere-Adv').appendChild(codeTextNodeAdv);
