@@ -1119,7 +1119,7 @@ def getconfig(request):
 
         #buttons_constructor
         btncr = wma_object.buttons_constructor
-        sprite = btncr.btns_images.path.replace("_ci_", "_sq_") if btncr.form_buttons=="SQ" else btncr.btns_images.path
+        sprite = btncr.btns_images.path.replace("/ci/", "/sq/") if btncr.form_buttons=="SQ" else btncr.btns_images.path
 
         #Advert
         try:
