@@ -336,10 +336,10 @@
               var spriteNumber = $this.find('input').attr('value');
               var tag = $('input[name="form_buttons"]').val() == "CI" ? "ci" : "sq";
                                                        
-              $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
+              $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
               
-              $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
-              $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
+              $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
+              $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
             });
             
             $('div.sSNTreeWrapper input').prop('checked','checked');
@@ -394,7 +394,7 @@
               $this = $(this);
               var value = $this.find('span').data('value');
                 
-              //$('#sAdvBtn').css('background', 'url(../../static/sharewall-template/images/advert-btn-'+value+'.png)no-repeat');
+              $('#sAdvBtn').css('background', 'url(../../static/sharewall-template/images/advert-btn-'+value+'.png)no-repeat');
                 
               $('input[name="btn_image"]').val(value);
                 
@@ -485,10 +485,10 @@
             var tag = $this.data("form") == "CI" ? "ci" : "sq";
             var spriteNumber = $('input[name="btns_images"]').val();
 
-            $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
+            $('#sharewallContainer > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
             
-            $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
-            $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprite_'+tag+'_'+spriteNumber+'.png")');
+            $('#sharewallContainer-Adv > a').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
+            $('#sharewallContainer-Adv > span:nth-child(1)').css("background-image", 'url("http://localhost/static/sharewall-template/images/btns_sprites/'+tag+'/41/btns_sprite_'+spriteNumber+'.png")');
         }
 
         function setLocation(e){

@@ -1015,37 +1015,37 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     padding-top: 2px;
 }
 .sBSNode-1{
-    background-image: url("../images/btns_sprite_ci_1.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_1.png")!important;
 }
 .sBSNode-2{
-    background-image: url("../images/btns_sprite_ci_2.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_2.png")!important;
 }
 .sBSNode-3{
-    background-image: url("../images/btns_sprite_ci_3.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_3.png")!important;
 }
 .sBSNode-4{
-    background-image: url("../images/btns_sprite_ci_4.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_4.png")!important;
 }
 .sBSNode-5{
-    background-image: url("../images/btns_sprite_ci_5.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_5.png")!important;
 }
 .sBSNode-6{
-    background-image: url("../images/btns_sprite_ci_6.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_6.png")!important;
 }
 .sBSNode-7{
-    background-image: url("../images/btns_sprite_ci_7.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_7.png")!important;
 }
 .sBSNode-8{
-    background-image: url("../images/btns_sprite_ci_8.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_8.png")!important;
 }
 .sBSNode-9{
-    background-image: url("../images/btns_sprite_ci_9.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_9.png")!important;
 }
 .sBSNode-10{
-    background-image: url("../images/btns_sprite_ci_10.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_10.png")!important;
 }
 .sBSNode-11{
-    background-image: url("../images/btns_sprite_ci_11.png")!important;
+    background-image: url("../images/btns_sprites/ci/41/btns_sprite_11.png")!important;
 }
 span[data-sn="tw"] {
     background-position: 0px 0px;
@@ -1660,16 +1660,16 @@ span[data-sn="lj"] {
     background-position: -368px 0px!important;
 }
 #sAdvBtn[data-img="2"]{
-    background-position: -368px 0px!important;
+    background-position: -409px 0px!important;
 }
 #sAdvBtn[data-img="3"]{
-    background-position: -368px 0px!important;
+    background-position: -450px 0px!important;
 }
 #sAdvBtn[data-img="4"]{
-    background-position: -368px 0px!important;
+    background-position: -491px 0px!important;
 }
 #sAdvBtn[data-img="5"]{
-    background-position: -368px 0px!important;
+    background-position: -532px 0px!important;
 }
 .sAdvertAllowWrapper-Detail{
     width: 315px;   
