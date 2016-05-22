@@ -201,9 +201,9 @@ def detailmain(request):
         temp_statistic['socials'] = 0
 
         #Adv
-        temp_statistic['shows'] = 0
-        temp_statistic['clicks'] = 0
-        temp_statistic['money'] = 0
+        temp_statistic['shows'] = temp_statistic.get('shows', 0)
+        temp_statistic['clicks'] = temp_statistic.get('clicks', 0)
+        temp_statistic['money'] = temp_statistic.get('money', 0)
 
         if for_1:
             area_per_day_list = AreaToday.objects.all()#.select_related('webmaster_area')
@@ -312,14 +312,14 @@ def detailmain(request):
                     temp_statistic['socials'] = temp_today_social_counter
 
                 #Adv
-                if temp_today_shows_counter > temp_statistic['shows']:
-                    temp_statistic['shows'] = temp_today_shows_counter
+                #if temp_today_shows_counter > temp_statistic['shows']:
+                temp_statistic['shows'] += temp_today_shows_counter
 
-                if temp_today_clicks_counter > temp_statistic['clicks']:
-                    temp_statistic['clicks'] = temp_today_clicks_counter
+                #if temp_today_clicks_counter > temp_statistic['clicks']:
+                temp_statistic['clicks'] += temp_today_clicks_counter
 
-                if temp_today_money_counter > temp_statistic['money']:
-                    temp_statistic['money'] = temp_today_money_counter
+                #if temp_today_money_counter > temp_statistic['money']:
+                temp_statistic['money'] += temp_today_money_counter
 
             if not temp_areaPDay_date in dates:
                 dates.append(temp_areaPDay_date)
@@ -360,12 +360,9 @@ def detailmain(request):
                 clicks.append(clicksT)
                 money.append(moneyT)
 
-                if showsT > statistic['shows']:
-                    statistic['shows'] = showsT
-                if clicksT > statistic['clicks']:
-                    statistic['clicks'] = clicksT
-                if moneyT > statistic['money']:
-                    statistic['money'] = moneyT
+                statistic['shows'] += showsT
+                statistic['clicks'] += clicksT
+                statistic['money'] += moneyT
 
     return render(request, template_name,
     {
@@ -375,7 +372,7 @@ def detailmain(request):
         'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
         'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
         'dates': dates,
-        'shows': [0,0,0,0],
+        'shows': shows,
         'shares': shares,
         'socials': socials,
         'clicks': clicks,
@@ -994,7 +991,7 @@ def getAdvert(request, cook):
                     #'advert': advert_response,
                     #'advert_json': advert_json,
                     #'advert_json_adm': advert_json['seatbid'][0]['bid'][0]['adm'],
-                    #'advert_json_price': advert_json['seatbid'][0]['bid'][0]['price'],
+                    #'advert_json_price': advert_json_price,
                     #'advert_json_nurl': advert_json['seatbid'][0]['bid'][0]['nurl'],
                     }
 
@@ -1051,6 +1048,18 @@ def checkconfig(request):
             except:
                 wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
 
+            list_sn_shortcuts = [sn.shortcut for sn in list_sn]
+            #fix tw, lj
+            if request.GET.get("sn", False):
+                index_fix_share = list_sn_shortcuts.index(request.GET.get("sn"))
+                temp_share_counter = [int(s) for s in snc.split(',')]
+                temp_share_counter[index_fix_share] += 1
+                snc = ''
+                for i in temp_share_counter:
+                    snc += str(i) + ','
+                snc = snc[:-1]
+                answer += 'console.log("snc fix: '+snc+'");'
+
             try:
                 page_detail = PageDetail.objects.get(webmaster_area=wma_object, url=request_url)
                 
@@ -1060,7 +1069,6 @@ def checkconfig(request):
 
                     if index_sn is not None:
                         short_sn = list_sn[index_sn].shortcut
-                        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
                         index_sn = list_sn_shortcuts.index(short_sn)
                         temp_social_counter = [int(s) for s in page_detail.total_social_counter.split(',')]
                         temp_social_counter[index_sn] += 1
@@ -1077,7 +1085,6 @@ def checkconfig(request):
                 if page_detail:
                     if index_sn is not None:
                         short_sn = list_sn[index_sn].shortcut
-                        list_sn_shortcuts = [sn.shortcut for sn in list_sn]
                         index_sn = list_sn_shortcuts.index(short_sn)
                         temp_social_counter = [int(s) for s in page_detail.total_social_counter.split(',')]
                         temp_social_counter[index_sn] += 1
@@ -1174,7 +1181,6 @@ def getconfig(request):
 
         if btncr.with_background:
             answer += '$("div#sharewallContainer").css({"background-color": "'+btncr.background_color+'", "padding-top": "6px", "border-radius": "10px", "display": "inline-block"});'
-            #answer += 'console.log("'+btncr.background_color+'");'
 
         if btncr.location_buttons == "VE":
             answer += '$("div#sharewallContainer").css("float","left");'
@@ -1270,7 +1276,7 @@ def getconfig(request):
                 temp_size = list_sn_unic[sn].img_bd_pos_sml
 
             answer += '$("div#sharewallContainer").append(\'\''
-            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\' style="width:'+btn_width+'px; height:'+btn_height+'px; margin-right:'+btn_margin+'px; display:inline-block; background-image: url(http://sharewall.ru/static/sharewall-template/{1}); background-repeat: no-repeat; {2}"></a>\''.format(sn, sprite, temp_size)
+            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\' style="width:{1}px; height:{2}px; margin-right:{3}px; display:inline-block; background-image: url(http://sharewall.ru/static/sharewall-template/{4}); background-repeat: no-repeat; {5}"></a>\''.format(sn, btn_width, btn_height, btn_margin, sprite, temp_size)
             if btncr.location_buttons == "VE":
                 answer += '+\'<br>\''
             answer += ');'
@@ -1375,6 +1381,14 @@ def getconfig(request):
                                     w.clearInterval(popup_w_interval);\
                                     console.log("popup closed! "+sn);'
         #TODO: counter each sn
+        answer += 'if(sn=="lj"){\
+                       sharewallSetSNC("lj", 1);\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "lj", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                   }'
+        answer += 'if(sn=="tw"){\
+                       sharewallSetSNC("tw", 1);\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "tw", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                   }'
         answer += 'if(sn=="vk"){\
                        $.when($.ajax({ url: "http://vk.com/share.php?act=count&url="+encodeURIComponent(d.URL), dataType: "jsonp" })\
                        ).done(w.setTimeout(function(){\
