@@ -22,7 +22,9 @@ class BtnsImages(models.Model):
 class AdvertBtnImage(models.Model):
     name = models.CharField('name image', max_length=100)
     path = models.CharField('path to image', max_length=200)
-    bg_position = models.CharField('background position', max_length=100, default='background-position: -368px 0px;')
+    bg_position = models.CharField('background position big', max_length=100, default='background-position: -370px 0px;')
+    bg_position_med = models.CharField('background position medium', max_length=100, default='background-position: -280px 0px;')
+    bg_position_sml = models.CharField('background position small', max_length=100, default='background-position: -190px 0px;')
 
     def __str__(self):
         return str('Name: %s' % self.name)
@@ -65,7 +67,10 @@ class Advert(models.Model):
 class SocialNetworks(models.Model):
     shortcut = models.CharField('shortcut for network', max_length=2)
     url = models.URLField('url for network', null=False, blank=False, default='')
-    img_bd_pos = models.CharField('img background position', max_length=400)
+    img_bd_pos = models.CharField('img background position big', max_length=400, default='background-position: 0px 0px;')
+    img_bd_pos_med = models.CharField('img background position med', max_length=400, default='background-position: 0px 0px;')
+    img_bd_pos_sml = models.CharField('img background position sml', max_length=400, default='background-position: 0px 0px;')
+
     db_table = 'SocialNetworks'
 
     def __str__(self):

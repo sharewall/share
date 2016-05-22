@@ -22,7 +22,9 @@ class BtnsImages(models.Model):
 class AdvertBtnImage(models.Model):
     name = models.CharField('name image', max_length=100)
     path = models.CharField('path to image', max_length=200)
-    bg_position = models.CharField('background position', max_length=100, default='background-position: -368px 0px;')
+    bg_position = models.CharField('background position big', max_length=100, default='background-position: -370px 0px;')
+    bg_position_med = models.CharField('background position medium', max_length=100, default='background-position: -280px 0px;')
+    bg_position_sml = models.CharField('background position small', max_length=100, default='background-position: -190px 0px;')
 
     def __str__(self):
         return str('Name: %s' % self.name)
@@ -65,7 +67,10 @@ class Advert(models.Model):
 class SocialNetworks(models.Model):
     shortcut = models.CharField('shortcut for network', max_length=2)
     url = models.URLField('url for network', null=False, blank=False, default='')
-    img_bd_pos = models.CharField('img background position', max_length=400)
+    img_bd_pos = models.CharField('img background position big', max_length=400, default='background-position: 0px 0px;')
+    img_bd_pos_med = models.CharField('img background position med', max_length=400, default='background-position: 0px 0px;')
+    img_bd_pos_sml = models.CharField('img background position sml', max_length=400, default='background-position: 0px 0px;')
+
     db_table = 'SocialNetworks'
 
     def __str__(self):
@@ -76,16 +81,20 @@ class ButtonsConstructorModel(models.Model):
     btns_images = models.ForeignKey(BtnsImages, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
     name_constructor = models.CharField("name_constructor", max_length=50, default="Default constructor")
 
-    sn_list = SocialNetworks.objects.all()
+    #sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
 
-    for s in sn_list:
-        if not s.shortcut in SOCIAL_DEFAULT:
-            SOCIAL_DEFAULT += s.shortcut + ','
-    SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+    #for s in sn_list:
+    #    if not s.shortcut in SOCIAL_DEFAULT:
+    #        SOCIAL_DEFAULT += s.shortcut + ','
+    #SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
 
     social_networks = models.CharField(max_length=300, default=SOCIAL_DEFAULT)
+
     with_counter = models.BooleanField(default=True)
+    mobile_view = models.BooleanField(default=False)
+    with_background = models.BooleanField(default=False)
+    background_color = models.TextField(default='rgb(255, 255, 255)')
 
     CIRCLE = 'CI'
     SQUARE = 'SQ'
@@ -113,12 +122,10 @@ class ButtonsConstructorModel(models.Model):
     )
     size_buttons = models.CharField(max_length=3, choices=SIZE_CHOICES, default=BIG)
 
-    mobile_view = models.BooleanField(default=False)
-    with_background = models.BooleanField(default=False)
-    background_color = models.TextField(default='rgb(255, 255, 255)')
     page_url = models.URLField(blank=True, default='')
     page_title = models.CharField(blank=True, max_length=200, default='')
     page_description = models.TextField(blank=True, default='')
+
     db_table = 'ButtonsConstructorModel'
 
     def __str__(self):

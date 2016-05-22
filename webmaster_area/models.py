@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from django.db import models
-from buttons_constructor.models import SocialNetworks, ButtonsConstructorModel
+from buttons_constructor.models import ButtonsConstructorModel, SocialNetworks
 from cabinet_webmaster.models import CabinetWebmasterModel
 
 class AreaCategory(models.Model):
@@ -28,8 +28,7 @@ class WebmasterAreaModel(models.Model):
             AREA_CAT_DEFAULT += a.name + ','
     AREA_CAT_DEFAULT = AREA_CAT_DEFAULT[:-1]
     area_category = models.CharField('area_category', max_length=600, default=AREA_CAT_DEFAULT)
-    #date(2005, 7, 27)
-    #date = models.DateField('date', auto_now_add=True)
+
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
     COUNTER_DEFAULT = ''
@@ -39,10 +38,10 @@ class WebmasterAreaModel(models.Model):
             COUNTER_DEFAULT += '0,'
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
-    #today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
     total_social_counter = models.CharField("total social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
-    #today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     total_share_counter = models.CharField("total share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
     db_table = 'WebmasterAreaModel'
     
     def __str__(self):
@@ -112,9 +111,7 @@ class PageDetail(models.Model):
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
 
-    #today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     total_social_counter = models.CharField("total social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
-    #today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     total_share_counter = models.CharField("total share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
 
     db_table = 'PageDetail'

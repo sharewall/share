@@ -974,13 +974,6 @@ def getAdvert(request, cook):
                     area_today.today_money += float(advert_json_price / 1000)
                     area_today.save()
 
-                    try:
-                        cabinet = advert.cabinet_webmaster
-                        cabinet.money += float(advert_json_price / 1000)
-                        cabinet.save()
-                    except:
-                        return HttpResponse('bad cabinet')
-
                 answer = {
                     'adm': advert_json_adm,
                     #'nurl_response': r.data.decode('utf-8'),
@@ -1128,13 +1121,7 @@ def getconfig(request):
 
         #buttons_constructor
         btncr = wma_object.buttons_constructor
-
-        if btncr.form_buttons=="SQ":
-            sprite = btncr.btns_images.path.replace("/ci/", "/sq/")
-        else:
-            sprite = btncr.btns_images.path
-
-        sprite = sprite.replace("/BIG/", "/"+btncr.size_buttons+"/")
+        sprite = btncr.btns_images.path.replace("_ci_", "_sq_") if btncr.form_buttons=="SQ" else btncr.btns_images.path
 
         #Advert
         try:
@@ -1142,40 +1129,10 @@ def getconfig(request):
         except:
             advert = None
 
-        if btncr.size_buttons == 'BIG':
-            btn_width = '41'
-            btn_height = btn_width
-            btn_margin = '15'
-            btn_logo_pos = '-328'
-            btn_counter_style = 'height:41px; width:64px; font: 400 14px / 41px Roboto;'
-            if advert:
-                btn_adv_pos = advert.btn_image.bg_position
-        elif btncr.size_buttons == 'MED':
-            btn_width = '31'
-            btn_height = btn_width
-            btn_margin = '5'
-            btn_logo_pos = '-248'
-            btn_counter_style = 'height:31px; width:48px; font: 400 12.5px / 31px Roboto; background-size:cover;'
-            if advert:
-                btn_adv_pos = advert.btn_image.bg_position_med
-        else:
-            btn_width = '21'
-            btn_height = btn_width
-            btn_margin = '0'
-            btn_logo_pos = '-168'
-            btn_counter_style = 'height:21px; width:31px; font: 400 10.5px / 21px Roboto; background-size:cover;'
-            if advert:
-                btn_adv_pos = advert.btn_image.bg_position_sml
-
         answer = 'function sharewallWrapper(){'
         answer += '(function sharewallConstruct($, d, w) {'
 
         answer += '    $("div#sharewallContainer").html(\'\');'
-
-        if btncr.with_background:
-            answer += '$("div#sharewallContainer").css({"background-color": "'+btncr.background_color+'", "padding-top": "6px", "border-radius": "10px", "display": "inline-block"});'
-            #answer += 'console.log("'+btncr.background_color+'");'
-
         if btncr.location_buttons == "VE":
             answer += '$("div#sharewallContainer").css("float","left");'
 
@@ -1200,8 +1157,7 @@ def getconfig(request):
             answer += '$("body").append(\'<img src="http://sync.mecash.ru/uid/match?partner=sharewall&id=\'+advCook+\'" style="width: 1px; height: 1px; opacity: 0; position: absolute;" />\');'
 
             if advert.ad_type == 'BUY':
-                answer += '$("div#sharewallContainer").append(\'<span id="sAdvBtn" style="width:'+btn_width+'px; height:'+btn_height+'px; margin-right:'+btn_margin+'px; display:inline-block; background-image: url(http://sharewall.ru/static/sharewall-template/'+sprite+'); background-repeat: no-repeat; '+btn_adv_pos+' cursor: pointer;"></span>\''
-
+                answer += '$("div#sharewallContainer").append(\'<span id="sAdvBtn" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+sprite+'); background-repeat: no-repeat; '+advert.btn_image.bg_position+' cursor: pointer; margin-left:-2px;"></span>\''
                 if btncr.location_buttons == "VE":
                     answer += '+\'<br/>\''
                 answer += ');'
@@ -1262,24 +1218,17 @@ def getconfig(request):
                     '"&subject="+encodeURIComponent("'+btncr.page_title+'")' if btncr.page_title else '"&subject="+encodeURIComponent(d.title)'
                 )
 
-            if btncr.size_buttons == 'BIG':
-                temp_size = list_sn_unic[sn].img_bd_pos
-            elif btncr.size_buttons == 'MED':
-                temp_size = list_sn_unic[sn].img_bd_pos_med
-            else:
-                temp_size = list_sn_unic[sn].img_bd_pos_sml
-
             answer += '$("div#sharewallContainer").append(\'\''
-            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\' style="width:'+btn_width+'px; height:'+btn_height+'px; margin-right:'+btn_margin+'px; display:inline-block; background-image: url(http://sharewall.ru/static/sharewall-template/{1}); background-repeat: no-repeat; {2}"></a>\''.format(sn, sprite, temp_size)
+            answer += '   +\'<a data-share-sn="{0}" href=\'+new_href+\' style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/{1}); background-repeat: no-repeat; {2}"></a>\''.format(sn, sprite, list_sn_unic[sn].img_bd_pos)
             if btncr.location_buttons == "VE":
                 answer += '+\'<br>\''
             answer += ');'
 
-        answer += '$("div#sharewallContainer").append(\'<a target="_blank" href="//sharewall.ru" style="width:'+btn_width+'px; height:'+btn_width+'px; margin-right:'+btn_margin+'px; display:inline-block; background-image: url(http://sharewall.ru/static/sharewall-template/'+sprite+'); background-repeat: no-repeat; background-position: '+btn_logo_pos+'px 0px;"></a>\');'
+        answer += '$("div#sharewallContainer").append(\'<a target="_blank" href="//sharewall.ru" style="width:41px; height:41px; display:inline-block; margin-right:15px; background-image: url(http://sharewall.ru/static/sharewall-template/'+sprite+'); background-repeat: no-repeat; background-position: -328px 0px;"></a>\');'
         if btncr.with_counter:
             if btncr.location_buttons == "VE":
                 answer += '$("div#sharewallContainer").append("<br/>");'
-            answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; display:inline-block; color:#fff; text-align:center; vertical-align: top; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png); background-repeat: no-repeat; cursor: default; '+btn_counter_style+'">0</span>\');'
+            answer += '$("div#sharewallContainer").append(\'<span id="shareCounter" style="margin-left:3px; height:41px; width:64px; display:inline-block; color:#fff; font: 400 14px / 22px Roboto; text-align:center; line-height:41px; vertical-align: top; background-image: url(http://sharewall.ru/static/sharewall-template/images/btns-counter-black.png); background-repeat: no-repeat; background-position: 50% 60%; cursor: default;">0</span>\');'
 
         answer += '    $("body").append("<div id=\'sharewallSNC\' style=\'display: none\'></div>");'
         for s in SOCIAL_DEFAULT.split(","):
