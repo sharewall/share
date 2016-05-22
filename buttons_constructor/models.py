@@ -85,7 +85,11 @@ class ButtonsConstructorModel(models.Model):
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
 
     social_networks = models.CharField(max_length=300, default=SOCIAL_DEFAULT)
+
     with_counter = models.BooleanField(default=True)
+    mobile_view = models.BooleanField(default=False)
+    with_background = models.BooleanField(default=False)
+    background_color = models.TextField(default='rgb(255, 255, 255)')
 
     CIRCLE = 'CI'
     SQUARE = 'SQ'
@@ -113,12 +117,10 @@ class ButtonsConstructorModel(models.Model):
     )
     size_buttons = models.CharField(max_length=3, choices=SIZE_CHOICES, default=BIG)
 
-    mobile_view = models.BooleanField(default=False)
-    with_background = models.BooleanField(default=False)
-    background_color = models.TextField(default='rgb(255, 255, 255)')
     page_url = models.URLField(blank=True, default='')
     page_title = models.CharField(blank=True, max_length=200, default='')
     page_description = models.TextField(blank=True, default='')
+
     db_table = 'ButtonsConstructorModel'
 
     def __str__(self):

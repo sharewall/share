@@ -10,6 +10,23 @@ from buttons_constructor.models import ButtonsConstructorModel, BtnsImages, Soci
 from webmaster_area.models import WebmasterAreaModel
 from django.contrib.auth.models import User
 
+def remove_html_markup(s):
+    tag = False
+    quote = False
+    out = ""
+
+    for c in s:
+            if c == '<' and not quote:
+                tag = True
+            elif c == '>' and not quote:
+                tag = False
+            elif (c == '"' or c == "'") and tag:
+                quote = not quote
+            elif not tag:
+                out = out + c
+
+    return out
+
 class ButtonsConstructorIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
     template_name = 'buttons_constructor/index.html'
@@ -112,6 +129,9 @@ def create(request):
 
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
+
+            #remove html tags
+            buttons_constructor.page_description = remove_html_markup(buttons_constructor.page_description)
 
             buttons_constructor.save()
 

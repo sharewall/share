@@ -240,7 +240,8 @@
                                    <span onclick="setBackground(this)" data-background="true">С фоном</span>
                                    <span class="sActive" onclick="setBackground(this)" data-background="false">Без фона</span>
                                    <div id="sColorPickWrapper">
-                                     <input form="createConst" name="background_color" type="text">
+                                     <label for="add_background_color" style="font: 400 13px / 22px Roboto; margin-left: 7px; margin-right: 4px;">Выберите цвет</label>
+                                     <input form="createConst" id="add_background_color" name="background_color" type="text">
                                    </div>
                               </div>
                               <div class="sClear-Both"></div>
