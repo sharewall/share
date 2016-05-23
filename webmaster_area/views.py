@@ -123,9 +123,9 @@ def detailmain(request):
     template_name = 'webmaster_area/detail-main.html'
     
     dates = []
-    shows = []
     shares = []
     socials = []
+    shows = []
     clicks = []
     money = []
     dates_range_start = None
@@ -378,6 +378,83 @@ def detailmain(request):
         'clicks': clicks,
         'money': money
     })
+
+@login_required
+def detailadvert(request, name):
+    template_name = 'webmaster_area/detail-advert.html'
+    title = name
+    header = name
+    
+    dates = []
+    shows = []
+    clicks = []
+    money = []
+    dates_range_start = None
+    dates_range_end = None
+    statistic = {
+        'shows': 0,        
+        'clicks': 0,        
+        'money': 0,        
+    }
+
+    try:
+        if request.user.is_staff and request.GET.get('wmid', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.GET.get('wmid'), name_area=name)
+        elif request.user.is_staff and request.session.get('profile', False):
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+        else:
+            area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+    except:
+        area = None
+
+    if area:
+        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
+        try:
+            request_dateRange = request.GET.get('daterange').split(' - ')
+            dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
+            dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+        except:
+            if area_per_day_list.first():
+                temp_areaToday = area_per_day_list.first()
+                dates_range_start = temp_areaToday.date
+                temp_areaToday = area_per_day_list.last()
+                dates_range_end = temp_areaToday.date
+            else:
+                dates_range_start = datetime.datetime.now().date()
+                dates_range_end = datetime.datetime.now().date()
+
+        if dates_range_start and dates_range_end:
+            area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))
+
+        for a in area_per_day_list:
+            dates.append(a.date.strftime("%d.%m"))
+            #adv
+            temp_show = int(a.today_show_counter)
+            temp_click = int(a.today_click_counter)
+            temp_money = float(a.today_money)
+
+            shows.append(temp_show)
+            clicks.append(temp_click)
+            money.append(temp_money)
+
+            statistic['shows'] += temp_show
+            statistic['clicks'] += temp_click
+            statistic['money'] += temp_money
+
+        return render(request, template_name,
+        {
+            'statistic': statistic,
+            'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
+            'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
+            'page': { 'title': title, 'header': header },
+            'dates': dates,
+            'shows': shows,
+            'clicks': clicks,
+            'money': money
+        })
+    else:
+        return HttpResponseRedirect('/webmaster-area/detail-error/')
 
 @login_required
 def detailsocial(request, name):

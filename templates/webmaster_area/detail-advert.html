@@ -1,0 +1,120 @@
+  {% load staticfiles %}
+<!DOCTYPE html>
+ <html lang="en" class="sHeight-100p">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{ page.title }}</title>
+
+    <link href="{% static "sharewall-template/css/header.css" %}" rel="stylesheet"> 
+    <link href="{% static "sharewall-template/css/media-queries.css" %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "sharewall-template/css/highslide.css" %}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+  </head>
+  <body class="sWidth-100p sHeight-100p sOverHidden-X">
+    <div class="sWrapper">
+        <div class="sHeight-Auto">
+            <div class="sContainer sMargin-Auto" style="width:100%;">
+                <div class="sListConstructors" style="padding-bottom:0px">
+                    <div id="highChartsSocial" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+
+                <div class="sTableAreas">
+                    <div class="sTableAreasFieldName">
+                        <div class="sTableAreasField" style="width:162px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">Показы</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:100px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">Клики</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:120px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">Заработок</span>
+                        </div>
+                    </div>
+                      
+                    <div class="sTableAreasCell">
+                        <div class="sTableAreasField" style="width:162px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Заработок</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:110px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.shows }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:100px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.clicks }}</span>
+                        </div>
+                        <div class="sTableAreasField" style="width:120px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.money }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="{% static "sharewall-template/js/highcharts.js" %}"></script>
+    <script src="{% static "sharewall-template/js/exporting.js" %}"></script>
+    <!-- Additional files for the Highslide popup effect -->
+    <script src="{% static "sharewall-template/js/highslide-full.min.js" %}"></script>
+    <script src="{% static "sharewall-template/js/highslide.config.js" %}" charset="utf-8"></script>
+    <script>
+        $(function () {
+            $('#highChartsSocial').highcharts({
+                title: {
+                    text: '',
+                    x: -20 
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                  categories: {{ dates|safe }}
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                //tooltip: {
+                //    valueSuffix: ' просмотров'
+                //},
+                legend: {
+                    layout: 'horizontal',
+                    //align: 'top',
+                    x: -20,
+                    verticalAlign: 'top',
+                    borderWidth: 0
+                },
+                series: [
+                {
+                    name: 'Показы',
+                    data: {{ shows }}
+                },
+                {
+                    name: 'Клики',
+                    data: {{ clicks }}
+                }, 
+                {
+                    name: 'Заработок',
+                    data: {{ money }}
+                }
+                ]
+            });
+            $('.highcharts-button').hide();
+            $('svg > text:last-of-type').hide();
+
+            window.parent.$('.sListConstructors > span.sTabs.sActive').click();//!important
+
+            window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
+            window.parent.setDatePicker("{{ dates_range_start|safe }}", "{{ dates_range_end|safe }}");
+            window.parent.$('div.sBusyOverlay').hide();
+        });
+    </script>
+  </body>
+</html>

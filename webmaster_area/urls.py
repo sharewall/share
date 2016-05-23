@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^delete/(?P<pk>[0-9]+)/$', views.delete, name='webmaster-area-delete'),
     url(r'^detail/(?P<name>[^/]+)/$', views.detail, name='webmaster-area-detail'),
     url(r'^detail-social/(?P<name>[^/]+)/$', views.detailsocial, name='webmaster-area-detail-social'),
+    url(r'^detail-advert/(?P<name>[^/]+)/$', views.detailadvert, name='webmaster-area-detail-advert'),
     url(r'^detail-main/$', views.detailmain, name='webmaster-area-detail-main'),
     url(r'^setcounter/$', views.setcounter, name='webmaster-area-setcounter'),
     url(r'^getconfig/$', views.getconfig, name='webmaster-area-getconfig'),

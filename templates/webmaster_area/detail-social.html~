@@ -50,7 +50,7 @@
                     </div>
                       
                     <div class="sTableAreasCell">
-                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Социальный трафик</span>
+                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Соц. трафик</span>
                         </div>
                         <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.vk }}</span>
                         </div>
