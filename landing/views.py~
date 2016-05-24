@@ -17,18 +17,37 @@ from webmaster_area.models import WebmasterAreaModel
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
 
-class LandingView(LoginRequiredMixin, TemplateView):
-    login_url = '/login/' 
-    #template_name = 'landing/index.html'
-    template_name = 'webmaster_area/statistic-main.html'
-    title = 'Главная'
+# not use
+class LandingView(TemplateView):#LoginRequiredMixin, TemplateView):
+    #login_url = '/login/' 
+
+    template_name = 'landing/login.html'
+    title = 'Sharewall'
 
     def get(self, request, *args, **kwargs):
+
+        # not work change template!
+        #template_name = 'webmaster_area/statistic-main.html'
+        #title = 'Общая статистика'
+
         return render(request, self.template_name,
         {
             "page": { "title": self.title }
-            #"profile": request.session.get('profile')
         })
+
+def landing(request):
+    
+    if request.user.is_authenticated():
+        template_name = 'webmaster_area/statistic-main.html'
+        title = 'Общая статистика'
+    else:
+        template_name = 'landing/login.html'
+        title = 'Sharewall'
+
+    return render(request, template_name,
+    {
+        "page": { "title": title }
+    })
 
 @login_required
 def chat(request):
@@ -226,7 +245,7 @@ def admin_wm_by_id(request):
         else:
             try:
                 int(request_pattern)
-                temp_1 = User.objects.filter(pk__exact=request_pattern).values_list('pk', 'username')
+                temp_1 = User.objects.filter(pk__icontains=request_pattern).values_list('pk', 'username')
             except:
                 temp_1 = []
 
@@ -332,27 +351,45 @@ def logout(request):
 @ensure_csrf_cookie
 def login(request):
     template_name = 'landing/login.html'
-    title = 'Авторизация'
+    title = 'Sharewall'
 
     request_next = request.GET.get('next', '/') # request.PATH 
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
+
+        usernameoremail = request.POST.get('usernameoremail', False)
+        password = request.POST.get('password', False)
+
+        if usernameoremail and password:
+            try:
+                # email authenticate
+                user = User.objects.get(email=usernameoremail)
+                if user.check_password(password):
+                    user = authenticate(username=user.username, password=password)
+                else:
+                    user = None
+            except:
+                user = None
+
+            if user is None:
+                # user authenticate
+                user = authenticate(username=usernameoremail, password=password)
+        else:
+            user = None
+
         if user:
             if user.is_active:
                 django_login(request, user)
                 return HttpResponse("Login success")
                 #return HttpResponseRedirect(request_next)
             else:
-                return HttpResponse("Account disabled")
+                return HttpResponse("Аккаунт забанен")
                 #return render(request, template_name,
                 #{
                 #    'error': 'User account disabled'
                 #})
         else:
-            return HttpResponse("Invalid authenticate")
+            return HttpResponse("Ошибка авторизации")
             #return render(request, template_name,
             #{
             #    'error': 'Invalid authenticate'
@@ -366,22 +403,32 @@ def login(request):
 #@csrf_exempt
 def register(request):
     template_name = 'landing/login.html'
-    title = 'Register'
+    title = 'Sharewall'
 
     request_next = request.GET.get('next', '/')
 
     if request.method == 'POST':
+        # check username
+        if User.objects.filter(username=request.POST.get('username','')).count() > 0:
+            return HttpResponse('Имя занятo')
+
         user_form = UserForm(data=request.POST)
         cabinet_webmaster_form = CabinetWebmasterForm(data={ 'wmr':'', 'mobile_phone':'', 'skype':'' })
+
         if user_form.is_valid() and cabinet_webmaster_form.is_valid():
-            #TODO: check email
+            # check email
+            if User.objects.filter(email=request.POST.get('email','')).count() > 0:
+                return HttpResponse('E-mail занят')
+
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+
             cabinet_webmaster = cabinet_webmaster_form.save(commit=False)
             cabinet_webmaster.user = user
             cabinet_webmaster.save()
-            answer = 'Register success! You can login now with %s'%user.username
+
+            answer = 'Регистрация успешна! Вы можете войти под именем %s'%user.username
             return HttpResponse(answer)
             #return HttpResponseRedirect(reverse('landing-login'))#, kwargs={'success':'f'}))
             #return render(request, template_name,
@@ -391,10 +438,8 @@ def register(request):
             #})
         else:
             user_form = UserForm(user_form.cleaned_data)
-            if cabinet_webmaster_form.is_valid():
-                pass
             cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
-            return HttpResponse('Registration error')
+            return HttpResponse('Ошибка регистрации!')
             #return render(request, template_name,
             #{
             #    'error': 'Registration error',

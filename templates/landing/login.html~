@@ -4,120 +4,282 @@
 {% block custom_style %}
 
 <style>
-  body{
-    background-color:#2fabf6;
-  }
-  span:hover{
-    cursor:pointer;
-  } 
-  input[type='email']{ 
-    display:none; 
-  }
-  form { 
-    font: 400 14.5px Roboto; color: #FFFFFF; 
-  }
-  .sError { 
-    position: relative; font: 400 14.5px Roboto; color: #FFFFFF; height:auto; display: inline-block; 
-  }
-  .cmn-toggle {
-    position: absolute;
-    margin-left: -9999px;
-    visibility: hidden;
-    z-index: 2;
-  }
-  .cmn-toggle + label {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    outline: none;
-    user-select: none;
-  }
-  input.cmn-toggle-round + label {
-    padding: 2px;
-    width: 80px; /*120*/
-    height: 20px;
-    background-color: #dddddd;
-    border-radius: 60px;
-  }
-  input.cmn-toggle-round + label:before,
-  input.cmn-toggle-round + label:after {
-    display: inline-block;
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    bottom: 1px;
-    content: ""
-  }
-  input.cmn-toggle-round + label:before {
-    right: 1px;
-    opacity: 1;
-    background-color: #f1f1f1;    
-    border-radius: 60px;
-    transition: background 0.4s;
-  }
-  input.cmn-toggle-round + label:after {    
-    width: 28px;  /*58*/
-    background-color: #f1f1f1;
-    border-radius: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: margin 0.4s; 
-  }
-  input.cmn-toggle-round:checked + label:before {    
-    background-color: #FFFFFF; 
-  }
-  input.cmn-toggle-round:checked + label:after {
-    margin-left: 55px; /*60*/    
-      background-color: #2fabf6;
-  }
-  input.cmn-toggle-round:checked ~ form > input[type='email']{
-      display: inline-block;
-  }
+    
+    input:checked + label.sBSInput {
+        background: url("/static/sharewall-template/images/bs-chekbox-checked.png");
+    }
+    
 </style>
 
 {% endblock %}   
 
 {% block title %}{{ page.title }}{% endblock %}
 
-{% block content %}
-	<div class="sContent-H100 sTextAlign-C" style="padding-top:10%">
-      <div class="sError">
+{% block header %}
+
+   <div class="sAlertMessageWrapper"></div>
+
+   <div class="sPopupWrapper">
+      <div class="sPopupWrapper-Modal" data-modal="reg">
+        <p>Регистрация</p>
+        
+        <form method="post" action="/register/">
+          <input required type="text" name="username" placeholder="Имя" value=""/><br/>
+          <input required type="email" name="email" placeholder="E-mail" value=""/><br/>
+          <input required type="password" name="password" placeholder="Пароль" value=""/><br/>
+          <input required type="password" name="rpassword" placeholder="Повторите пароль" value=""/><br/>
+          <input type="submit" hidden/>
+
+          <span data-form="reg">Зарегистрироваться</span>   
+        </form> 
+          
+        <span data-modal="close"></span>
       </div>
-    <div class="sMargin-Auto sTextAlign-C" style="height:auto; width:300px;">
-      <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
-      <label for="cmn-toggle-1"></label>
-      <form method="post" action=".">
-          <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="text" name="username" placeholder="Username" value=""/><br/>
-          <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="password" name="password" placeholder="Password" value=""/><br/>
-          <input style="box-shadow: 0px 20px 20px 0px rgba(117, 129, 141, 0.75);" type="email" name="email" placeholder="Email" value=""/><br/>
-          <span onclick="formSubmit()" class="" style=""></span>
-      </form> 
+       
+      <div class="sPopupWrapper-Modal" data-modal="log">
+        <p>Вход</p>
+          
+        <form method="post" action="/login/">
+          <input required type="text" name="usernameoremail" placeholder="Имя/E-mail" value=""/><br/>
+          <input required type="password" name="password" placeholder="Пароль" value=""/><br/> 
+          <label class="sFloat-L" data-rememberme>Запомнить меня
+              <input id="remember_me" name="remember_me" value="true" style="opacity:0; display:none; margin-left:9999px;" type="checkbox">
+              <label for="remember_me" class="sBSInput" style="margin-top:8px;"></label>
+          </label>
+          <div class="sClear-Both"></div>
+          <input type="submit" hidden/>
+
+          <span data-form="log">Войти</span>  
+        </form> 
+
+        <span class="sActionLink" style="margin-top:20px;">Забыли пароль?</span>
+          
+        <span data-modal="close"></span>
+      </div>
+   </div>
+
+   <div class="sLandHeaderWrapper sMargin-Auto sContainer-Land">
+    <div class="sShadow">
+            
+        <div id="header" class="sWidth-100p">
+              <div class="sContainer sMargin-Auto">
+                  <div class="sHeaderWrapper">
+                      <div class="sHeaderBox sHeaderBox-Logo sFloat-L sPos-Rel">
+                        <a href="{% url "landing-index" %}" class="sFloat-L">
+                              Sharing
+                        </a>
+                      </div>
+                      <div class="sFloat-R sHeaderBox sLandHeader-Auth">
+                        <span data-event="log">Вход</span>
+                        <span data-event="reg">Регистрация</span>
+                      </div>
+                       <div class="sFloat-R sHeaderBox sLandHeader-Menu">
+                        <span>FAQ</span>
+                        <span>О проекте</span>
+                        <span>Контакты</span>
+                      </div>
+                      <div class="sClear-Both"></div>
+                  </div>
+              </div>
+         </div>
+        
+         <div class="sContainer sMargin-Auto">
+             <div class="sLandHeaderOfferWrapper">
+                <div class="sFloat-L sLandHeaderOfferWrapper-L">
+                  <h2>Кастомизированные социальные кнопки</h2>
+                  <p>Sharewall - инструмент для простого добавления на сайт и визуальной настройки виджетов крупнейших социалных и облачных сервисов, который поможет в привлечении новых посетителей к вашему проекту и монетизации вашего трафика</p>
+                  <span data-event="reg">Регистрация</span>
+                </div>
+                <div class="sFloat-R sLandHeaderOfferWrapper-R">
+                  <div class="sFloat-L sLandHeaderOfferWrapper-R-Y">
+                       <span data-img></span>
+                       <span data-count="sites">57.697</span>
+                       <p>сайтов исользующих наши соц. кнопки</p>
+                  </div>
+                  <div class="sFloat-R sLandHeaderOfferWrapper-R-G">
+                       <span data-img></span>
+                       <span data-count="shares">57.697</span>
+                       <p>шаринга страниц</p>
+                  </div>
+                  <div class="sFloat-L sLandHeaderOfferWrapper-R-B">
+                       <span data-img></span>
+                       <span data-count="socials">57.697</span>
+                       <p>переходов на сайт вебмастера из различных сетей</p>  
+                  </div>
+                  <div class="sFloat-R sLandHeaderOfferWrapper-R-R">
+                       <span data-img></span>
+                       <span data-count="socials">57.697</span>
+                       <p>максимальный заработок за вчера</p>     
+                  </div>
+                  <div class="sClear-Both"></div>
+                </div>
+             </div>
+         </div>
+            
+     </div>
     </div>
+{% endblock %}
+
+{% block content %}
+  <div class="sHeight-Auto">
+      
+      <div class="sContainer sMargin-Auto">
+        <div class="sLandWhyWrapper">
+            <div class="sLandWhy">
+            </div>
+        </div>
+      </div>
+      
+      <div class="sLandMiddleWrapper sContainer-Land sMargin-Auto">
+        <div class="sFloat-L sLandMiddleWrapper-1">
+          <div class="sShadow"></div>
+        </div>
+        <div class="sFloat-R sLandMiddleWrapper-2">
+          <h2>Шаринг</h2>
+          <span class="sLandMiddle-Big">1,5%</span>
+          <p>пользователей делают шаринг</p>
+          <span class="sLandMiddle-Big" style="margin-top: 53px;">6</span>
+          <p>новых пользователей,</p>
+          <p style="margin-top:0px;">зашедших на сайт даёт каждый шаринг</p>
+        </div>
+        <div class="sFloat-L sLandMiddleWrapper-3">
+          <h2>Реклама</h2>
+          <span class="sLandMiddle-Big">5</span>
+          <p>тизерных блоков</p>
+          <span class="sLandMiddle-Big" style="margin-top: 53px;">240х400 &#8226;  728x900</span>
+          <p>2 формата баннерной рекламы</p>
+        </div>
+        <div class="sFloat-R sLandMiddleWrapper-4">
+            <div class="sShadow"></div>  
+        </div>
+      </div>
+      <div class="sClear-Both"></div>
+      
+      <div class="sLandFooterWrapper sContainer-Land sMargin-Auto">
+        <div class="sShadow">
+          
+            <div class="sTextAlign-C">
+                <div class="sLandFooterWrapper-Registration">
+                    <p>Регистрация</p>
+                    <form class="authForm" method="post" action="/register/">
+                        <input required type="text" name="username" placeholder="Логин" value=""/><br/>
+                        <input required type="email" name="email" placeholder="Почта" value=""/><br/>
+                        <input required type="password" name="password" placeholder="Пароль" value=""/><br/>
+                        <input required type="password" name="rpassword" placeholder="Повторите пароль" value=""/><br/>
+                        <input type="submit" hidden/>
+
+                        <span data-submit data-form="reg">Регистрация</span>
+                    </form> 
+                </div>
+                <div class="sLandFooterWrapper-Email">
+                    <p>Остались вопросы?</p>
+                    <p style="margin:0px;">Свяжитесь с нами</p>
+                    <span></span>
+                    <p>info@protradeexpert.com</p>
+                </div>
+            </div>
+            
+        </div>
+      </div>
+      
+      
   </div>
+{% endblock %}
+
+{% block footer_script %}
+
   <script>
-      function formSubmit(){
-        var action = $('input#cmn-toggle-1').prop('checked') == true ? "/register/" : "/login/";
-        $.ajax({url: action, type: "POST", data: $('form').serialize(), success: function(response, status, jqXHR) { 
-          if(response == 'Login success'){
-            (location.search.split('?next=').length > 1 ? window.location = location.search.split('?next=')[1] : window.location = '/');
-          }else{
-            $('.sError').text(response);
+              
+        function validatePassword(){
+            
+          $this = $(this);
+          var confirm = $this.parent().find('[name="password"]').val();
+          
+          if(this.value != confirm) {
+            this.setCustomValidity("Пароли не совпадают");
+          } else {
+            this.setCustomValidity('');
           }
+            
+        }
+      
+      function formSubmit(){
+
+        var form = $(this).closest('form');
+        form.find('[type="submit"]').click();
+
+        var validate = true;
+        var inputs = form.find('input:not([type="submit"])');
+        var rpasswordValue = form.find('[name="rpassword"]').val();
+        console.log(rpasswordValue);
+        $.each(inputs, function(index,element){
+
+          if(element.value){
+            console.log(element.value);
+          }else{
+            validate = false;
+          }
+
+        });
+
+        if(validate==false)
+          return;
+
+        var action = form.attr('action');
+
+        $.ajax({
+          url: action, 
+          type: "POST", 
+          data: form.serialize(), 
+          success: function(response, status, jqXHR) { 
+
+            form.nextAll('[data-modal="close"]').click();
+
+            if(response == 'Авторизирован'){
+             (location.search.split('?next=').length > 1 ? window.location = location.search.split('?next=')[1] : window.location = '/');
+            }else{
+              $('.sAlertMessageWrapper').text(response).fadeIn('slow');
+              window.setTimeout(function(){
+                $('.sAlertMessageWrapper').text('').fadeOut('slow');
+              },2000);
+            }
+
           }
         });
+
       }
-      function switchAction(){
-          var action = $('input#cmn-toggle-1').prop('checked') == true ? "Registration" : "Login";
-          $('span').text(action);
-      }
-      switchAction();
-      $('input#cmn-toggle-1').click(switchAction);
+
+      $(function(){
+
+        $('form').submit(function(e){
+          return false;
+        });
+
+        $('[data-form]').click(formSubmit);
+
+        $('input[name="rpassword"]').keyup(validatePassword);
+          
+         $('[data-event]').click(function(){
+             $('.sPopupWrapper').show();
+             var event = $(this).data('event');
+             $('[data-modal="'+event+'"]').show();
+         }); 
+          
+         $('[data-modal="close"]').click(function(){
+            $('.sPopupWrapper-Modal').hide(); 
+            $('.sPopupWrapper').hide();
+         });  
+          
+      });
+      
       function csrfSafeMethod(method) {
           return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
       }
+
       var csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
       $.ajaxSetup({
           beforeSend: function(xhr, settings) {
-              $('.sError').text('Please wait...');
               if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                   xhr.setRequestHeader("X-CSRFToken", csrftoken);
               }
@@ -125,4 +287,5 @@
       });
 
   </script>
+
 {% endblock %}

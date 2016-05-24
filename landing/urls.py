@@ -1,9 +1,9 @@
 from django.conf.urls import url
-from landing.views import LandingView, register, login, logout, admin_webmasters, admin_change_status, admin_profile, admin_profile_clear, admin_area_by_id, chat, chat_create, admin_chat_billing, admin_chat_support, chat_update, admin_wm_by_id
+from landing.views import LandingView, landing, register, login, logout, admin_webmasters, admin_change_status, admin_profile, admin_profile_clear, admin_area_by_id, chat, chat_create, admin_chat_billing, admin_chat_support, chat_update, admin_wm_by_id
 
 #app_name = 'landing'
 urlpatterns = [
-    url(r'^$', LandingView.as_view(), name='landing-index'),
+    url(r'^$', landing, name='landing-index'), #LandingView.as_view(), name='landing-index'),
     url(r'^register/$', register, name='landing-register'),
     url(r'^login/$', login, name='landing-login'),
     url(r'^logout/$', logout, name='landing-logout'),
