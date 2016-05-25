@@ -668,7 +668,6 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sAreaChoices-Line{
     background-color: #e8e8e8;
-    width: 1170px;
     height: 58px;
     margin-top: 26px;
 }

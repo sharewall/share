@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import Q
 from django.core import serializers
-from webmaster_area.models import WebmasterAreaModel
+from webmaster_area.models import WebmasterAreaModel, AreaToday
 #from django.views.decorators.cache import cache_page
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
@@ -380,7 +380,7 @@ def login(request):
         if user:
             if user.is_active:
                 django_login(request, user)
-                return HttpResponse("Login success")
+                return HttpResponse("Авторизирован")
                 #return HttpResponseRedirect(request_next)
             else:
                 return HttpResponse("Аккаунт забанен")
@@ -395,9 +395,44 @@ def login(request):
             #    'error': 'Invalid authenticate'
             #})
     else:
+        sites = WebmasterAreaModel.objects.all().count()
+        sites = int(sites*10.5)
+
+        shares = 0
+        socials = 0
+        money = 0
+        areaTodayList = AreaToday.objects.all()
+        for a in areaTodayList:
+            shares += (
+                int(a.today_share_counter.split(',')[0])+
+                int(a.today_share_counter.split(',')[1])+
+                int(a.today_share_counter.split(',')[2])+
+                int(a.today_share_counter.split(',')[3])+
+                int(a.today_share_counter.split(',')[4])+
+                int(a.today_share_counter.split(',')[5])+
+                int(a.today_share_counter.split(',')[6])+
+                int(a.today_share_counter.split(',')[7])
+            )
+
+            socials += (
+                int(a.today_social_counter.split(',')[0])+
+                int(a.today_social_counter.split(',')[1])+
+                int(a.today_social_counter.split(',')[2])+
+                int(a.today_social_counter.split(',')[3])+
+                int(a.today_social_counter.split(',')[4])+
+                int(a.today_social_counter.split(',')[5])+
+                int(a.today_social_counter.split(',')[6])+
+                int(a.today_social_counter.split(',')[7])
+            )
+
+            money += float(a.today_money)
+
+        money = float(money*10005)
+
         return render(request, template_name,
         {
-            "page": { "title": title }
+            "page": { "title": title },
+            "stats": { "sites": sites, "shares": shares, "socials": socials, "money": money  }
         })
 
 #@csrf_exempt

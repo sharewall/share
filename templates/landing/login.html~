@@ -93,7 +93,7 @@
                 <div class="sFloat-R sLandHeaderOfferWrapper-R">
                   <div class="sFloat-L sLandHeaderOfferWrapper-R-Y">
                        <span data-img></span>
-                       <span data-count="sites">57.697</span>
+                       <span data-count="sites">{{ stats.sites }}</span>
                        <p>сайтов исользующих наши соц. кнопки</p>
                   </div>
                   <div class="sFloat-R sLandHeaderOfferWrapper-R-G">
@@ -210,8 +210,15 @@
 
         var validate = true;
         var inputs = form.find('input:not([type="submit"])');
+
         var rpasswordValue = form.find('[name="rpassword"]').val();
-        console.log(rpasswordValue);
+        var passwordValue = form.find('[name="password"]').val();
+
+        if(rpasswordValue){
+          if(rpasswordValue!=passwordValue)
+            return;
+        }
+
         $.each(inputs, function(index,element){
 
           if(element.value){

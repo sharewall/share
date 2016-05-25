@@ -1,3 +1,9 @@
+@media only screen and (max-width:1920px) {
+    .sContainer-Land{
+        width: auto;
+    }
+}
+
 @media only screen and (max-width:1200px) {
 
     .sContainer{
@@ -50,8 +56,34 @@
         -ms-transform: rotate(270deg);
         -o-transform: rotate(270deg);         
     }
+   /*21/04/2016*/ 
+    .sBtnConstructor > .sFormPad{
+        float:none;
+        width:auto!important;
+    }
+    .sFormPad-Wrapper > .sBSExample{
+        width:auto;
+    }
+    /*24/05/2016*/
+    .sLandHeaderOfferWrapper-L{
+        width: 42%;
+    }
+    .sLandHeaderOfferWrapper-R{
+        width: 57%;
+    }
+    .sLandWhy{
+        width: auto;
+        background-size: contain;
+    }
+    .s1200Width-10P{
+        width: 10%!important;
+    }
+    .s1200Width-30P{
+        width: 30%!important;
+    }
     
 }
+
 @media only screen and (max-width:1030px) {
 
     .sContainer{
@@ -83,8 +115,22 @@
     .sFormPad-Wrapper > .sBSExample{
         width:auto;
     }
+    /*24/05/2016*/ 
+    .sLandMiddle-Big{
+        font: 500 59px / 40px Roboto;
+    }
+    .sLandHeaderOfferWrapper-L{
+        width: 36%;
+    }
+    .sLandHeaderOfferWrapper-R{
+        width: 63%;
+    }
+    .s1030Hide{
+        display: none!important;
+    }
     
 }
+
 @media only screen and (max-width:936px) {
 
     .sContainer{
@@ -119,6 +165,18 @@
     }
     .sFormPad-Wrapper > .sBSExample{
         width:auto;
+    }
+    .sTableAreasField > span{
+        padding: 0px!important;
+    }
+    .s936Width-10P{
+        width: 10%!important;
+    }
+    .sInputWebmasterSearchWrapper{
+        width: 151px;
+    }
+    .sInputWebmasterSearchWrapper > .sInputWebmasterSearch{
+        width: 171px;
     }
 
 }
@@ -187,8 +245,20 @@
     .sFormPad-Wrapper > .sBSExample{
         width:auto;
     }
+   /*24/05/2016*/ 
+    .s835Hide{
+        display: none!important;
+    }
+    .sAreaSelectWrapper{
+        width: 125px;
+    }
+    .sAreaSelectWrapper select, 
+    .sChatMainWrapper select{
+        width: 165px;
+    }
 
 }
+
 @media only screen and (max-width:735px) {
     
     .sContainer{
@@ -231,13 +301,15 @@
     .sMenu-Dd{
         width: 119px;
     } 
-    .sHeaderBox-WmMenu > input.sInputH ~ label{                 background: url(../images/three-bars-16-w.png);
+    .sHeaderBox-WmMenu > input.sInputH ~ label{                 
+        background: url(../images/three-bars-16-w.png);
         background-repeat: no-repeat;
         background-position: 0 45%;
         background-size: 100% auto;
         width: 20px;
     }
-    .sHeaderBox-WmMenu > input.sInputH:checked ~ label{         background: url(../images/three-bars-16-g.png);
+    .sHeaderBox-WmMenu > input.sInputH:checked ~ label{         
+        background: url(../images/three-bars-16-g.png);
         background-repeat: no-repeat;
         background-position: 0 45%;
         background-size: 100% auto;
@@ -276,6 +348,16 @@
     .sSettings-Field-Edit > div{
         width: 171px;
     }
+   /*24/05/2016*/ 
+    .s735Width-20P{
+        width: 20%!important;
+    }
+    .s735Width-19P{
+        width: 19%!important;
+    }
+    .s735Font-13px{
+        font: 400 13px Roboto;
+    }
     
 }
 
@@ -284,7 +366,6 @@
     body{
         min-width: 400px;
         overflow: auto!important;
-       
     }
     
 }

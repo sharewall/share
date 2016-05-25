@@ -25,21 +25,21 @@
                     <div id="highChartsSocial" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
 
-                <div class="sTableAreas">
+                <div class="sTableAreas sTextAlign-C">
                     <div class="sTableAreasFieldName">
-                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
+                        <div class="sTableAreasField s1030Hide" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
                         </div>
-                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Вконтакте</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">Вконтакте</span>
                         </div>
-                        <div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">Facebook</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">Facebook</span>
                         </div>
-                        <div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">Twitter</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">Twitter</span>
                         </div>
-                        <div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">Одноклассники</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">Одноклассники</span>
                         </div>
-                        <div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">Google+</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">Google+</span>
                         </div>
-                        <div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span>
                         </div>
                         <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span>
                         </div>
@@ -50,19 +50,19 @@
                     </div>
                       
                     <div class="sTableAreasCell">
-                        <div class="sTableAreasField" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Соц. трафик</span>
+                        <div class="sTableAreasField s1030Hide" style="width:162px;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Соц. трафик</span>
                         </div>
-                        <div class="sTableAreasField" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.vk }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:110px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.vk }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.fb }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:100px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.fb }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.tw }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:85px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.tw }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.od }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:145px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.od }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.gp }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:92px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.gp }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.ma }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.ma }}</span>
                         </div>
                         <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.li }}</span>
                         </div>
@@ -153,7 +153,7 @@
             $('.highcharts-button').hide();
             $('svg > text:last-of-type').hide();
             //console.log(window.parent.$('.sListConstructors > span.sTabs.sActive'));
-            window.parent.$('.sListConstructors > span.sTabs.sActive').click();
+            //window.parent.$('.sListConstructors > span.sTabs.sActive').click();
             window.parent.$('input#inputDate').val("{{ dates_range_start|safe }} - {{ dates_range_end|safe }}");
             window.parent.setDatePicker("{{ dates_range_start|safe }}", "{{ dates_range_end|safe }}");
             window.parent.$('div.sBusyOverlay').hide();

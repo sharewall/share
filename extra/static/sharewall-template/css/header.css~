@@ -668,7 +668,6 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 }
 .sAreaChoices-Line{
     background-color: #e8e8e8;
-    width: 1170px;
     height: 58px;
     margin-top: 26px;
 }
@@ -2373,6 +2372,11 @@ span[data-submit]{
 .sAlertMessageWrapper{
     display: none;
     width: auto;
+    transition: width 0.5s;
+    -moz-transition: width 0.5s;
+    -webkit-transition: width 0.5s;
+    -o-transition: width 0.5s;
+    -ms-transition: width 0.5s;
     height: 80px;
     background-color: rgb(255, 255, 255);
     position: fixed;
@@ -2383,4 +2387,7 @@ span[data-submit]{
     font: 300 25px/80px Roboto-Light;
     text-align: center;
     padding: 0px 20px;
+}
+.s1200Hide{
+    display: block;
 }

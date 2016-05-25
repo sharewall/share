@@ -40,7 +40,7 @@
                     <div class="sTableAreasCell">
                         <div class="sTableAreasField" style="width:162px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center; color:#1693d5;">Заработок</span>
                         </div>
-                        <div class="sTableAreasField" style="width:110px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.shares }}</span>
+                        <div class="sTableAreasField" style="width:110px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.shows }}</span>
                         </div>
                         <div class="sTableAreasField" style="width:100px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.clicks }}</span>
                         </div>
