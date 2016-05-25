@@ -96,7 +96,7 @@
                   <label for="add-text">Сообщение</label>
                   <label for="add-files" style="margin-top: 95%;">Вложения</label>
               </div>
-              <div class="sFloat-L">
+              <div class="sFloat-L s735Width-300PX">
                   <div>
                       <input form="createChat" id="add_header" name="header" value="" maxlength="100" required="" type="text">
                   </div>
@@ -106,7 +106,7 @@
                         
                         <span class="sSearchIcon" style="bottom: 93%!important;" onclick="eventSearch()"></span>
                     </div>
-                    <div class="sFloat-R" style="width: 185px; overflow: hidden; display: inline-block; margin-right: 4px; background: url({% static "sharewall-template/images/select-area-arrow.png" %})no-repeat 95% #fff; line-height: 33px; border-radius: 7px; margin-top: 10px;">
+                    <div class="sFloat-R s835MarginRight-150PX s735Float-L" style="width: 185px; overflow: hidden; display: inline-block; margin-right: 4px; background: url({% static "sharewall-template/images/select-area-arrow.png" %})no-repeat 95% #fff; line-height: 33px; border-radius: 7px; margin-top: 10px;">
                       <select form="createChat" id="add_wmId" name="to_user_pk">
                         {% for pk, name in users_data %} 
                         <option value="{{ pk }}">{{ pk }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</option>

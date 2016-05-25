@@ -1615,7 +1615,6 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     color: #32353c;
     font: 400 14px / 50px Roboto;
     margin-bottom: 182px;
-    width: 1170px;
 }
 .sChatWrapper-Wm{
     height: 504px;
@@ -1775,11 +1774,7 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     margin-left: 5px;
     line-height: 34px;
 }
-.sChatMessageWrapper{
-    
-}
 .sChatMessage{
-    width: 1170px;
     height: 190px;
     color: #26292d;
     font: 400 15px / 22px Roboto;
@@ -2387,7 +2382,4 @@ span[data-submit]{
     font: 300 25px/80px Roboto-Light;
     text-align: center;
     padding: 0px 20px;
-}
-.s1200Hide{
-    display: block;
 }

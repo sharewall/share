@@ -25,7 +25,7 @@
                     <div id="highChartsSocial" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
 
-                <div class="sTableAreas">
+                <div class="sTableAreas sTextAlign-C">
                     <div class="sTableAreasFieldName">
                         <div class="sTableAreasField" style="width:162px;text-align:center;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
                         </div>

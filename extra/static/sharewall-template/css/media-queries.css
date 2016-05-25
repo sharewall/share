@@ -75,14 +75,42 @@
         width: auto;
         background-size: contain;
     }
+    .s1200Width-5P{
+        width: 5%!important;
+    }
     .s1200Width-10P{
         width: 10%!important;
+    }
+    .s1200Width-12P{
+        width: 12%!important;
+    }
+    .s1200Width-15P{
+        width: 15%!important;
+    }
+    .s1200Width-20P{
+        width: 20%!important;
     }
     .s1200Width-30P{
         width: 30%!important;
     }
+    .s1200Width-40P{
+        width: 40%!important;
+    }
     .s1200Pad-0{
         padding: 0px!important;
+    }
+    .s1200Pad-05PX{
+        padding: 0px 5px!important;
+    }
+    .sChatUpdateStatus div span{
+        width: 30%!important;
+    }
+    .sChatUpdate textarea{
+        width: 95%;
+    }
+    .sLandFooterWrapper-Registration,
+    .sLandFooterWrapper-Email{
+        width: auto;
     }
     
 }
@@ -130,6 +158,21 @@
     }
     .s1030Hide{
         display: none!important;
+    }
+    .s1030MarginLeft-75PX{
+        margin-left: 75px!important;
+    }
+    .s1030FontSize-14PX{
+        font-size: 14px!important;
+    }
+    .sTableAreasField > .sAdminButton{
+        background-size: cover;
+        height: 26px;
+        width: 90px;
+        font: 400 15px/26px Roboto!important;
+    }
+    .sPopupWrapper-Modal{
+        position: absolute;
     }
     
 }
@@ -180,6 +223,38 @@
     }
     .sInputWebmasterSearchWrapper > .sInputWebmasterSearch{
         width: 171px;
+    }
+    .s935Margin-0{
+        margin: 0px!important;
+    }
+    .sChatMainWrapper > div:first-of-type{
+        margin-left: 0px;
+    }
+    .sChatFooterWrapper{
+        padding-left: 190px;
+    }
+    .sLandHeaderOfferWrapper-L{
+        width: 54%;
+    }
+    .sLandHeaderOfferWrapper-R{
+        width: 46%;
+    }
+    .sLandHeaderOfferWrapper-R > div{
+        width: 180px;
+        height: 221px;
+    }
+    .sLandHeaderOfferWrapper-R-Y,
+    .sLandHeaderOfferWrapper-R-B{
+        margin-right: 0px;
+    }
+    .sLandHeaderOfferWrapper-R-B > p{
+        width: auto;
+    }
+    .sLandWhy{
+        margin-bottom: 0px;
+    }
+    .sPopupWrapper-Modal{
+        left: 15%;
     }
 
 }
@@ -258,6 +333,40 @@
     .sAreaSelectWrapper select, 
     .sChatMainWrapper select{
         width: 165px;
+    }
+    .sAddAreaWrapper > div input{
+        width: 350px!important;
+    }
+    .sAddAreaWrapper > div > div > select{
+        width: 371px!important;
+    }
+    .sAddAreaWrapper > div > div:nth-child(3),
+    .sAddAreaWrapper > div > div:nth-child(4){
+        width: 350px!important;
+    }
+    .sChatMainWrapper > div > div:not(.sNone) input,
+    .sChatMainWrapper > div > div:not(.sNone) textarea{
+        width: 389px;
+    }
+    .s835MarginRight-150PX{
+        margin-right: 150px!important;
+    }
+    .sLandHeaderOfferWrapper-L{
+        width: 46%;
+    }
+    .sLandHeaderOfferWrapper-R{
+        width: 54%;
+    }
+    .sLandHeaderOfferWrapper-R > div{
+        width: 180px;
+        height: 221px;
+    }
+    .sLandHeaderOfferWrapper-R-Y,
+    .sLandHeaderOfferWrapper-R-B{
+        margin-right: 0px;
+    }
+    .sLandHeaderOfferWrapper-L > h2{
+        margin-top: 0px;
     }
 
 }
@@ -352,6 +461,9 @@
         width: 171px;
     }
    /*24/05/2016*/ 
+    .s735Width-10P{
+        width: 10%!important;
+    }
     .s735Width-20P{
         width: 20%!important;
     }
@@ -360,6 +472,95 @@
     }
     .s735Font-13px{
         font: 400 13px Roboto;
+    }
+    .s735Width-0{
+        width: 0px;
+    }
+    .s735Opacity-0{
+        opacity: 0;
+    }
+    .sAreaChoices-Line{
+        height: 120px;
+    }
+    .s735Hide{
+        display: none;
+    }
+    .sAddAreaWrapper > div input{
+        width: 94%!important;
+    }
+    .sAddAreaWrapper > div > div > select{
+        width: 95%!important;
+    }
+    .sAddAreaWrapper > div > div:nth-child(3),
+    .sAddAreaWrapper > div > div:nth-child(4){
+        width: 94%!important;
+    }
+    .sChatMainWrapper > div:first-of-type{
+        width: 80px;
+    }
+    .sChatMainWrapper{
+        height: auto;
+    }
+    .s735Width-300PX{
+        width: 300px;
+    }
+    .sChatMainWrapper > div > div:not(.sNone) input,
+    .sChatMainWrapper > div > div:not(.sNone) textarea{
+        width: 189px;
+    }
+    .s835MarginRight-150PX{
+        margin-right: 0px!important;
+    }
+    .s735Float-L{
+        float: left;
+    }
+    .sChatFooterWrapper{
+        padding-left: 0px;
+        line-height: normal;
+    }
+    .sChatSubmitBtn{
+        width: 99px;
+        height: 34px;
+        background-size: cover!important;
+        font: 400 14px/34px Roboto!important;
+    }
+    .sChatUpdate > input{
+        width: 266px;
+    }
+    .sChatUpdate textarea{
+        width: 90%;
+    }
+    .sLandFooterWrapper-Email{
+        display: none;
+    }
+    .sLandHeaderOfferWrapper-R > div{
+        display: none!important;
+    }
+    .sLandHeaderOfferWrapper-L{
+        width: 100%;
+    }
+    .sLandHeaderWrapper{
+        height: 555px;
+    }
+    .sLandWhy{
+        height: 215px;
+    }
+    span[data-submit]{
+        width: 400px;
+        background-size: contain;
+    }
+    .authForm > input{
+        width: 90%;
+    }
+    .sPopupWrapper-Modal{
+        left: 5%!important;
+        width: 430px!important;
+    }
+    .sPopupWrapper-Modal [data-form]{
+        margin-left: 0px;
+    }
+    .sPopupWrapper-Modal > [data-modal="close"]{
+        left: 411px!important;
     }
     
 }

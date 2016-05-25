@@ -28,44 +28,44 @@
             <div class="sClear-Both"></div>
           
             <div class="sTableAreasFieldName">
-                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Дата</span>
+                <div class="sTableAreasField s1200Width-12P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Дата</span>
                 </div>
-                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Отдел</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Отдел</span>
                 </div>
-                <div class="sTableAreasField" style="width:140px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Номер тикета</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:140px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Номер тикета</span>
                 </div>
-                <div class="sTableAreasField" style="width:230px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Тема</span>
+                <div class="sTableAreasField s1200Width-20P" style="width:230px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Тема</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Состояние</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:125px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Состояние</span>
                 </div>
-                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Обновление</span>
+                <div class="sTableAreasField s1200Width-12P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">Обновление</span>
                 </div>
-                <div class="sTableAreasField" style="width:208px; text-align:center;">
+                <div class="sTableAreasField s1200Width-15P" style="width:208px; text-align:center;">
                 </div>
             </div>
 
             {% for chat in chats %}
             <div class="sTableAreasCell">
-              <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showCreateDate }}</span>
+              <div class="sTableAreasField s1200Width-12P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showCreateDate }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showDepartment }}</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showDepartment }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:140px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">#{{ chat.pk }}</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:140px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">#{{ chat.pk }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:230px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.header }}</span>
+                <div class="sTableAreasField s1200Width-20P" style="width:230px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ chat.header }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;">
+                <div class="sTableAreasField s1200Width-10P" style="width:125px; text-align:center;">
                 {% if chat.status == 'ACT' %}
-                  <span data-chatstate="active" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                  <span class="s1200Pad-0" data-chatstate="active" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
                 {% elif chat.status == 'CLO' %}
-                  <span data-chatstate="close" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                  <span class="s1200Pad-0" data-chatstate="close" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
                 {% else %}
-                  <span data-chatstate="answered" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
+                  <span class="s1200Pad-0" data-chatstate="answered" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showStatus }}</span>
                 {% endif %}
                 </div>
-                <div class="sTableAreasField" style="width:154px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ chat.showUpdateDate }}</span>
+                <div class="sTableAreasField s1200Width-12P" style="width:154px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ chat.showUpdateDate }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:208px;">
+                <div class="sTableAreasField s1200Width-15P" style="width:208px;">
                   <a href="{% url "chat-update" chat.pk %}" class="sGoWatchChat">Просмотр тикета</a>
                 </div>
             </div> 

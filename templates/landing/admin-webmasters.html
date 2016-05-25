@@ -26,17 +26,17 @@
           
           <div class="sTableAreas" style="margin-bottom:40px; max-height: 680px; overflow-y: auto;">
             <div class="sTableAreasFieldName">
-                <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">ID</span>
+                <div class="sTableAreasField s1200Width-5P" style="width:54px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">ID</span>
                 </div>
-                <div class="sTableAreasField" style="width:128px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Логин</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:128px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">Логин</span>
                 </div>
-                <div class="sTableAreasField" style="width:177px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Email</span>
+                <div class="sTableAreasField s1200Width-15P" style="width:177px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">Email</span>
                 </div>
-                <div class="sTableAreasField" style="width:141px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">Skype</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:141px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">Skype</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">WMR</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:125px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">WMR</span>
                 </div>
-                <div class="sTableAreasField" style="width:539px; text-align:center;">
+                <div class="sTableAreasField" style="width:auto; text-align:center;">
                 </div>
             </div>
             {% for cab in all_cabinets %}
@@ -47,18 +47,18 @@
             {% else %}
                 <div class="sTableAreasCell">
             {% endif %}
-              <div class="sTableAreasField" style="width:54px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.pk }}</span>
+              <div class="sTableAreasField s1200Width-5P" style="width:54px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ cab.pk }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:128px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.username }}</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:128px; text-align:center;"><span class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.username }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:177px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.email }}</span>
+                <div class="sTableAreasField s1200Width-15P" style="width:177px; text-align:center;"><span  class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ cab.user.email }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:141px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.skype }}</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:141px; text-align:center;"><span  class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ cab.skype }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:125px; text-align:center;"><span style="padding:0 10px 0 10px; text-align:center;">{{ cab.wmr }}</span>
+                <div class="sTableAreasField s1200Width-10P" style="width:125px; text-align:center;"><span  class="s1200Pad-0" style="padding:0 10px 0 10px; text-align:center;">{{ cab.wmr }}</span>
                 </div>
-                <div class="sTableAreasField" style="width:539px;">
-                  <a href="/admin/profile/{{ cab.user.pk }}" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 40px 0 50px;">Посмотреть профиль</a>
+                <div class="sTableAreasField" style="width:auto;">
+                  <a href="/admin/profile/{{ cab.user.pk }}" class="s1200Pad-05PX s1030FontSize-14PX" style="display:inline-block; line-height:41px!important; font: 400 16px Roboto; text-decoration: underline dotted rgb(47, 171, 246) !important; padding:0 40px 0 50px;">Посмотреть профиль</a>
                   <!--<span class="sAdminButton sAdminButton-Yellow">Написать</span>-->
                   <a href="{% url "chat-create" %}?to={{ cab.user.pk }}" target="_blank" class="sAdminButton sAdminButton-Yellow">Написать</a>
                   {% if cab.user.is_staff %}
