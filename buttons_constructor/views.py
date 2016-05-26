@@ -215,7 +215,7 @@ def create(request):
     
     return render(request, template_name,
     {
-        'page': { 'title': title, 'header': header },
+        'page': { 'title': title, 'header': header, 'noQueries': True },
         #'buttons_constructor_form': ButtonsConstructorForm(),
         #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
         #'areas': list_distinct,

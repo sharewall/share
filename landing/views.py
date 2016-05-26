@@ -472,9 +472,9 @@ def register(request):
             #    'success': 'Registration success'
             #})
         else:
-            user_form = UserForm(user_form.cleaned_data)
-            cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
-            return HttpResponse('Ошибка регистрации!')
+            #user_form = UserForm(user_form.cleaned_data)
+            #cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
+            return HttpResponse('Ошибка регистрации! Проверьте корректность данных')
             #return render(request, template_name,
             #{
             #    'error': 'Registration error',

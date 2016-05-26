@@ -427,7 +427,7 @@ def login(request):
 
             money += float(a.today_money)
 
-        money = float(money*10005)
+        money = float(money*109005)
 
         return render(request, template_name,
         {
@@ -447,8 +447,11 @@ def register(request):
         if User.objects.filter(username=request.POST.get('username','')).count() > 0:
             return HttpResponse('Имя занятo')
 
-        user_form = UserForm(data=request.POST)
-        cabinet_webmaster_form = CabinetWebmasterForm(data={ 'wmr':'', 'mobile_phone':'', 'skype':'' })
+        try:
+            user_form = UserForm(data=request.POST)
+            cabinet_webmaster_form = CabinetWebmasterForm(data={ 'wmr':'', 'mobile_phone':'', 'skype':'' })
+        except:
+            return HttpResponse('E-mail не корректен')
 
         if user_form.is_valid() and cabinet_webmaster_form.is_valid():
             # check email
@@ -472,8 +475,8 @@ def register(request):
             #    'success': 'Registration success'
             #})
         else:
-            user_form = UserForm(user_form.cleaned_data)
-            cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
+            #user_form = UserForm(user_form.cleaned_data)
+            #cabinet_webmaster_form = CabinetWebmasterForm(cabinet_webmaster_form.cleaned_data)
             return HttpResponse('Ошибка регистрации!')
             #return render(request, template_name,
             #{

@@ -13,7 +13,9 @@
     <title>{% block title %}{% endblock %}</title>
     
     <link href="{% static "sharewall-template/css/header.css" %}" rel="stylesheet"> 
-    <link href="{% static "sharewall-template/css/media-queries.css" %}" rel="stylesheet">
+    {% if not page.noQueries %}
+      <link href="{% static "sharewall-template/css/media-queries.css" %}" rel="stylesheet">
+    {% endif %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
 
     {% block custom_style %}{% endblock %}   

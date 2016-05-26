@@ -2,7 +2,13 @@
 
   {% block custom_style %}
   <style>
-      .sError { position: relative; display: none; }
+      .sError { 
+        position: relative; 
+        display: none; 
+      }
+      .sOverHidden-X{
+          overflow-x: auto;
+      }
   </style>
   {% endblock %}
 
@@ -323,9 +329,9 @@
               var tag = $('input[name="form_buttons"]').val() == "CI" ? "ci" : "sq";
               var size = $('input[name="size_buttons"]').val();
                                                        
-              $('#sharewallContainer > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
+              $('#sharewallContainer > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
               
-              $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
+              $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
             });
             
             $('div.sSNTreeWrapper input').prop('checked','checked');
@@ -489,9 +495,9 @@
             var spriteNumber = $('input[name="btns_images"]').val();
             var tag = $('input[name="form_buttons"]').val() == "CI" ? "ci" : "sq";
 
-            $('#sharewallContainer > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")').attr('data-size', size);
+            $('#sharewallContainer > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")').attr('data-size', size);
             
-            $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")').attr('data-size', size);
+            $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")').attr('data-size', size);
 
             $('#sharewallContainer > #shareCounter').attr('data-size', size);
             $('#sharewallContainer-Adv > #shareCounter').attr('data-size', size);
@@ -510,9 +516,9 @@
             var spriteNumber = $('input[name="btns_images"]').val();
             var size = $('input[name="size_buttons"]').val();
 
-            $('#sharewallContainer > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
+            $('#sharewallContainer > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
             
-            $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("//localhost/static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
+            $('#sharewallContainer-Adv > :not(:last())').css("background-image", 'url("../../static/sharewall-template/images/btns_sprites/'+tag+'/'+size+'/btns_sprite_'+spriteNumber+'.png")');
         }
 
         function setLocation(e){

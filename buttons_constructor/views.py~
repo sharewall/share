@@ -130,7 +130,7 @@ def create(request):
             cleaned_social_networks = cleaned_social_networks[:-1]
             buttons_constructor.social_networks = cleaned_social_networks
 
-            #clean html tags
+            #remove html tags
             buttons_constructor.page_description = remove_html_markup(buttons_constructor.page_description)
 
             buttons_constructor.save()
@@ -215,7 +215,7 @@ def create(request):
     
     return render(request, template_name,
     {
-        'page': { 'title': title, 'header': header },
+        'page': { 'title': title, 'header': header, 'no-queries': True },
         #'buttons_constructor_form': ButtonsConstructorForm(),
         #"areas": WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),#.order_by('-date'),
         #'areas': list_distinct,
