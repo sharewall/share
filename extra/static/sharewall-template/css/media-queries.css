@@ -292,7 +292,7 @@
         height: 178px;
     }
     .sHeaderBox-Menu > div:first-of-type{
-        z-index: 2;
+        z-index: 1003;
         position: relative;
     }
     .sHeaderBox-Menu > input.sInputH + div > a:not(:first-of-type){

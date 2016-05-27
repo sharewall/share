@@ -38,19 +38,19 @@
           <div class="sHeaderWrapper">
               <div class="sHeaderBox sHeaderBox-WmMenu sFloat-R sPos-Rel"> 
                   <input type="checkbox" id="sWmInput" class="sInputH">
-                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label>
+                  <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel "></label>
                   <div class="sOverHidden-All sTextAlign-L">
                       {% if user.is_staff and request.session.profile %}
-                      <span class="sVAlign-50p sPos-Rel sZi-2">
+                      <span class="sVAlign-50p sPos-Rel sZi-1003">
                           {{ request.session.profile.username }}
                       </span>
                       {% else %}
-                      <span class="sVAlign-50p sPos-Rel sZi-2">
+                      <span class="sVAlign-50p sPos-Rel sZi-1003">
                           {{ user.username }}
                       </span>
                       {% endif %}
                   </div> 
-                  <div class="sWmMenu sPos-Rel sZi-1">
+                  <div class="sWmMenu sPos-Rel">
                       <span class="sWmMenuSpace"></span>
                       <a href="{% url "cabinet-webmaster-index" %}">Настройки</a>
                       <a href="{% url "landing-logout" %}">Выйти</a>
@@ -97,8 +97,8 @@
                       {% endif %}
                   </div>                
 
-                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel sZi-2"></label> 
-                  <div class="sMenu-Dd sPos-Rel sZi-1">
+                  <label for="sHeaderMenuInput" class="sUnderpants sFloat-R sPos-Rel "></label> 
+                  <div class="sMenu-Dd sPos-Rel">
                       <span class="sWmMenuSpace"></span>
                       {% if user.is_staff and request.session.profile == None or user.is_staff and request.session.profile and request.session.profile.is_staff %}
                         <a href="{% url "webmaster-area-index" %}">Площадки</a>

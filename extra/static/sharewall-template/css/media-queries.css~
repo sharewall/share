@@ -171,6 +171,9 @@
         width: 90px;
         font: 400 15px/26px Roboto!important;
     }
+    .sPopupWrapper-Modal{
+        position: absolute;
+    }
     
 }
 
@@ -364,9 +367,6 @@
     }
     .sLandHeaderOfferWrapper-L > h2{
         margin-top: 0px;
-    }
-    .sPopupWrapper-Modal{
-        position: absolute;
     }
 
 }

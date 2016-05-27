@@ -285,11 +285,14 @@ a { text-decoration: none!important; }
 .sPos-Rel{
     position: relative;
 }
+.sZi-1{
+    z-index: 1;
+}
 .sZi-2{
     z-index: 2;
 }
-.sZi-1{
-    z-index: 1;
+.sZi-1003{
+    z-index: 1003;
 }
 .sHeight-Auto{
     height: auto;
@@ -301,6 +304,7 @@ a { text-decoration: none!important; }
     background-repeat: no-repeat;
     cursor: pointer;
     background-position: -10px 45%;   
+    z-index: 1003;
 }
 .sInputH{
     position: absolute;
@@ -322,6 +326,7 @@ a { text-decoration: none!important; }
     color: #282f3a; 
 }
 .sWmMenu, .sMenu-Dd{
+    z-index: 1002;
     top: -36px; /*36px*/
     left: 4px;
     height: 41px;    
@@ -1446,11 +1451,8 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     display: none;
     text-align:center;
     color: #636d7a;
-    font: 300 34px / 18px Roboto-Light;px;
-    line-height:600px;
-}
-.sBusyOverlay2{
-    line-height:300px;
+    font: 300 34px / 18px Roboto-Light;
+    padding-top: 77px;
 }
 .sListConstructors > span.sActive{
     background-color: #ffae00;
@@ -1550,7 +1552,7 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     position: absolute;
     top: -5px;
     right: -70px;
-    
+    z-index: 1002; 
     display: none;
     opacity: 0;
 }
