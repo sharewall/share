@@ -40,14 +40,54 @@ def landing(request):
     if request.user.is_authenticated():
         template_name = 'webmaster_area/statistic-main.html'
         title = 'Общая статистика'
+
+        return render(request, template_name,
+        {
+            "page": { "title": title }
+        })
     else:
         template_name = 'landing/login.html'
         title = 'Sharewall'
 
-    return render(request, template_name,
-    {
-        "page": { "title": title }
-    })
+        sites = WebmasterAreaModel.objects.all().count()
+        sites = int(sites*10.5)
+
+        shares = 0
+        socials = 0
+        money = 0
+        areaTodayList = AreaToday.objects.all()
+        for a in areaTodayList:
+            shares += (
+                int(a.today_share_counter.split(',')[0])+
+                int(a.today_share_counter.split(',')[1])+
+                int(a.today_share_counter.split(',')[2])+
+                int(a.today_share_counter.split(',')[3])+
+                int(a.today_share_counter.split(',')[4])+
+                int(a.today_share_counter.split(',')[5])+
+                int(a.today_share_counter.split(',')[6])+
+                int(a.today_share_counter.split(',')[7])
+            )
+
+            socials += (
+                int(a.today_social_counter.split(',')[0])+
+                int(a.today_social_counter.split(',')[1])+
+                int(a.today_social_counter.split(',')[2])+
+                int(a.today_social_counter.split(',')[3])+
+                int(a.today_social_counter.split(',')[4])+
+                int(a.today_social_counter.split(',')[5])+
+                int(a.today_social_counter.split(',')[6])+
+                int(a.today_social_counter.split(',')[7])
+            )
+
+            money += float(a.today_money)
+
+        money = float(money*109005)
+
+        return render(request, template_name,
+        {
+            "page": { "title": title },
+            "stats": { "sites": sites, "shares": shares, "socials": socials, "money": money  }
+        })
 
 @login_required
 def chat(request):
@@ -395,6 +435,16 @@ def login(request):
             #    'error': 'Invalid authenticate'
             #})
     else:
+        '''
+        if not request.user.is_authenticated():
+            try:
+                user = authenticate(username='landing', password='landingpascal')
+                if user:
+                    django_login(request, user)
+            except:
+                pass
+        '''
+
         sites = WebmasterAreaModel.objects.all().count()
         sites = int(sites*10.5)
 
@@ -428,6 +478,11 @@ def login(request):
             money += float(a.today_money)
 
         money = float(money*109005)
+
+        '''
+        if request.user.is_authenticated() and request.user.username == 'landing':
+            django_logout(request)
+        '''
 
         return render(request, template_name,
         {

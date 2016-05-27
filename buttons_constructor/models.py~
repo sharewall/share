@@ -60,6 +60,7 @@ class Advert(models.Model):
 
     show_counter = models.IntegerField('show counter', default=0)
     click_counter = models.IntegerField('click counter', default=0)
+    money = models.FloatField('earned money', default=0.0)
 
     def __str__(self):
         return str('PK: %s' % self.pk)
@@ -81,13 +82,13 @@ class ButtonsConstructorModel(models.Model):
     btns_images = models.ForeignKey(BtnsImages, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="related btns images", related_name="buttons_constructor")
     name_constructor = models.CharField("name_constructor", max_length=50, default="Default constructor")
 
-    #sn_list = SocialNetworks.objects.all()
+    sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
 
-    #for s in sn_list:
-    #    if not s.shortcut in SOCIAL_DEFAULT:
-    #        SOCIAL_DEFAULT += s.shortcut + ','
-    #SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
+    for s in sn_list:
+        if not s.shortcut in SOCIAL_DEFAULT:
+            SOCIAL_DEFAULT += s.shortcut + ','
+    SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
 
     social_networks = models.CharField(max_length=300, default=SOCIAL_DEFAULT)
 

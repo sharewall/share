@@ -41,11 +41,11 @@
                   <label for="sWmInput" class="sUnderpants sFloat-R sPos-Rel "></label>
                   <div class="sOverHidden-All sTextAlign-L">
                       {% if user.is_staff and request.session.profile %}
-                      <span class="sVAlign-50p sPos-Rel sZi-1002">
+                      <span class="sVAlign-50p sPos-Rel sZi-1003">
                           {{ request.session.profile.username }}
                       </span>
                       {% else %}
-                      <span class="sVAlign-50p sPos-Rel sZi-1002">
+                      <span class="sVAlign-50p sPos-Rel sZi-1003">
                           {{ user.username }}
                       </span>
                       {% endif %}
@@ -176,9 +176,29 @@
     {% block footer_script %}{% endblock %}
         
         <script>
+
             $(function(){
                $('[data-url]').click(function(){ location.href = $(this).data('url'); }) 
             });    
+
+            {% if user.is_staff and not request.session.profile %}
+
+                function csrfSafeMethod(method) {
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+
+                var csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+            {% endif %}
+
         </script>
         
     </div>

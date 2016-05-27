@@ -42,37 +42,6 @@ class WebmasterAreaIndexView(LoginRequiredMixin, TemplateView):
         })
 
 @login_required
-def addCategory(request):
-    if request.user.is_staff:
-        request_name = request.POST.get('name', False)
-
-        if request_name:
-            area, created = AreaCategory.objects.get_or_create(name=request_name)
-
-            if created:
-                return HttpResponse('OK')
-            else:
-                return HttpResponse('Категория уже существует')
-
-    else:
-        return HttpResponse('bad id')
-
-@login_required
-def deleteCategory(request):
-    if request.user.is_staff:
-        request_name = request.POST.get('name', False)
-
-        if request_name:
-            try:
-                AreaCategory.objects.get(name=request_name).delete()
-                return HttpResponse('OK')
-            except:
-                return HttpResponse('Категория не найдена')
-
-    else:
-        return HttpResponse('bad id')
-
-@login_required
 def statistic(request):
     template_name = 'webmaster_area/statistic.html'
     title = 'Статистика'
@@ -961,7 +930,7 @@ def setcounterprivate(url):
                     snc += '0,'
                 else:
                     try:
-                        timeout = 2.0
+                        timeout = 4.0
 
                         response = requests.get(u, timeout=timeout)
                         re_result = re.findall(m, response.text)
@@ -1065,7 +1034,7 @@ def getAdvert(request, cook):
                     advert_json_price = advert_json['seatbid'][0]['bid'][0]['price']
                     advert_json_nurl = advert_json['seatbid'][0]['bid'][0]['nurl']
                 except:
-                    return HttpResponse('console.log("Sharewall advert no bid: '+str(advert_response)+'");')
+                    return HttpResponse('console.log("no bid");')
 
                 pattern_auc_price = '${AUCTION_PRICE}'
                 index_price = advert_json_nurl.index(pattern_auc_price)
@@ -1075,22 +1044,13 @@ def getAdvert(request, cook):
                 r = pool.urlopen('GET', nurl_url)
 
                 if area_today:
-                    total_money = float(advert_json_price / 1000)
-                    webmaster_money = float((advert_json_price / 1000) * 0.15)
-
-                    # Update advert
-                    advert.show_counter += 1
-                    advert.money_counter += total_money
-                    advert.save()
-
-                    # Update area_today
                     area_today.today_show_counter += 1
-                    area_today.today_money += webmaster_money
+                    area_today.today_money += float(advert_json_price / 1000)
                     area_today.save()
 
                     try:
                         cabinet = advert.cabinet_webmaster
-                        cabinet.money += webmaster_money
+                        cabinet.money += float(advert_json_price / 1000)
                         cabinet.save()
                     except:
                         return HttpResponse('bad cabinet')
@@ -1368,12 +1328,12 @@ def getconfig(request):
                     answer += '+\'<br/>\''
                 answer += ');'
                 answer += '$("div#sharewallContainer > #sAdvBtn").click(function(){\
-                            console.log("Sharewall advert click");\
+                            console.log("advert click");\
                             $.ajax({ url: "http://sharewall.ru/webmaster-area/getadvert/"+advCook, type: "POST", dataType: "jsonp" });\
                            });'
             else:
                 answer += 'w.setTimeout(function(){\
-                            console.log("Sharewall advert setTimeout=3000");\
+                            console.log("advert setTimeout=3000");\
                             $.ajax({ url: "http://sharewall.ru/webmaster-area/getadvert/"+advCook, type: "POST", dataType: "jsonp" });\
                            },3000);'
 
@@ -1472,7 +1432,64 @@ def getconfig(request):
                            $buttonCounter.text(updatedCounter);\
                        }'
 
-        answer += '$.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });'
+        answer += '    w.VK = { Share: { count: function(index, counter){\
+                           sharewallSetSNC("vk", counter);\
+                       }}};'
+        answer += '    w.ODKL = { updateCount: function(index, count){ sharewallSetSNC("od", count); }                       };'
+        answer += '    w.sharewallMyMailCallback = function(response){ sharewallSetSNC("ma", response[d.URL]["shares"]);\
+                       };'
+        answer += '    function sharewallGetAllSNC(){\
+                           var snc = "";\
+                           $("body div#sharewallSNC").find("span").each(function(i, e){ snc += $(e).attr("data-share-sn-count")+","; });\
+                           console.log("sharewallGetAllSNC: "+snc);\
+                           return snc;\
+                       }'
+        answer += '$.sharewallSharedCount = function(url, fn) {\
+                       url = encodeURIComponent(url || location.href);\
+                       var domain = "//free.sharedcount.com";\
+                       var ak = "e02e2352f161d72d0466e71ee4fc812dfe321e32";\
+                       var arg = {\
+                           data: {\
+                               url: url,\
+                               apikey: ak\
+                           },\
+                           url: domain + "/url",\
+                           cache: true,\
+                           dataType: "json"\
+                       };\
+                       if ("withCredentials" in new XMLHttpRequest) {\
+                           arg.success = fn;\
+                       } else {\
+                           var cb = "sc_" + url.replace(/\W/g, "");\
+                           window[cb] = fn;\
+                           arg.jsonpCallback = cb;\
+                           arg.dataType += "p";\
+                       }\
+                       return $.ajax(arg);\
+                   };'
+        answer += '$.sharewallSharedCount(location.href, function(data){\
+                       if(data.GooglePlusOne){\
+                           sharewallSetSNC("gp", data.GooglePlusOne);\
+                       }\
+                   });'
+
+        answer += '    $.when(\
+                           $.ajax({ url: "http://vk.com/share.php?act=count&url="+encodeURIComponent(d.URL), dataType: "jsonp" }),\
+                           $.ajax({ url: "https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=" + "\'" +encodeURIComponent(d.URL)+ "\'", dataType: "jsonp", success: function(data, status, jqXHR) {\
+                           if(status == "success" && data[0]) {\
+                               if(data[0].share_count > 0) {\
+                                   sharewallSetSNC("fb", data[0].share_count);\
+                               }\
+                           }\
+                           }}),\
+                           $.ajax({ url: "https://connect.ok.ru/dk?st.cmd=extLike&ref="+encodeURIComponent(d.URL), dataType: "jsonp", jsonp: false }),\
+                           $.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(d.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false }),\
+                           $.ajax({ url: "https://www.linkedin.com/countserv/count/share?url=" + encodeURIComponent(d.URL), dataType: "jsonp", success: function(response) { sharewallSetSNC("li", response.count); }\
+                           })\
+                       ).done(w.setTimeout(function(){\
+                       console.log("done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));'
 
         answer += ' $("div#sharewallContainer").children().each(\
             function(i,e){\
@@ -1498,35 +1515,63 @@ def getconfig(request):
         #TODO: counter each sn
         answer += 'if(sn=="lj"){\
                        sharewallSetSNC("lj", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "lj", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "lj", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
                    }'
         answer += 'if(sn=="tw"){\
                        sharewallSetSNC("tw", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "tw", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "tw", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
                    }'
         answer += 'if(sn=="vk"){\
-                       sharewallSetSNC("vk", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "vk", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.when($.ajax({ url: "http://vk.com/share.php?act=count&url="+encodeURIComponent(d.URL), dataType: "jsonp" })\
+                       ).done(w.setTimeout(function(){\
+                       console.log("VK done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "vk", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));\
                    }'
         answer += 'if(sn=="fb"){\
-                       sharewallSetSNC("fb", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "fb", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.when($.ajax({ url: "https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=" + "\'" +encodeURIComponent(d.URL)+ "\'", dataType: "jsonp", success: function(data, status, jqXHR) {\
+                        if(status == "success" && data[0]) {\
+                             if(data[0].share_count > 0) {\
+                                 sharewallSetSNC("fb", data[0].share_count);\
+                             }\
+                        }\
+                        }})\
+                       ).done(w.setTimeout(function(){\
+                       console.log("FB done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "fb", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));\
                     }'
         answer += 'if(sn=="od"){\
-                       sharewallSetSNC("od", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "od", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.when($.ajax({ url: "https://connect.ok.ru/dk?st.cmd=extLike&ref="+encodeURIComponent(d.URL), dataType: "jsonp", jsonp: false })\
+                       ).done(w.setTimeout(function(){\
+                       console.log("OD done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "od", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));\
                     }'
         answer += 'if(sn=="ma"){\
-                       sharewallSetSNC("ma", 1);\
-                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "ma", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.when($.ajax({ url: "http://connect.mail.ru/share_count?url_list="+encodeURIComponent(d.URL)+"&callback=1&func=sharewallMyMailCallback", dataType: "jsonp", jsonp: false })\
+                       ).done(w.setTimeout(function(){\
+                       console.log("MA done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "ma", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));\
                     }'
         answer += 'if(sn=="gp"){\
-                      sharewallSetSNC("gp", 1);\
-                      $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "gp", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } })\
+                       $.sharewallSharedCount(location.href, function(data){\
+                           if(data.GooglePlusOne){\
+                               sharewallSetSNC("gp", data.GooglePlusOne);\
+                           }\
+                           w.setTimeout($.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "gp", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } })\
+                       ,1000);\
+                       console.log("GP done setTimeout=1000");\
+                       });\
                    }'
         answer += 'if(sn=="li"){\
-                      sharewallSetSNC("li", 1);\
-                      $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, title: d.title, sn: "li", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1") } });\
+                       $.when($.ajax({ url: "https://www.linkedin.com/countserv/count/share?url=" + encodeURIComponent(d.URL), dataType: "jsonp", success: function(response) { sharewallSetSNC("li", response.count); }\
+                        })\
+                       ).then(w.setTimeout(function(){\
+                       console.log("LI done setTimeout=1000");\
+                       $.ajax({ url: "http://sharewall.ru/webmaster-area/checkconfig", dataType: "jsonp", jsonp: false, data: { referrer: d.referrer, url: d.URL, title: d.title, sn: "li", rr: d.cookie.replace(/(?:(?:^|.*;\s*)_sharewallrr\s*\=\s*([^;]*).*$)|^.*$/, "$1"), snc: sharewallGetAllSNC() } });\
+                       },1000));\
                    }'
 
         answer += '}\

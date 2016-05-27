@@ -3,12 +3,33 @@
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
+
+  {% if user.is_staff and not request.session.profile %}
+
+    <div class="sAlertMessageWrapper"></div>
+
+    <div class="sPopupWrapper">
+
+      <div class="sPopupWrapper-Modal" data-modal="cat">
+        <p>Категория</p> 
+        <input required type="text" name="catname" placeholder="Название категории" value=""/><br/>
+        <span class="sBlockLink sBlockLink-Blue" data-modal="addcat">Добавить</span>
+        <span class="sBlockLink sBlockLink-Red" data-modal="delcat">Удалить</span>
+        <span data-modal="close"></span>
+      </div> 
+
+    </div>
+  {% endif %}
+
   <div class="sContent-PB">
       <div class="sContainer sMargin-Auto">
 
           <div class="sH1Wrapper">
               <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
               <span class="sAdd-Circle"></span>
+              {% if user.is_staff and not request.session.profile %}
+                <span class="sBlockLink sBlockLink-Blue sDisplay-Block" data-event="cat">Добавить/удалить категории</span>
+              {% endif %}
               <div class="sClear-Both"></div>
           </div>        
           <div class="sTableAreas">
@@ -52,7 +73,7 @@
           <div class="sAddAreaModal" data-mode="create">
               <div class="sH1">Добавление площадки</div>
               <div class="sAddAreaWrapper">  
-                  <div class="sFloat-L s935Margin-0">
+                  <div class="sFloat-L s1030MarginLeft-75PX s935Margin-0">
                       <label for="add_name_area">Название</label>
                       <label for="add_url">URL</label> 
                       <label for="add_category">Категории</label>
@@ -91,9 +112,11 @@
   {% block footer_script %}
 
         <script>
+
             function formSubmit(){
                 $('form input[type="submit"]').click();
             }
+
             function eventUpdate(e){
                 $this = $(e);
                 $parent = $this.closest('.sTableAreasCell');
@@ -123,7 +146,9 @@
                 if($modal.data('mode') == $pk){ $modal.toggle(); }
                 else { $modal.data('mode', $pk).show(); }
             }
+
             $(function(){
+
                 $('div.sH1Wrapper span.sAdd-Circle').click(function(){ 
                   $modal = $('div.sAddAreaModal'); 
                   $modal.find('div.sH1').text('Добавление площадки');
@@ -143,7 +168,76 @@
                 if(location.search.indexOf('?create') != -1){
                     $('div.sH1Wrapper span.sAdd-Circle').click(); 
                 }
+
+                {% if user.is_staff and not request.session.profile %}
+
+                   $('[data-event]').click(function(){
+                       $('.sPopupWrapper').show();
+                       var event = $(this).data('event');
+                       $('[data-modal="'+event+'"]').show();
+                   }); 
+                    
+                   $('[data-modal="close"]').click(function(){
+                      $('.sPopupWrapper-Modal').hide(); 
+                      $('.sPopupWrapper').hide();
+                   });  
+
+                   $('[data-modal="addcat"]').click(function(){
+                       var name = $('input[name="catname"]').val();
+
+                       $.ajax({ 
+                          url: "{% url "webmaster-area-add-category" %}", 
+                          type: "POST", 
+                          data: {"name": name}, 
+                          success: function(response, status, jqXHR) { 
+                              console.log(response);
+
+                              $('[data-modal="close"]').click();
+
+                              if(response == 'OK'){
+                                  window.location.reload();
+                              }else{
+                                  $('.sAlertMessageWrapper').text(response).fadeIn('slow');
+                                  window.setTimeout(function(){
+                                    $('.sAlertMessageWrapper').text('').fadeOut('slow');
+                                  },2000);
+                              }
+
+                          }
+                      });
+
+                   }); 
+
+                   $('[data-modal="delcat"]').click(function(){
+                       var name = $('input[name="catname"]').val();
+
+                       $.ajax({ 
+                          url: "{% url "webmaster-area-delete-category" %}", 
+                          type: "POST", 
+                          data: {"name": name}, 
+                          success: function(response, status, jqXHR) { 
+                              console.log(response);
+
+                              $('[data-modal="close"]').click();
+
+                              if(response == 'OK'){
+                                  window.location.reload();
+                              }else{
+                                  $('.sAlertMessageWrapper').text(response).fadeIn('slow');
+                                  window.setTimeout(function(){
+                                    $('.sAlertMessageWrapper').text('').fadeOut('slow');
+                                  },2000);
+                              }
+
+                          }
+                      });
+
+                   }); 
+
+                {% endif %}
+
             });            
+          
         </script>
 
   {% endblock %}

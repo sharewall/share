@@ -60,6 +60,7 @@ class Advert(models.Model):
 
     show_counter = models.IntegerField('show counter', default=0)
     click_counter = models.IntegerField('click counter', default=0)
+    money_counter = models.FloatField('earned money in rub', default=0.0)
 
     def __str__(self):
         return str('PK: %s' % self.pk)

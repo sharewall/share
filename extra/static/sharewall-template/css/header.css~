@@ -583,7 +583,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     
 }
 .sAddAreaWrapper > div > div:nth-child(3),
-.sAddAreaWrapper > div > div:nth-child(4){
+.sAddAreaWrapper > div > div:nth-of-type(4){
     width: 591px;
     overflow: hidden;
     background-color: rgb(255, 255, 255);
@@ -591,10 +591,10 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-left: 17px;
     margin-top: 6px;
 }
-.sAddAreaWrapper > div > div:nth-child(4){
+.sAddAreaWrapper > div > div:nth-of-type(4){
     margin-top: 14px;
 }
-.sAddAreaWrapper > div > div:nth-child(4) > select{
+.sAddAreaWrapper > div > div:nth-of-type(4) > select{
     padding-left: 5px;
 }
 .sAddAreaWrapper > div > div > select{
@@ -1452,7 +1452,7 @@ not(.sAdvertWrapper) .sCodeDescription > p:first-of-type{
     text-align:center;
     color: #636d7a;
     font: 300 34px / 18px Roboto-Light;
-    vertical-align: bottom;
+    padding-top: 77px;
 }
 .sListConstructors > span.sActive{
     background-color: #ffae00;
@@ -2348,6 +2348,9 @@ span[data-submit]{
 .sPopupWrapper-Modal[data-modal="log"] > [data-modal="close"]{
     bottom: 433px;
 }
+.sPopupWrapper-Modal[data-modal="cat"] > [data-modal="close"]{
+    bottom: 150px;
+}
 .sPopupWrapper-Modal  [data-form]{
     background: url(../images/big-yellow-btn-4.png)no-repeat;
     width: 423px;
@@ -2385,4 +2388,14 @@ span[data-submit]{
     font: 300 25px/80px Roboto-Light;
     text-align: center;
     padding: 0px 20px;
+}
+.sBlockLink{
+    font: 400 14px Roboto;
+    cursor: pointer;
+}
+.sBlockLink-Blue{
+    color: rgb(0, 139, 212);
+}
+.sBlockLink-Red{
+    color: red;
 }
