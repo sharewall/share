@@ -72,7 +72,7 @@ def settings(request):
                 else:
                     django_logout(request)
                 answer = 'УДАЛИТЬ'
-            elif request_post.get('password') and request.user.check_password(request_post.get('password')):
+            elif request_post.get('password') and request.user.check_password(request_post.get('password')):#TODO: if profile
                 user.set_password(request_post.get('new_password'))
                 user.save()
                 answer = 'PASS'

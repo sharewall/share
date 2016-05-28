@@ -542,3 +542,14 @@ def register(request):
             #user_form = UserForm()
         #if not 'cabinet_webmaster_form' in locals():
             #cabinet_webmaster_form = CabinetWebmasterForm()
+
+@login_required
+def adminBalance(request):
+    if request.user.is_staff:
+        if request.method is 'POST':
+            return HttpResponse('ADMIN POST')
+        else:
+            return HttpResponse('ADMIN GET')
+
+    else:
+        return HttpResponse('BAD ID')

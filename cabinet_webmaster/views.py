@@ -106,3 +106,11 @@ def settings(request):
         return HttpResponse(answer)
     else:
         return HttpResponseRedirect('/cabinet-webmaster/')
+
+@login_required
+def balance(request):
+    if request.method is 'POST':
+        return HttpResponse('POST')
+    else:
+        return HttpResponse('GET')
+

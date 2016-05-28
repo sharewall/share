@@ -58,15 +58,21 @@
               </div>
               <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
                   <div class="sOverHidden-All">
-                      <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
                       {% if user.is_staff and request.session.profile %}
-                      <span class="sVAlign-50p sPos-Rel">
-                          {{ request.session.profile.money }} p.                    
-                      </span>
+                      <a href="{% url "cabinet-webmaster-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ request.session.profile.money }} p.                    
+                        </span>
+                      {% elif user.is_staff and not request.session.profile %}
+                        <a href="{% url "admin-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ user.cabinet_webmaster.money }} p.                    
+                        </span>
                       {% else %}
-                      <span class="sVAlign-50p sPos-Rel">
-                          {{ user.cabinet_webmaster.money }} p.                    
-                      </span>
+                        <a href="{% url "cabinet-webmaster-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ user.cabinet_webmaster.money }} p.                    
+                        </span>
                       {% endif %}
                   </div> 
               </div>
@@ -93,7 +99,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                        <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
+                        <a href="javascript:return false;" class="sVAlign-50p" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>                
 
@@ -119,7 +125,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                        <a href="javascript:return false;">FAQ</a>
+                        <a href="javascript:return false;" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>
               </div>

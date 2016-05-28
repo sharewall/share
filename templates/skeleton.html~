@@ -93,7 +93,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                        <a href="javascript:return false;" class="sVAlign-50p">FAQ</a>
+                        <a href="javascript:return false;" class="sVAlign-50p" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>                
 
@@ -119,7 +119,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                        <a href="javascript:return false;">FAQ</a>
+                        <a href="javascript:return false;" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>
               </div>
@@ -181,23 +181,19 @@
                $('[data-url]').click(function(){ location.href = $(this).data('url'); }) 
             });    
 
-            {% if user.is_staff and not request.session.profile %}
+            function csrfSafeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
 
-                function csrfSafeMethod(method) {
-                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-                }
+            var csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-                var csrftoken = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-                $.ajaxSetup({
-                    beforeSend: function(xhr, settings) {
-                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                        }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     }
-                });
-
-            {% endif %}
+                }
+            });
 
         </script>
         

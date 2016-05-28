@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from landing.views import LandingView, landing, register, login, logout, admin_webmasters, admin_change_status, admin_profile, admin_profile_clear, admin_area_by_id, chat, chat_create, admin_chat_billing, admin_chat_support, chat_update, admin_wm_by_id
+from landing.views import LandingView, landing, register, login, logout, admin_webmasters, admin_change_status, admin_profile, admin_profile_clear, admin_area_by_id, chat, chat_create, admin_chat_billing, admin_chat_support, chat_update, admin_wm_by_id, adminBalance
 
 #app_name = 'landing'
 urlpatterns = [
@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^admin/chat/billing/$', admin_chat_billing, name='admin-chat-billing'),
     url(r'^admin/chat/support/$', admin_chat_support, name='admin-chat-support'),
     url(r'^admin/wm-by-id/$', admin_wm_by_id, name='admin-wm-by-id'),
+    url(r'^admin/balance/$', adminBalance, name='admin-balance'),
 ]
