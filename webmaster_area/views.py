@@ -105,6 +105,9 @@ def updateServer(request):
         answer = answer + area.name_area + ": "
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
+        # TODO: If we collect page_today, need move update to checkconfig, because better way
+        # Need create area_today to update stats.
+        # Move to checkconfig() area_today, created = AreaToday.objects.get_or_create(webmaster_area=wma_object, date=datetime.date.today())
         if area_per_day_list.last():
             last_day = area_per_day_list.last()
 
@@ -1132,13 +1135,8 @@ def checkconfig(request):
         history_rr = request.GET.get('rr', 'none rr')
 
         request_url = request_referer.lower() # request_url = request.GET.get('url', 'none url')
-        #request_url = request_url.lower()
-        #answer += 'console.log("'+request_url+', '+request.GET.get('url', 'none url')+'");'
 
         request_title = request.GET.get('title', 'Title')
-
-        #snc = request.GET.get('snc', 'none snc')
-        #snc = snc[:-1]
 
         list_sn = SocialNetworks.objects.all()
 
@@ -1152,36 +1150,20 @@ def checkconfig(request):
             index_sn = list_parsed_sn.index(history_parsed_referrer)
             answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
 
-        #Page detail
-        #Disable page_today
-        #Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
-
-        #request_url_html = urllib.request.urlopen(request_url)
-        #soup = BeautifulSoup(request_url_html)
-
-        #if parsed_referer == urlparse(request_url).netloc and request_url_html.status == 200:
-            #answer += 'console.log("url ok");'
-            #TODO: update wma today?
-            '''
-            try:
-                wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
-            except:
-                wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today()) #,today_share_counter=snc)
-            '''
-
-        # Move >> to backup
         list_sn_shortcuts = [sn.shortcut for sn in list_sn]
 
         # TODO: Find url with (no response) timeout in setcounterprivate(url)
         snc_server = setcounterprivate(request_url)
 
         try:
+            # Update pagedetail
             page_detail, created = PageDetail.objects.get_or_create(
                 webmaster_area=wma_object, 
                 url=request_url, 
-                defaults={'title': request_title},#page_detail.title = soup.title.string
+                defaults={'title': request_title},
                 )
 
+            page_detail.title = request_title
             old_snc = page_detail.total_share_counter
 
             request_sn = request.GET.get("sn", False)
@@ -1248,18 +1230,48 @@ def checkconfig(request):
             else:
                 answer += 'console.log("'+str(page_detail) + ' updated!");' 
 
+            # Update areatoday
+            # Better way to update area today!?
+            area_today, created = AreaToday.objects.get_or_create(webmaster_area=wma_object, date=datetime.date.today())
+            # Disable page_today
+            # Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
+
+            # Change logic from updateServer(), for each area_today separate, we need today_page_counter
+            '''
+            area_today_social_counter_int = [int(s) for s in area_today.today_social_counter.split(',')]
+            area_today_share_counter_int = [int(s) for s in area_today.today_share_counter.split(',')]
+
+            page_detail_social_counter_int = [int(s) for s in page_detail.total_social_counter.split(',')]
+            page_detail_share_counter_int = [int(s) for s in page_detail.total_share_counter.split(',')]
+
+            index_social, index_share = [0,0]
+
+            for i,i2 in zip(area_today_social_counter_int, page_detail_social_counter_int):
+                area_today_social_counter_int[index_social] = (i + i2)
+                index_social += 1
+
+            for i,i2 in zip(area_today_share_counter_int, page_detail_share_counter_int):
+                area_today_share_counter_int[index_share] = (i + i2)
+                index_share += 1
+
+            for i,i2 in zip(area_today_social_counter_int, area_today_share_counter_int):
+                area_today.today_social_counter += str(i) + ','
+                area_today.today_share_counter += str(i2) + ','
+
+            area_today.today_social_counter = area_today.today_social_counter[:-1]
+            area_today.today_share_counter = area_today.today_share_counter[:-1]
+            '''
+
         except:
             answer += 'console.log("Server page_detail error!");' 
                 
-        #else:
-        #    answer = "bad id!"
-        #    return HttpResponse(answer)
-
         answer += '    document.cookie = "_sharewallrr=; expires=Thu, 01 Jan 1970 00:00:00 UTC";'
         answer += '    var date = new Date(); date.setTime(date.getTime() + 24*60*60*1000);'
         answer += '    document.cookie = "_sharewallrr=%s'%history_referrer+'; path=%s'%urlparse(request_url).path+'; max-age="+24*60*60+"; expires="+date.toGMTString();'
+
     else:
         answer = 'bad id!'
+
     return HttpResponse(answer)
 
 

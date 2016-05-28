@@ -59,8 +59,11 @@ class WebmasterAreaModel(models.Model):
         
 class AreaToday(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='related_webmaster_area', related_name='area_today')
+
     date = models.DateField('date', auto_now_add=True)
+
     sn_list = SocialNetworks.objects.all()
+
     SOCIAL_DEFAULT = ''
     COUNTER_DEFAULT = ''
     for s in sn_list:
@@ -69,9 +72,10 @@ class AreaToday(models.Model):
             COUNTER_DEFAULT += '0,'
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
+
     today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
-
+    # Adv
     today_money = models.FloatField("today money in rub", default=0.0)
     today_show_counter = models.IntegerField('today show counter', default=0)
     today_click_counter = models.IntegerField('today click counter', default=0)
