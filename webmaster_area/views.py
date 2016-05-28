@@ -1146,9 +1146,14 @@ def checkconfig(request):
 
         #answer += 'console.log("history_parsed_referrer = %s");'%history_parsed_referrer
 
-        if history_referrer != history_rr and history_parsed_referrer in list_parsed_sn:
-            index_sn = list_parsed_sn.index(history_parsed_referrer)
-            answer += 'console.log("list_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
+        if history_referrer != history_rr:
+            if history_parsed_referrer in list_parsed_sn:
+                index_sn = list_parsed_sn.index(history_parsed_referrer)
+                answer += 'console.log("List_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
+            # Fix LJ
+            elif 'livejournal.com' in list_parsed_sn and 'livejournal.com' in history_parsed_referrer:
+                index_sn = list_parsed_sn.index('livejournal.com')
+                answer += 'console.log("FIX LJ! List_parsed = {0} history_parsed_referrer = {1} index = {2} history_rr = {3} history_referrer = {4}");'.format(list_parsed_sn, history_parsed_referrer, index_sn, history_rr, history_referrer)
 
         list_sn_shortcuts = [sn.shortcut for sn in list_sn]
 
