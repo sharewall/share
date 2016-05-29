@@ -8,6 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from landing.forms import UserForm, CabinetWebmasterForm
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.contrib.auth.models import User
+from cabinet_webmaster.models import Balance, CabinetWebmasterModel
+import numbers
 
 class CabinetWebmasterIndexView(LoginRequiredMixin, TemplateView):
     login_url = '/login/' 
@@ -113,13 +115,51 @@ def balance(request):
     title = 'Баланс'
     header = title
 
-    #if request.user.is_staff and request.session.get('profile', False):
-
     if request.method == 'POST':
-        return HttpResponse('POST')
+        if request.user.is_staff and request.session.get('profile', False):
+            return HttpResponse('Ошибка! Выводить средства может только вебмастер')
+
+        request_summ = request.POST.get('summ', False)
+
+        if request_summ:
+            try:
+                request_summ = float(request_summ)
+
+                if request_summ <= 0:
+                    return HttpResponse('Ошибка! Введите сумму больше 0')
+
+            except:
+                return HttpResponse('Ошибка! Введите сумму')
+
+            cabinet_webmaster = request.user.cabinet_webmaster
+
+            user_money = cabinet_webmaster.money
+            user_wmr = cabinet_webmaster.wmr
+
+            if request_summ <= user_money:
+                Balance.objects.create(user=request.user, wmr=user_wmr, money=request_summ)
+
+                cabinet_webmaster.money = float(cabinet_webmaster.money - request_summ)
+                cabinet_webmaster.save()
+
+                return HttpResponse('OK')
+
+            else:
+                return HttpResponse('Ошибка! Недостаточно средств')
+
+        else:
+            return HttpResponse('Ошибка!')
 
     else:
+        if request.user.is_staff and request.session.get('profile', False):
+            profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
+            balances = Balance.objects.filter(user=profile_user)
+
+        else:
+            balances = Balance.objects.filter(user=request.user)
+
         return render(request, template_name,
         {
-            'page': { 'title': title, 'header': header }
+            'page': { 'title': title, 'header': header },
+            'balances': balances,
         })

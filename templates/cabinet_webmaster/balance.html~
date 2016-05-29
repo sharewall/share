@@ -8,14 +8,14 @@
 
     <div class="sPopupWrapper">
 
-      <div class="sPopupWrapper-Modal" data-modal="money">
-        <p>Вывод средств</p> 
-        <input form="balanceForm" required type="text" name="summ" placeholder="{{ user.cabinet_webmaster.money }}" value=""/><br/>
+      <div class="sPopupWrapper-Modal" data-modal="money" style="background-color: #efefef; width: 418px; height: 242px;">
+        <p style="color: #636d7a; font: 300 25px / 18px Roboto-Light; margin-bottom:36px;">Вывод средств</p> 
+        <input class="sAuthForm-Input" form="balanceForm" required type="text" name="summ" placeholder="{{ user.cabinet_webmaster.money }}" value=""/><br/>
         <form id="balanceForm" style="display:none; opacity:0;" method="post" action="{% url "cabinet-webmaster-balance" %}">
             {% csrf_token %}
             <input type="submit" />
         </form>
-        <span class="sBlockLink sBlockLink-Blue" data-modal="sendmoney">Отправить</span>
+        <span data-modal="sendmoney">Отправить</span>
         <span data-modal="close"></span>
       </div> 
 
@@ -27,7 +27,11 @@
           <div class="sH1Wrapper" style="border-bottom: 1px solid rgb(143, 143, 143); padding-bottom: 0px;">
               <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
               <span class="sDisplay-Inline sFloat-R" data-event="money">Вывести средства</span>
-              <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ user.cabinet_webmaster.money }}</span>
+              {% if user.is_staff and request.session.profile %}
+                <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ request.session.profile.money }}</span>
+              {% else %}
+                <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ user.cabinet_webmaster.money }}</span>
+              {% endif %}
               <div class="sClear-Both"></div>
           </div>    
           
@@ -44,8 +48,8 @@
           
           <div class="sTableAreas" style="margin-top:70px;">
               <div class="sTableAreasFieldName">
-                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span>Дата</span>
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                    <span>Дата подачи</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
                     <span>Статус</span>
@@ -60,40 +64,31 @@
                     <span>Дата обработки</span>
                   </div>
               </div>
+
+              {% for balance in balances %}
               <div class="sTableAreasCell">
-                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span>01.01.2016</span>
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                    <span>{{ balance.showCreateDate }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span class="sBalanceStatus" data-status="accept"></span>
+                    <span class="sBalanceStatus" data-status="{{ balance.get_status_display }}"></span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>1250</span>
+                    <span>{{ balance.money }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>R2022020125</span>
+                    <span>{{ balance.wmr }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>03.01.2016</span>
+                    {% if balance.status == "WAI" %}
+                      <span class="sBalanceAdmStatus">{{ balance.showStatus }}</span>
+                    {% else %}
+                      <span>{{ balance.showUpdateDate }}</span>
+                    {% endif %}
                   </div>
               </div>
-              <div class="sTableAreasCell">
-                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span>01.01.2016</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span class="sBalanceStatus" data-status="decline"></span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>2000</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>R2022020125</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>03.01.2016</span>
-                  </div>
-              </div>
+              {% endfor %}
+
           </div>         
 
 
@@ -105,7 +100,54 @@
 
         <script>
 
-          
+          $(function(){
+
+             $('[data-event]').click(function(){
+                 $('.sPopupWrapper').show();
+                 var event = $(this).data('event');
+                 $('[data-modal="'+event+'"]').show();
+             }); 
+              
+             $('[data-modal="close"]').click(function(){
+                $('.sPopupWrapper-Modal').hide(); 
+                $('.sPopupWrapper').hide();
+             });  
+        
+             $('[data-modal="sendmoney"]').click(function(){
+                 var summ = $('input[name="summ"]').val();
+                 
+                 if(summ){
+                      $.ajax({ 
+                        url: "{% url "cabinet-webmaster-balance" %}", 
+                        type: "POST", 
+                        data: {"summ": summ}, 
+                        success: function(response, status, jqXHR) { 
+                            console.log(response);
+
+                            $('[data-modal="close"]').click();
+
+                            if(response == 'OK'){
+                                window.location.reload();
+                            }else{
+                                $('.sAlertMessageWrapper').text(response).fadeIn('slow');
+                                window.setTimeout(function(){
+                                  $('.sAlertMessageWrapper').text('').fadeOut('slow');
+                                },2000);
+                            }
+
+                            }
+                        });
+                 }else{
+                    $('.sAlertMessageWrapper').css('z-index','2').text("Ошибка! Введите сумму!").fadeIn('slow');
+                    window.setTimeout(function(){
+                      $('.sAlertMessageWrapper').css('z-index','1').text('').fadeOut('slow');
+                    },2000); 
+                 }
+
+             }); 
+
+         }); 
+
         </script>
 
   {% endblock %}

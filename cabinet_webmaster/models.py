@@ -97,3 +97,39 @@ class ChatMessageFile(models.Model):
     
     def __str__(self):
         return str('Chat_message: %s' % self.chat_message + '; File_store: %s ' % self.file_store)
+
+class Balance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="balance")
+
+    wmr = models.CharField("user_wmr", max_length=100, null=True, blank=True, default="")
+    money = models.FloatField("money in rub", default=0.0)
+
+    date_create = models.DateTimeField('date_create', auto_now_add=True)
+    date_update = models.DateTimeField('date_update', auto_now=True)
+
+    def showCreateDate(self):
+        return str(self.date_create.strftime('%d.%m.%Y %H:%M'))
+
+    def showUpdateDate(self):
+        return str(self.date_update.strftime('%d.%m.%Y %H:%M'))
+
+    WAIT = 'WAI'
+    ACCEPT = 'ACE'
+    DECLINE = 'DEC'
+    STATUS_CHOICES=(
+        (WAIT,'wait'),
+        (ACCEPT,'accept'),
+        (DECLINE,'decline'),
+    )
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default=WAIT)
+
+    def showStatus(self):
+        if self.status == self.WAIT:
+            return 'В процессе'
+        elif self.status == self.ACCEPT:
+            return 'Выполнено'
+        else:
+            return 'Отказ'
+
+    def __str__(self):
+        return str('From: %s' % self.user.username + '; Money: %s' % self.money + '; WMR: %s' % self.wmr + '; Date_update: %s ' % self.date_update.strftime('%d/%m/%Y %H:%M'))

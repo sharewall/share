@@ -3,16 +3,17 @@ from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from landing.forms import UserForm, CabinetWebmasterForm
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.core.urlresolvers import reverse
-from cabinet_webmaster.models import CabinetWebmasterModel, Chat, ChatMessage, ChatMessageFile
 from django.contrib.auth.models import User
-from itertools import chain
 from django.db.models import Q
 from django.core import serializers
+from itertools import chain
 from webmaster_area.models import WebmasterAreaModel, AreaToday
+from cabinet_webmaster.models import CabinetWebmasterModel, Chat, ChatMessage, ChatMessageFile, Balance
+from landing.forms import UserForm, CabinetWebmasterForm
+from buttons_constructor.models import Advert
 #from django.views.decorators.cache import cache_page
 #from django.conf import settings
 #from django.contrib.auth.hashers import check_password
@@ -546,17 +547,70 @@ def register(request):
 @login_required
 def adminBalance(request):
     template_name = 'landing/admin-balance.html'
-    title = 'Баланс'
+    title = 'Общий баланс'
     header = title
 
     if request.user.is_staff:
         if request.method == 'POST':
-            return HttpResponse('ADMIN POST')
+            request_status = request.POST.get('status', False)
+            request_id = request.POST.get('id', False)
+
+            if request_status and request_id:
+                try:
+                    balance = Balance.objects.get(pk=request_id)
+
+                except:
+                    return HttpResponse('Некорректные данные')
+
+                if request_status == 'accept':
+
+                elif request_status == 'decline':
+
+                else:
+                    return HttpResponse('Некорректные данные')
+
+            else:
+                return HttpResponse('Недостаточно данных')
+
         else:
-            return HttpResponse('ADMIN GET')
+            # Webmasters money
+            cabinet_webmaster_all = CabinetWebmasterModel.objects.all()
+
+            money_webmaster_all = 0.0
+
+            for cabinet in cabinet_webmaster_all:
+                money_webmaster_all += cabinet.money
+
+            # System money
+            advert_all = Advert.objects.all()
+
+            money_system_all = 0.0
+
+            for advert in advert_all:
+                money_system_all += advert.money_counter
+
+            # Balances
+            balances_all = Balance.objects.all().select_related('user')
+            
+            balances_accept = []
+            balances_not_accept = []
+
+            for balance in balances_all:
+                if balance.status == 'ACE':
+                    balances_accept.append(balance)
+                else:
+                    balances_not_accept.append(balance)
+            
+            return render(request, template_name,
+            {
+                'page': { 'title': title, 'header': header },
+                #'balances_all': balances_all,
+                'balances_accept': balances_accept,
+                'balances_not_accept': balances_not_accept,
+                'money_webmaster_all': money_webmaster_all,
+                'money_system_all': money_system_all,
+                'money_total': float(money_webmaster_all + money_system_all),
+            })
 
     else:
-        return render(request, template_name,
-        {
-            'page': { 'title': title, 'header': header }
-        })
+        return HttpResponse('BAD ID')

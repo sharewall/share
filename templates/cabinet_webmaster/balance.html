@@ -27,18 +27,30 @@
           <div class="sH1Wrapper" style="border-bottom: 1px solid rgb(143, 143, 143); padding-bottom: 0px;">
               <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
               <span class="sDisplay-Inline sFloat-R" data-event="money">Вывести средства</span>
-              <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ user.cabinet_webmaster.money }}</span>
+              {% if user.is_staff and request.session.profile %}
+                <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ request.session.profile.money }}</span>
+              {% else %}
+                <span class="sBigMoney sFloat-R s735Font-Size-20PX">{{ user.cabinet_webmaster.money }}</span>
+              {% endif %}
               <div class="sClear-Both"></div>
           </div>    
           
           <div style="padding: 0px 15px; margin: 0px 5px; border-bottom: 1px solid rgb(237, 237, 237);">
               <span class="sStdText sTextColor-Black sFloat-L">Баннер</span>
-              <span class="sStdText sTextColor-Blue sFloat-R">{{ user.cabinet_webmaster.money }}</span>
+              {% if user.is_staff and request.session.profile %}
+                <span class="sStdText sTextColor-Blue sFloat-R">{{ request.session.profile.money }}</span>
+              {% else %}
+                <span class="sStdText sTextColor-Blue sFloat-R">{{ user.cabinet_webmaster.money }}</span>
+              {% endif %}
               <div class="sClear-Both"></div>
           </div>
           <div style="padding: 0px 20px; background-color:#ededed;">
               <span class="sBoldText sTextColor-Black sFloat-L">Всего</span>
-              <span class="sBoldText sTextColor-Blue sFloat-R">{{ user.cabinet_webmaster.money }}</span>
+              {% if user.is_staff and request.session.profile %}
+                <span class="sBoldText sTextColor-Blue sFloat-R">{{ request.session.profile.money }}</span>
+              {% else %}
+                <span class="sBoldText sTextColor-Blue sFloat-R">{{ user.cabinet_webmaster.money }}</span>
+              {% endif %}
               <div class="sClear-Both"></div>
           </div>
           
@@ -60,40 +72,31 @@
                     <span>Дата обработки</span>
                   </div>
               </div>
+
+              {% for balance in balances %}
               <div class="sTableAreasCell">
                   <div class="sTableAreasField sNoneBorder" style="width:15%;">
-                    <span>01.01.2016</span>
+                    <span>{{ balance.showCreateDate }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span class="sBalanceStatus" data-status="accept"></span>
+                    <span class="sBalanceStatus" data-status="{{ balance.get_status_display }}"></span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>1250</span>
+                    <span>{{ balance.money }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>R2022020125</span>
+                    <span>{{ balance.wmr }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>03.01.2016</span>
+                    {% if balance.status == "WAI" %}
+                      <span class="sBalanceAdmStatus">{{ balance.showStatus }}</span>
+                    {% else %}
+                      <span>{{ balance.showUpdateDate }}</span>
+                    {% endif %}
                   </div>
               </div>
-              <div class="sTableAreasCell">
-                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
-                    <span>01.01.2016</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
-                    <span class="sBalanceStatus" data-status="decline"></span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>2000</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>R2022020125</span>
-                  </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
-                    <span>03.01.2016</span>
-                  </div>
-              </div>
+              {% endfor %}
+
           </div>         
 
 

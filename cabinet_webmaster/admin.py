@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from cabinet_webmaster.models import CabinetWebmasterModel, Chat, ChatMessage, ChatMessageFile
+from cabinet_webmaster.models import CabinetWebmasterModel, Chat, ChatMessage, ChatMessageFile, Balance
 
 # Define an inline admin descriptor for CabinetWebmasterModel model
 # which acts a bit like a singleton
@@ -22,3 +22,4 @@ admin.site.register(CabinetWebmasterModel)
 admin.site.register(Chat)
 admin.site.register(ChatMessage)
 admin.site.register(ChatMessageFile)
+admin.site.register(Balance)

@@ -218,6 +218,7 @@
                     "id": id
                   }, 
                   success: function(response, status, jqXHR) { 
+                      console.log(response);
 
                       if(response == 'OK'){
                           window.location.reload();
@@ -229,7 +230,7 @@
                       }
 
                       }
-                 });
+                  });
 
              }); 
 
