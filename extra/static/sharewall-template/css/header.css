@@ -489,6 +489,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
 .sTableAreas .sTableAreasFieldName{
     height: 45px;
     background: #e7e7e7;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
 .sTableAreasCell{
     height: 41px;
@@ -2314,7 +2315,7 @@ span[data-submit]{
     font: 300 40px / 18px Roboto-Light;
     margin-top: 43px;
 }
-.sPopupWrapper-Modal  input[type="text"],
+.sPopupWrapper-Modal  input[type="text"]:not(.sAuthForm-Input),
 .sPopupWrapper-Modal  input[type="password"],
 .sPopupWrapper-Modal  input[type="email"]{
     background: url(../images/land-popup-input.png)no-repeat;
@@ -2350,6 +2351,10 @@ span[data-submit]{
 }
 .sPopupWrapper-Modal[data-modal="cat"] > [data-modal="close"]{
     bottom: 203px;
+}
+.sPopupWrapper-Modal[data-modal="money"] > [data-modal="close"]{
+    bottom: 256px;
+    left: 400px;
 }
 .sPopupWrapper-Modal  [data-form]{
     background: url(../images/big-yellow-btn-4.png)no-repeat;
@@ -2398,4 +2403,70 @@ span[data-submit]{
 }
 .sBlockLink-Red{
     color: red;
+}
+.sBigMoney{
+    color: #636d7a;
+    font: 300 34px / 18px Roboto-Light;
+}
+[data-event="money"]{
+    background: url(../images/balance-getmoney-btn.png);
+    color: #ffffff;
+    font: 400 15px / 50px Roboto;
+    text-align: center;
+    width: 203px;
+    height: 60px;
+    margin-top: -17px;
+    margin-right: -10px;
+}
+.sStdText{
+    font: 400 15px / 50px Roboto;
+}
+.sBoldText{
+    color: #262d38;
+    font: 500 16px / 50px Roboto;
+}
+.sTextColor-Black{
+    color: #262d38;
+}
+.sTextColor-Blue{
+    color: #2fabf6;
+}
+.sNoneBorder{
+    border: none!important;
+}
+.sBalanceStatus{
+    width: 24px;
+    height: 24px!important;
+    background-repeat: no-repeat!important;
+    margin: 0 auto;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.sBalanceStatus[data-status="accept"]{
+    background: url(../images/balance-status-accept.png);
+}
+.sBalanceStatus[data-status="decline"]{
+    background: url(../images/balance-status-decline.png);
+}
+[data-modal="sendmoney"]{
+    background: url(../images/send-money.png);
+    display: block;
+    color: #ffffff;
+    font: 400 13.4px / 57px Roboto;
+    width: 188px;
+    height: 67px;
+    margin: 0 auto;
+    cursor: pointer;
+    margin-top: 28px;
+}
+.sAuthForm-Input{
+    border: 0px none;
+    text-align: left;
+    background-color: #ffffff;
+    border-radius: 7px;
+    width: 337px;
+    height: 45px;
+    color: #636d7a;
+    font: 400 15px / 18px Roboto;
+    padding-left: 10px;
 }

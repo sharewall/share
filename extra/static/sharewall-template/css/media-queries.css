@@ -212,7 +212,7 @@
     .sFormPad-Wrapper > .sBSExample{
         width:auto;
     }
-    .sTableAreasField > span{
+    .sTableAreasField > *{
         padding: 0px!important;
     }
     .s936Width-10P{
@@ -255,6 +255,9 @@
     }
     .sPopupWrapper-Modal{
         left: 15%;
+    }
+    .s936TextAlign-C{
+        text-align: center;
     }
 
 }
@@ -561,6 +564,9 @@
     }
     .sPopupWrapper-Modal > [data-modal="close"]{
         left: 411px!important;
+    }
+    .s735Font-Size-20PX{
+        font-size: 20px;
     }
     
 }

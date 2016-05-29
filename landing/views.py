@@ -546,7 +546,7 @@ def register(request):
 @login_required
 def adminBalance(request):
     if request.user.is_staff:
-        if request.method is 'POST':
+        if request.method == 'POST':
             return HttpResponse('ADMIN POST')
         else:
             return HttpResponse('ADMIN GET')

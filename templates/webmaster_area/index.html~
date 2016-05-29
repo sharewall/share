@@ -32,17 +32,17 @@
               {% endif %}
               <div class="sClear-Both"></div>
           </div>        
-          <div class="sTableAreas">
+          <div class="sTableAreas s936TextAlign-C">
               <div class="sTableAreasFieldName">
                   <div class="sTableAreasField s1200Width-5P"><span>ID</span>
                   </div>
                   <div class="sTableAreasField s1200Width-10P"><span>Название</span>
                   </div>
-                  <div class="sTableAreasField s1200Width-10P"><span>URL</span>
+                  <div class="sTableAreasField s1200Width-15P"><span>URL</span>
                   </div>
                   <div class="sTableAreasField s1200Width-40P"><span>Категории</span>
                   </div>
-                  <div class="sTableAreasField s1200Width-10P"><span>Типы рекламы</span>
+                  <div class="sTableAreasField s1200Width-15P"><span>Типы рекламы</span>
                   </div>
                   <div class="sTableAreasField s1200Width-10P"><span>Действия</span>
                   </div>
@@ -53,15 +53,15 @@
                   </div>
                   <div class="sTableAreasField s1200Width-10P"><a>{{ a.name_area }}</a>
                   </div>
-                  <div class="sTableAreasField s1200Width-10P"><a target="_blank" href="//{{ a.url }}">{{ a.url }}</a>
+                  <div class="sTableAreasField s1200Width-15P"><a target="_blank" href="//{{ a.url }}">{{ a.url }}</a>
                   </div>
                   <div class="sTableAreasField s1200Width-40P"><span>{{ a.area_category }}</span>
                   </div>
-                  <div class="sTableAreasField s1200Width-10P"><span>{{ a.get_ad_type_display }}</span>
+                  <div class="sTableAreasField s1200Width-15P"><span>{{ a.get_ad_type_display }}</span>
                   </div>
                   <div class="sTableAreasField s1200Width-10P">
-                      <span class="sAreaEdit" onclick="eventUpdate(this)"></span>
-                      <a href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
+                      <span title="редактировать" class="sAreaEdit" onclick="eventUpdate(this)"></span>
+                      <a title="удалить" href="/webmaster-area/delete/{{ a.pk }}/" class="sAreaDelete"></a>
                   </div>
               </div>
               {% endfor %}

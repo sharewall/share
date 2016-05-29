@@ -109,8 +109,17 @@ def settings(request):
 
 @login_required
 def balance(request):
-    if request.method is 'POST':
+    template_name = 'cabinet_webmaster/balance.html'
+    title = 'Баланс'
+    header = title
+
+    #if request.user.is_staff and request.session.get('profile', False):
+
+    if request.method == 'POST':
         return HttpResponse('POST')
     else:
-        return HttpResponse('GET')
+        return render(request, template_name,
+        {
+            'page': { 'title': title, 'header': header }
+        })
 
