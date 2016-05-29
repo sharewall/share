@@ -185,6 +185,7 @@
                    $('[data-modal="addcat"]').click(function(){
                        var name = $('input[name="catname"]').val();
 
+                       if(name){
                        $.ajax({ 
                           url: "{% url "webmaster-area-add-category" %}", 
                           type: "POST", 
@@ -205,12 +206,19 @@
 
                           }
                       });
+                       }else{
+                            $('.sAlertMessageWrapper').css('z-index','2').text("Ошибка! Введите название!").fadeIn('slow');
+                            window.setTimeout(function(){
+                              $('.sAlertMessageWrapper').css('z-index','1').text('').fadeOut('slow');
+                            },2000); 
+                         }
 
                    }); 
 
                    $('[data-modal="delcat"]').click(function(){
                        var name = $('input[name="catname"]').val();
 
+                       if(name){
                        $.ajax({ 
                           url: "{% url "webmaster-area-delete-category" %}", 
                           type: "POST", 
@@ -231,6 +239,12 @@
 
                           }
                       });
+                        }else{
+                            $('.sAlertMessageWrapper').css('z-index','2').text("Ошибка! Введите название!").fadeIn('slow');
+                            window.setTimeout(function(){
+                              $('.sAlertMessageWrapper').css('z-index','1').text('').fadeOut('slow');
+                            },2000); 
+                         }
 
                    }); 
 

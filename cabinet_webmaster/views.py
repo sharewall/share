@@ -117,9 +117,9 @@ def balance(request):
 
     if request.method == 'POST':
         return HttpResponse('POST')
+
     else:
         return render(request, template_name,
         {
             'page': { 'title': title, 'header': header }
         })
-

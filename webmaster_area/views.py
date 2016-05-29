@@ -1078,12 +1078,12 @@ def getAdvert(request, cook):
                 r = pool.urlopen('GET', nurl_url)
 
                 if area_today:
-                    total_money = float(advert_json_price / 1000)
-                    webmaster_money = float((advert_json_price / 1000) * 0.15)
+                    adv_money = float((advert_json_price / 1000) * 0.15)
+                    webmaster_money = float((advert_json_price / 1000) * 0.85)
 
                     # Update advert
                     advert.show_counter += 1
-                    advert.money_counter += total_money
+                    advert.money_counter += adv_money
                     advert.save()
 
                     # Update area_today

@@ -115,7 +115,7 @@ def balance(request):
 
     #if request.user.is_staff and request.session.get('profile', False):
 
-    if request.method is 'POST':
+    if request.method == 'POST':
         return HttpResponse('POST')
     else:
         return render(request, template_name,

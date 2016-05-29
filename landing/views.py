@@ -545,11 +545,19 @@ def register(request):
 
 @login_required
 def adminBalance(request):
+    template_name = 'landing/admin-balance.html'
+    title = 'Общий баланс'
+    header = title
+
     if request.user.is_staff:
         if request.method == 'POST':
             return HttpResponse('ADMIN POST')
+
         else:
-            return HttpResponse('ADMIN GET')
+            return render(request, template_name,
+            {
+                'page': { 'title': title, 'header': header }
+            })
 
     else:
         return HttpResponse('BAD ID')
