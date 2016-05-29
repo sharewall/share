@@ -259,6 +259,10 @@
     .s936TextAlign-C{
         text-align: center;
     }
+    .sBalanceStatus[data-status="accept"],
+    .sBalanceStatus[data-status="decline"]{
+        background-position: 0px center!important;
+    }
 
 }
 @media only screen and (max-width:835px) {
@@ -371,6 +375,7 @@
     .sLandHeaderOfferWrapper-L > h2{
         margin-top: 0px;
     }
+    
 
 }
 

@@ -2470,3 +2470,18 @@ span[data-submit]{
     font: 400 15px / 18px Roboto;
     padding-left: 10px;
 }
+.sBalanceAdmStatus[data-admstatus="complete"]{
+    background-color: #d5e8ca;
+}
+.sBalanceAdmStatus[data-admstatus="wait"]{
+    background-color: #f9eea4;
+}
+.sBalanceAdmStatus[data-admstatus="decline"]{
+    background-color: #ffd2d2;
+}
+.sPad-0{
+    padding: 0px;   
+}
+.sBalanceStatus[data-status="accept"]{
+    
+}
