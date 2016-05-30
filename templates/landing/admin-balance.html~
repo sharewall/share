@@ -5,6 +5,17 @@
     <link rel="stylesheet" media="screen" type="text/css" href="{% static "sharewall-template/css/datepicker.css" %}"/>
 
     <script type="text/javascript" src="{% static "sharewall-template/js/datepicker.js" %}"></script>
+
+    <style>
+        input:checked + label.sBSInput{
+          background: url("{% static "sharewall-template/images/bs-chekbox-checked.png" %}");
+        }
+        
+        .sBSInput{
+          margin-top:0px;
+        }
+    </style>
+
   {% endblock %}
 
   {% block title %}{{ page.title }}{% endblock %}
@@ -54,6 +65,21 @@
               <div class="sGLine"></div>
           </div>
           <div class="sPos-Rel sFloat-R sPager" style="margin-top:21px; margin-bottom:17px;">
+                <div class="sFloat-L" id="sortWrapper" style="margin-top: 11px; margin-right: 12px;">
+                    <label class="sFloat-L" data-sortcell="all" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Все
+                      <input id="for0" type="radio" name="for" value="0" style="opacity:0; display:none; margin-left:9999px;">
+                      <label for="for0" class="sBSInput"></label>
+                    </label>
+                    <label class="sFloat-L" data-sortcell="accept" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Выполнено
+                      <input id="for1" type="radio" name="for" value="1" style="opacity:0; display:none; margin-left:9999px;">
+                      <label for="for1" class="sBSInput"></label>
+                    </label>
+                    <label class="sFloat-L" data-sortcell="decline" style="margin-left:10px; color: #262d38; font: 400 14px Roboto;">Отказ
+                      <input id="for2" type="radio" name="for" value="2" style="opacity:0; display:none; margin-left:9999px;">
+                      <label for="for2" class="sBSInput"></label>
+                    </label>
+                </div>
+
                 <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
                 <span class="sRoute" data-route="b"></span>
                 <span class="sRoute" data-route="f"></span>
@@ -88,7 +114,7 @@
                   </div>
               </div>
 
-              {% for balance in balances_not_accept %}
+              {% for balance in balances_wait %}
               <div class="sTableAreasCell">
                   <div class="sTableAreasField sNoneBorder" style="width:5%;">
                     <span>{{ balance.pk }}</span>
@@ -126,7 +152,7 @@
 
             <div class="sTableAreas" data-showtabs="2">
               <div class="sTableAreasFieldName">
-                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                  <div class="sTableAreasField sNoneBorder" style="width:10%;">
                     <span>ID платежа</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
@@ -135,10 +161,13 @@
                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
                     <span>Сумма</span>
                   </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                    <span>Статус</span>
+                  </div>
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
                     <span>Дата подачи</span>
                   </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
                     <span>Дата обработки</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:15%;">
@@ -146,9 +175,9 @@
                   </div>
               </div>
 
-              {% for balance in balances_accept %}
+              {% for balance in balances_not_wait %}
               <div class="sTableAreasCell">
-                   <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
                      <span>{{ balance.pk }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:20%;">
@@ -157,10 +186,13 @@
                   <div class="sTableAreasField sNoneBorder" style="width:10%;">
                     <span>{{ balance.money }}</span>
                   </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
+                    <span class="sBalanceAdmStatus" data-admstatus="{{ balance.get_status_display }}">{{ balance.showStatus }}</span>
+                  </div>
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
                     <span>{{ balance.showCreateDate }}</span>
                   </div>
-                  <div class="sTableAreasField sNoneBorder" style="width:20%;">
+                  <div class="sTableAreasField sNoneBorder" style="width:15%;">
                     <span>{{ balance.showUpdateDate }}</span>
                   </div>
                   <div class="sTableAreasField sNoneBorder" style="width:15%;">
@@ -198,13 +230,19 @@
               $this = $(this); 
               $this.parent().find('span.sTabs').removeClass('sActive'); 
               $this.addClass('sActive'); 
+
               var tabNumber = $this.data('tabs'); 
+              tabNumber=='2'? $('#sortWrapper').show() : $('#sortWrapper').hide();
+
               $('[data-showtabs]').hide();
               $('[data-showtabs="'+tabNumber+'"]').show();
             });
-            
+
             // auto
             $('.sListConstructors > span.sTabs:nth-child(1)').click();
+            $('[data-sortcell="all"]').click();
+            setDatePicker("{{ dates_range_start }}", "{{ dates_range_end }}");
+            $('#inputDate').val("{{ dates_range_start }}", "{{ dates_range_start }}");
         
              $('[data-status]').click(function(){
                  var status = $(this).data('status');
@@ -218,7 +256,6 @@
                     "id": id
                   }, 
                   success: function(response, status, jqXHR) { 
-                      console.log(response);
 
                       if(response == 'OK'){
                           window.location.reload();
@@ -230,9 +267,32 @@
                       }
 
                       }
-                  });
+                 });
 
              }); 
+
+             $('[data-sortcell]').click(function(){
+
+                var sortBy = $(this).data('sortcell');
+                var cells = $('[data-showtabs="2"] [data-admstatus]');
+
+                $.each(cells, function(index, element){
+                  $element = $(element);
+
+                  if(sortBy=='all'){
+                    $element.closest('.sTableAreasCell').show();
+                  }
+                  else{
+                    if($element.data('admstatus')==sortBy){
+                      $element.closest('.sTableAreasCell').show();
+                    }else{
+                      $element.closest('.sTableAreasCell').hide();
+                    }
+                  }
+
+                });
+
+             });
 
          }); 
             
@@ -242,6 +302,11 @@
 
           function showDatePicker(){
               $('#date2').slideToggle(400);
+          }
+
+          function filterDateShow(){
+              var daterange = $('#inputDate').val();
+              document.location = "{% url "admin-balance" %}"+"?daterange="+daterange;
           }
 
         </script>

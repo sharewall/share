@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
@@ -544,6 +545,9 @@ def register(request):
         #if not 'cabinet_webmaster_form' in locals():
             #cabinet_webmaster_form = CabinetWebmasterForm()
 
+def sortBalance(balance):
+    return balance.pk
+
 @login_required
 def adminBalance(request):
     template_name = 'landing/admin-balance.html'
@@ -596,26 +600,47 @@ def adminBalance(request):
                 money_system_all += advert.money_counter
 
             # Balances
-            balances_all = Balance.objects.all().select_related('user')
+            # Date
+            try:
+                request_dateRange = request.GET.get('daterange').split(' - ')
+                dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
+                dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+                # Fix date end
+                dates_range_end += datetime.timedelta(days=1)
+
+                balances_all = Balance.objects.filter(date_create__range=(dates_range_start, dates_range_end)).select_related('user')
+            except:
+
+                balances_all = Balance.objects.all().select_related('user')
+
+                if balances_all and balances_all.first():
+                    dates_range_start, dates_range_end = [balances_all.first().date_create, datetime.datetime.now().date()]
+                else:
+                    dates_range_start, dates_range_end = [datetime.datetime.now().date(), datetime.datetime.now().date()]
+
+            # reverse
+            balances_all = sorted(balances_all, key=sortBalance, reverse=True)
             
-            balances_accept = []
-            balances_not_accept = []
+            balances_wait = []
+            balances_not_wait = []
 
             for balance in balances_all:
-                if balance.status == 'ACE':
-                    balances_accept.append(balance)
+                if balance.status == 'WAI':
+                    balances_wait.append(balance)
                 else:
-                    balances_not_accept.append(balance)
+                    balances_not_wait.append(balance)
             
             return render(request, template_name,
             {
                 'page': { 'title': title, 'header': header },
                 #'balances_all': balances_all,
-                'balances_accept': balances_accept,
-                'balances_not_accept': balances_not_accept,
+                'balances_wait': balances_wait,
+                'balances_not_wait': balances_not_wait,
                 'money_webmaster_all': money_webmaster_all,
                 'money_system_all': money_system_all,
                 'money_total': float(money_webmaster_all + money_system_all),
+                'dates_range_start': dates_range_start.strftime("%d.%m.%Y"),
+                'dates_range_end': dates_range_end.strftime("%d.%m.%Y"),
             })
 
     else:
