@@ -609,6 +609,9 @@ def adminBalance(request):
                 dates_range_end += datetime.timedelta(days=1)
 
                 balances_all = Balance.objects.filter(date_create__range=(dates_range_start, dates_range_end)).select_related('user')
+
+                # Fix date end back
+                dates_range_end += datetime.timedelta(days=-1)
             except:
 
                 balances_all = Balance.objects.all().select_related('user')
