@@ -58,15 +58,21 @@
               </div>
               <div class="sHeaderBox sHeaderBox-Money sFloat-R sPos-Rel">
                   <div class="sOverHidden-All">
-                      <a href="javascript:return false;" class="sWmMoney sFloat-L"></a>
                       {% if user.is_staff and request.session.profile %}
-                      <span class="sVAlign-50p sPos-Rel">
-                          {{ request.session.profile.money }} p.                    
-                      </span>
+                      <a href="{% url "cabinet-webmaster-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ request.session.profile.money }} p.                    
+                        </span>
+                      {% elif user.is_staff and not request.session.profile %}
+                        <a href="{% url "admin-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ user.cabinet_webmaster.money }} p.                    
+                        </span>
                       {% else %}
-                      <span class="sVAlign-50p sPos-Rel">
-                          {{ user.cabinet_webmaster.money }} p.                    
-                      </span>
+                        <a href="{% url "cabinet-webmaster-balance" %}" class="sWmMoney sFloat-L"></a>
+                        <span class="sVAlign-50p sPos-Rel">
+                            {{ user.cabinet_webmaster.money }} p.                    
+                        </span>
                       {% endif %}
                   </div> 
               </div>

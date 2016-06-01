@@ -447,15 +447,17 @@ def login(request):
                 pass
         '''
 
-        sites = WebmasterAreaModel.objects.all().count()
-        sites = int(sites*10.5)
-
         shares = 0
         socials = 0
         money = 0
+
+        sites = WebmasterAreaModel.objects.all().count()
+        #sites = int(sites*10.5)
+
         areaTodayList = AreaToday.objects.all()
+
         for a in areaTodayList:
-            shares += (
+            temp_shares = (
                 int(a.today_share_counter.split(',')[0])+
                 int(a.today_share_counter.split(',')[1])+
                 int(a.today_share_counter.split(',')[2])+
@@ -466,7 +468,7 @@ def login(request):
                 int(a.today_share_counter.split(',')[7])
             )
 
-            socials += (
+            temp_socials = (
                 int(a.today_social_counter.split(',')[0])+
                 int(a.today_social_counter.split(',')[1])+
                 int(a.today_social_counter.split(',')[2])+
@@ -477,9 +479,15 @@ def login(request):
                 int(a.today_social_counter.split(',')[7])
             )
 
+            if temp_shares > shares:
+                shares = temp_shares
+
+            if temp_socials > socials:
+                socials = temp_socials 
+
             money += float(a.today_money)
 
-        money = float(money*109005)
+        #money = float(money*109005)
 
         '''
         if request.user.is_authenticated() and request.user.username == 'landing':
