@@ -1,0 +1,7 @@
+AddHandler wsgi-script .wsgi
+Options + ExecCGI
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ share/wsgi.py$1 [QSA,PT,L]
+RewriteCond %{HTTP_HOST} ^www.sharewall.ru$
+RewriteRule (.*) http://sharewall.ru/$1 [R=301,L]

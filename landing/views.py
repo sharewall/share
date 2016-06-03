@@ -47,19 +47,21 @@ def landing(request):
         {
             "page": { "title": title }
         })
+
     else:
         template_name = 'landing/login.html'
         title = 'Sharewall'
 
-        sites = WebmasterAreaModel.objects.all().count()
-        sites = int(sites*10.5)
-
         shares = 0
         socials = 0
         money = 0
+
+        sites = WebmasterAreaModel.objects.all().count()
+
         areaTodayList = AreaToday.objects.all()
+
         for a in areaTodayList:
-            shares += (
+            temp_shares = (
                 int(a.today_share_counter.split(',')[0])+
                 int(a.today_share_counter.split(',')[1])+
                 int(a.today_share_counter.split(',')[2])+
@@ -70,7 +72,7 @@ def landing(request):
                 int(a.today_share_counter.split(',')[7])
             )
 
-            socials += (
+            temp_socials = (
                 int(a.today_social_counter.split(',')[0])+
                 int(a.today_social_counter.split(',')[1])+
                 int(a.today_social_counter.split(',')[2])+
@@ -81,9 +83,13 @@ def landing(request):
                 int(a.today_social_counter.split(',')[7])
             )
 
-            money += float(a.today_money)
+            if temp_shares > shares:
+                shares = temp_shares
 
-        money = float(money*109005)
+            if temp_socials > socials:
+                socials = temp_socials 
+
+            money += float(a.today_money)
 
         return render(request, template_name,
         {

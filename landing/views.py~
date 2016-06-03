@@ -457,7 +457,7 @@ def login(request):
         areaTodayList = AreaToday.objects.all()
 
         for a in areaTodayList:
-            temp_shares += (
+            temp_shares = (
                 int(a.today_share_counter.split(',')[0])+
                 int(a.today_share_counter.split(',')[1])+
                 int(a.today_share_counter.split(',')[2])+
@@ -468,7 +468,7 @@ def login(request):
                 int(a.today_share_counter.split(',')[7])
             )
 
-            temp_socials += (
+            temp_socials = (
                 int(a.today_social_counter.split(',')[0])+
                 int(a.today_social_counter.split(',')[1])+
                 int(a.today_social_counter.split(',')[2])+
