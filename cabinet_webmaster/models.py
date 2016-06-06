@@ -8,6 +8,7 @@ def generate_filename(self, filename):
 
 class CabinetWebmasterModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="related user", related_name="cabinet_webmaster")
+
     wmr = models.CharField("wmr", max_length=100, null=True, blank=True, default="")
     mobile_phone = models.CharField("mobile phone", max_length=200, blank=True, default="")
     skype = models.CharField("skype", max_length=200, blank=True, default="")
@@ -21,6 +22,7 @@ class CabinetWebmasterModel(models.Model):
 
 class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat")
+
     to_user_pk = models.IntegerField('to_user_pk', blank=True, null=True)
     header = models.CharField('message_header', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')
@@ -68,6 +70,7 @@ class Chat(models.Model):
 class ChatMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message")
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, verbose_name="related_chat", related_name="chat_message")
+
     name = models.CharField('from_name', max_length=100, blank=True, default='')
     email = models.CharField('email', max_length=100, blank=True, default='')
     text = models.TextField('message_text', default='')

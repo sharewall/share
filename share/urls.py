@@ -19,9 +19,13 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+admin.site.site_header = 'sharewall.ru administration'
+admin.site.site_title = 'fruitbag.ru administration'
+
 #urlpatterns = patterns('',
     #(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 #)
+
 urlpatterns = [
     url(r'^', include('landing.urls')),
     url(r'^share-admin/', admin.site.urls),

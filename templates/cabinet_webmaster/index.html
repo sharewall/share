@@ -25,6 +25,7 @@
                     <span class="sFloat-L">Удалить аккаунт</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="delete_account">Введите "УДАЛИТЬ"</label>
                         <input id="delete_account" name="delete_account" type="text" placeholder="УДАЛИТЬ" value="" />
                       </form> 
@@ -52,6 +53,7 @@
                     <span class="sFloat-L">Имя</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="first_name">Текущее имя</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="first_name" name="first_name" type="text" placeholder="Введите имя" value="{{ request.session.profile.first_name }}" />
@@ -75,6 +77,7 @@
                     <span class="sFloat-L">Фамилия</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="last_name">Текущяя фамилия</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="last_name" name="last_name" type="text" placeholder="Введите фамилию" value="{{ request.session.profile.last_name }}" />
@@ -98,6 +101,7 @@
                     <span class="sFloat-L">Адрес электронной почты</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="email">Текущий адрес электронной почты</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="email" name="email" type="email" placeholder="Введите адрес электронной почты" value="{{ request.session.profile.email }}" />
@@ -121,6 +125,7 @@
                     <span class="sFloat-L">WMR кошелёк для вывода денег</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="wmr">Текущий WMR кошелёк</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="wmr" name="wmr" type="text" placeholder="Введите WMR кошелёк" value="{{ request.session.profile.wmr }}" />
@@ -139,6 +144,7 @@
                     <span class="sFloat-L">Пароль</span>
                     <div class="sFloat-L">
                       <form>
+                        {% csrf_token %}
                         <label for="password">Текущий пароль</label>
                         <input id="password" name="password" type="password" placeholder="Enter password" value="" />
                         <label for="new_password">Новый пароль</label>
@@ -163,6 +169,7 @@
                     <span class="sFloat-L">Мобильный телефон</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="mobile_phone">Текущий мобильный телефон</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="mobile_phone" name="mobile_phone" type="text" placeholder="Введите мобильный телефон" value="{{ request.session.profile.mobile_phone }}" />
@@ -186,6 +193,7 @@
                     <span class="sFloat-L">Скайп</span>
                     <div class="sFloat-L">
                       <form> 
+                        {% csrf_token %}
                         <label for="skype">Текущий скайп</label>
                         {% if user.is_staff and request.session.profile %}
                         <input id="skype" name="skype" type="text" placeholder="Введите скайп" value="{{ request.session.profile.skype }}" />

@@ -235,7 +235,7 @@
                          console.log(response);
                          {% if user.is_staff and request.session.profile %}
                            if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/admin/profile/{{ request.session.profile.pk }}/?next=/login/' } 
-                           else if(response != ''){ window.location = '/admin/profile/{{ request.session.profile.pk }}' }
+                           else if(response != ''){ window.location = '/admin/profile/{{ request.session.profile.pk }}/?next=/cabinet-webmaster/' }
                          {% else %}
                            if(response == 'УДАЛИТЬ' || response == 'PASS'){ window.location = '/login/' }          
                            else if(response != ''){ $parent.prev('.sSettings-Field').find('span:nth-child(2)').text(response); }

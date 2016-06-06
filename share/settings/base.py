@@ -20,8 +20,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,7 +47,9 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'share.urls'
+
 LOGIN_URL = '/login/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -73,7 +73,6 @@ WSGI_APPLICATION = 'share.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        
     }
 }
 

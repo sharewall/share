@@ -24,6 +24,7 @@
         <p>Регистрация</p>
         
         <form method="post" action="/register/">
+          {% csrf_token %}
           <input required type="text" name="username" placeholder="Имя" value=""/><br/>
           <input required type="email" name="email" placeholder="E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/>
@@ -40,6 +41,7 @@
         <p>Вход</p>
           
         <form method="post" action="/login/">
+          {% csrf_token %}
           <input required type="text" name="usernameoremail" placeholder="Имя/E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/> 
           <label class="sFloat-L" data-rememberme>Запомнить меня
@@ -162,6 +164,7 @@
                 <div class="sLandFooterWrapper-Registration">
                     <p>Регистрация</p>
                     <form class="authForm" method="post" action="/register/">
+                        {% csrf_token %}
                         <input required type="text" name="username" placeholder="Логин" value=""/><br/>
                         <input required type="email" name="email" placeholder="Почта" value=""/><br/>
                         <input required type="password" name="password" placeholder="Пароль" value=""/><br/>

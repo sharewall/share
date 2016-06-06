@@ -19,6 +19,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+admin.site.site_header = 'sharewall.ru administration'
 #urlpatterns = patterns('',
     #(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 #)
@@ -29,3 +30,6 @@ urlpatterns = [
     url(r'^cabinet-webmaster/', include('cabinet_webmaster.urls')),
     url(r'^webmaster-area/', include('webmaster_area.urls')),
 ]# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += patterns('', 
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
+)
