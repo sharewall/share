@@ -398,6 +398,14 @@ def detailmain(request):
                 statistic['clicks'] += clicksT
                 statistic['money'] += moneyT
 
+    if len(dates) < 1:
+        dates = ['0','0','0','0','0']
+        shows = [0,0,0,0,0]
+        clicks = [0,0,0,0,0]
+        shares = [0,0,0,0,0]
+        socials  = [0,0,0,0,0]
+        money  = [0,0,0,0,0]
+
     return render(request, template_name,
     {
         'temp_area_per_day_statistic': temp_area_per_day_statistic,
@@ -844,6 +852,9 @@ def update(request, pk):
     request_instance = None
     profile_user = None
 
+    answer = "100"
+    code = '100'
+
     if request.user.is_staff and request.session.get('profile', False):
         profile_user = User.objects.get(pk=request.session.get('profile').get('pk'))
 
@@ -864,9 +875,6 @@ def update(request, pk):
         request_post_data = {
             'name_area': request_instance.name_area,
             'url': request_instance.url,
-            #TODO: disable change name_area and url else need to check for conflict name_area and url
-            #'name_area': request.POST.get('name_area', ''),
-            #'url': request.POST.get('url', ''),
             'ad_type': request.POST.get('ad_type', ''),
             'area_category': area_category_clear
         }
@@ -877,15 +885,25 @@ def update(request, pk):
             webmaster_area = webmaster_area_form.save(commit=False)
             webmaster_area.save()
 
-            if profile_user:
-                return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
+            answer = 'Готово!'
+            code = 'OK'
 
-    return HttpResponseRedirect('/webmaster-area/')
+            if profile_user:
+                answer = "Площадка для вебмастера отредактирована!"
+                #return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
+
+    else:
+        answer = "Ошибка! Повторите запрос снова"
+
+    return JsonResponse({ "answer":answer, 'code': code })
+    #return HttpResponseRedirect('/webmaster-area/')
 
 @login_required
 def create(request):
 
     if request.method == 'POST':
+        answer = "100"
+        code = '100'
         profile_user = None
 
         if request.user.is_staff and request.session.get('profile', False):
@@ -904,36 +922,46 @@ def create(request):
         }
         webmaster_area_form = WebmasterAreaForm(data=request_post_data, auto_id=False)
 
-        #user_wma_list = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user)
         all_wma_list = WebmasterAreaModel.objects.select_related("buttons_constructor__cabinet_webmaster__user").all()
         user_wma_names_list = []
         all_wma_urls_list = []
 
-        #for area in user_wma_list:
-        #    user_wma_names_list.append(area.name_area)
         for area in all_wma_list:
             if area.buttons_constructor.cabinet_webmaster.user == profile_user if profile_user is not None else request.user:
                 user_wma_names_list.append(area.name_area)
+
             all_wma_urls_list.append(area.url)
 
+        answer = "Ошибка! Повторите запрос снова"
         isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
         isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
 
         if webmaster_area_form.is_valid() and isNameAreaAlreadyExist == False and isUrlAreaAlreadyExist == False:
 
             webmaster_area = webmaster_area_form.save()
-            #webmaster_area.buttons_constructor = request.user.cabinet_webmaster.buttons_constructor.all()[0]
+
             try:
                 webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.filter(cabinet_webmaster=profile_user.cabinet_webmaster).order_by('-pk')[0] if profile_user is not None else ButtonsConstructorModel.objects.filter(cabinet_webmaster=request.user.cabinet_webmaster).order_by('-pk')[0]
             except Exception as instance:
                 webmaster_area.buttons_constructor = ButtonsConstructorModel.objects.create(cabinet_webmaster=profile_user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk')) if profile_user is not None else ButtonsConstructorModel.objects.create(cabinet_webmaster=request.user.cabinet_webmaster, btns_images=BtnsImages.objects.latest('pk'))
 
             webmaster_area.save()
+            answer = "Готово!"
+            code = 'OK'
 
             if profile_user:
-                return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
+                answer = "Площадка для вебмастера создана!"
+                #return HttpResponseRedirect('/admin/profile/'+str(profile_user.pk)+'/?next=/webmaster-area/')
 
-    return HttpResponseRedirect('/webmaster-area/')
+        else:
+            if isNameAreaAlreadyExist:
+                answer = "Ошибка! У вас уже есть такая площадка!"
+
+            if isUrlAreaAlreadyExist:
+                answer = "Ошибка! Такая площадка уже зарегистрирована! Вы можете написать тикет для уточнения"
+
+    return JsonResponse({ "answer":answer, 'code': code })
+    #return HttpResponseRedirect('/webmaster-area/')
 
 def setcounterprivate(url):
     snc = ''

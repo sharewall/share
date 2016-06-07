@@ -9,6 +9,14 @@
       .sOverHidden-X{
           overflow-x: auto;
       }
+      body {
+        min-width: 1171px;
+      }
+      .sAdditionalWrapper > input,
+      .sAdditionalWrapper > textarea{
+        font: 400 15px / 22px Roboto;
+        color: #3d4853;
+      }
   </style>
   {% endblock %}
 
@@ -128,7 +136,7 @@
                     </div>
                     
                     <div class="sCopyCodeWrapper-Adv">
-                       <p id="sCodeHere-Adv" style="padding:40px;"></p>
+                       <p id="sCodeHere-Adv" style="padding-right:7px; padding-left:10px;"></p>
                     </div>
                     
                     <div class="sCodeDescription">

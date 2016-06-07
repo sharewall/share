@@ -29,7 +29,8 @@
                     <div id="highCharts" style="padding-bottom: 40px; min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
 
-                <div class="sTableAreas s735Font-13px">
+                {% if not isEmpty %}
+                <div class="sTableAreas s735Font-13px sTextAlign-C">
                     <div class="sTableAreasFieldName">
                         <div class="sTableAreasField s835Hide" style="width:180px;"><span style="padding:0 20px 0 20px; text-align:center;"></span>
                         </div>
@@ -60,6 +61,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
             </div>
         </div>
@@ -75,8 +77,12 @@
             window.parent.$('div.sBusyOverlay').show();
             {% if isEmpty %}
              $('div.sBusyOverlay2#isEmpty').show();
+
             {% else %}
              $('div.sBusyOverlay2#isEmpty').hide();
+
+             //console.log({{ dates|safe }}.length);
+
               $('#highCharts').highcharts({
                   title: {
                       text: '',

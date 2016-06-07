@@ -1,5 +1,16 @@
   {% extends "skeleton.html" %}
 
+  {% block custom_style %}
+
+    <style>
+      .sAlertMessageWrapper{
+        color: #fff;
+        background-color: #2fabf6;
+      } 
+    </style>
+
+  {% endblock %}   
+
   {% block title %}{{ page.title }}{% endblock %}
 
 	{% block content %}
@@ -112,6 +123,31 @@
   {% block footer_script %}
 
         <script>
+
+          $('form').submit(function(e){
+            console.log('submit event');
+
+            $.ajax({
+              url: $('form').attr('action'), 
+              type: "POST", 
+              data: $('form').serialize(), 
+              success: function(response, status, jqXHR) { 
+
+                console.log(response.answer);
+
+                $('.sAlertMessageWrapper').text(response.answer).fadeIn('slow');
+                window.setTimeout(function(){
+                  $('.sAlertMessageWrapper').text('').fadeOut('slow');
+                    if(response.code == 'OK'){
+                      (location.search.split('?next=').length > 1 ? window.location = location.search.split('?next=')[1] : window.location = '/webmaster-area/');
+                    }
+                },2000);
+
+              }
+            });
+
+            return false;
+          });
 
             function formSubmit(){
                 $('form input[type="submit"]').click();
