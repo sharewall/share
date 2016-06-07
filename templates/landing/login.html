@@ -25,7 +25,7 @@
         
         <form method="post" action="/register/">
           {% csrf_token %}
-          <input required type="text" name="username" placeholder="Имя" value=""/><br/>
+          <input required type="text" name="username" placeholder="Логин" value=""/><br/>
           <input required type="email" name="email" placeholder="E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/>
           <input required type="password" name="rpassword" placeholder="Повторите пароль" value=""/><br/>
@@ -42,7 +42,7 @@
           
         <form method="post" action="/login/">
           {% csrf_token %}
-          <input required type="text" name="usernameoremail" placeholder="Имя/E-mail" value=""/><br/>
+          <input required type="text" name="usernameoremail" placeholder="Логин/E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/> 
           <label class="sFloat-L" data-rememberme>Запомнить меня
               <input id="remember_me" name="remember_me" value="true" style="opacity:0; display:none; margin-left:9999px;" type="checkbox">

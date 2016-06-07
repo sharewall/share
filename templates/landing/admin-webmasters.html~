@@ -13,6 +13,7 @@
           </div>   
           
           <form id="SearchWebmaster" method="get" action="">
+             {% csrf_token %}
           </form>
           
           <div class="sInputWebmasterSearchWrapper">

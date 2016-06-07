@@ -2305,10 +2305,11 @@ span[data-submit]{
     display: none;
     position: fixed;
     top: 163px;
-    left: 35%;
+    left: 50%;
     width: 600px;
     background-color: #ffffff;
     text-align: center;
+    margin-left: -300px;
 }
 .sPopupWrapper-Modal > p:first-of-type{
     color: #636d7a;
