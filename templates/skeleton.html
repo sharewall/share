@@ -13,10 +13,15 @@
     <title>{% block title %}{% endblock %}</title>
     
     <link href="{% static "sharewall-template/css/header.css" %}" rel="stylesheet"> 
+
     {% if not page.noQueries %}
       <link href="{% static "sharewall-template/css/media-queries.css" %}" rel="stylesheet">
     {% endif %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.4.1.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.0.0-rc1.js"></script>-->
 
     {% block custom_style %}{% endblock %}   
     {% block custom_script %}{% endblock %}   
@@ -139,7 +144,11 @@
      </div>
     
     {% endblock %}
-
+    <!--[if IE]>
+      <script>
+        alert('Внимание! Вы используете устаревший браузер! Пожалуйста установите современный браузер для корректной работы!');
+      </script>
+    <![endif]-->
     {% block content %}{% endblock %}
             
     {% block footer %}
@@ -185,6 +194,13 @@
 
             $(function(){
                $('[data-url]').click(function(){ location.href = $(this).data('url'); }) 
+
+               console.log($.browser);
+               if($.browser.msie){
+                console.log('Detect IE');
+                //alert('IE');
+               }
+                
             });    
 
             function csrfSafeMethod(method) {

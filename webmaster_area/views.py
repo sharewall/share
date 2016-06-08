@@ -852,7 +852,7 @@ def update(request, pk):
     request_instance = None
     profile_user = None
 
-    answer = "100"
+    answer = "Ошибка! Ваш браузер устарел и не поддерживает HTML5. Установите другой браузер"
     code = '100'
 
     if request.user.is_staff and request.session.get('profile', False):
@@ -902,7 +902,7 @@ def update(request, pk):
 def create(request):
 
     if request.method == 'POST':
-        answer = "100"
+        answer = "Ошибка!"
         code = '100'
         profile_user = None
 
@@ -932,7 +932,7 @@ def create(request):
 
             all_wma_urls_list.append(area.url)
 
-        answer = "Ошибка! Повторите запрос снова"
+        answer = "Ошибка! Ваш браузер устарел и не поддерживает HTML5. Установите другой браузер"
         isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
         isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
 

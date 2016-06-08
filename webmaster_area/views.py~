@@ -400,11 +400,11 @@ def detailmain(request):
 
     if len(dates) < 1:
         dates = ['0','0','0','0','0']
-        shows = [0,1,2,3,4]
-        clicks = [0,1,2,3,4]
-        shares = [0,1,2,3,4]
-        socials  = [0,1,2,3,4]
-        money  = [0,1,2,3,4]
+        shows = [0,0,0,0,0]
+        clicks = [0,0,0,0,0]
+        shares = [0,0,0,0,0]
+        socials  = [0,0,0,0,0]
+        money  = [0,0,0,0,0]
 
     return render(request, template_name,
     {
@@ -852,7 +852,7 @@ def update(request, pk):
     request_instance = None
     profile_user = None
 
-    answer = "100"
+    answer = "Ошибка! Повторите запрос позже"
     code = '100'
 
     if request.user.is_staff and request.session.get('profile', False):

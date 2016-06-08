@@ -131,6 +131,7 @@
               url: $('form').attr('action'), 
               type: "POST", 
               data: $('form').serialize(), 
+              cache: false,
               success: function(response, status, jqXHR) { 
 
                 console.log(response.answer);
