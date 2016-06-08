@@ -90,7 +90,8 @@
                       <label for="add_category">Категории</label>
                       <label for="add_ad_type">Типы рекламы</label>
                   </div>
-                  <div class="sFloat-L">  
+                  <div class="sFloat-L" style="padding-top:0px;">  
+                       <div id="fixMac" style="height:58px; text-align:center;"></div>
                        <div>                       
                             <input form="create_form" id="add_name_area" type="text" pattern="[^?#%]+$" name="name_area" value="" maxlength="200" required>
                         </div> 
@@ -105,7 +106,7 @@
                             </select>
                         </div> 
                         <div>                           
-                            <select form="create_form" id="add_ad_type" name="ad_type" required>
+                            <select form="create_form" id="add_ad_type" name="ad_type" required style="padding-left: 5px;">
                                 <option value="NORM">Нормальный</option>
                                 <option value="ADUL">Для взрослых</option>
                             </select>
@@ -136,10 +137,17 @@
 
                 console.log(response.answer);
 
-                $('.sAlertMessageWrapper').text(response.answer).fadeIn('slow');
+                $('#fixMac').text(response.answer);
+                
+                console.log($('#fixMac').text());
+
+                $('.sAlertMessageWrapper').text(response.answer).fadeIn(500);
+
                 window.setTimeout(function(){
-                  $('.sAlertMessageWrapper').text('').fadeOut('slow');
+                  $('.sAlertMessageWrapper').text('').fadeOut(500);
                     if(response.code == 'OK'){
+                      $('#fixMac').text('');
+
                       (location.search.split('?next=').length > 1 ? window.location = location.search.split('?next=')[1] : window.location = '/webmaster-area/');
                     }
                 },2000);

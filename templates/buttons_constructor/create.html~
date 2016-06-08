@@ -136,7 +136,7 @@
                     </div>
                     
                     <div class="sCopyCodeWrapper-Adv">
-                       <p id="sCodeHere-Adv" style="padding-right:7px; padding-left:10px;"></p>
+                       <p id="sCodeHere-Adv" style="padding:40px;"></p>
                     </div>
                     
                     <div class="sCodeDescription">
@@ -279,7 +279,7 @@
                       <div class="sDescription2">Код для копирования</div>     
                        <div class="sDescription2 sDescription2-Short">Дополнительно*</div>
                       <div class="sCopyCodeWrapper sFloat-L">
-                       <p id="sCodeHere" style="padding:40px;"></p>
+                       <p id="sCodeHere" style="padding-right:7px; padding-left:10px;"></p>
                       </div>  
                       <div class="sAdditionalWrapper sFloat-R">
                           <label for="page_url">Ссылка на страницу</label>
