@@ -25,7 +25,7 @@
         
         <form method="post" action="/register/">
           {% csrf_token %}
-          <input required type="text" name="username" placeholder="Имя" value=""/><br/>
+          <input required type="text" name="username" placeholder="Логин" value=""/><br/>
           <input required type="email" name="email" placeholder="E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/>
           <input required type="password" name="rpassword" placeholder="Повторите пароль" value=""/><br/>
@@ -42,7 +42,7 @@
           
         <form method="post" action="/login/">
           {% csrf_token %}
-          <input required type="text" name="usernameoremail" placeholder="Имя/E-mail" value=""/><br/>
+          <input required type="text" name="usernameoremail" placeholder="Логин/E-mail" value=""/><br/>
           <input required type="password" name="password" placeholder="Пароль" value=""/><br/> 
           <label class="sFloat-L" data-rememberme>Запомнить меня
               <input id="remember_me" name="remember_me" value="true" style="opacity:0; display:none; margin-left:9999px;" type="checkbox">
@@ -279,8 +279,10 @@
             $('.sPopupWrapper-Modal').hide(); 
             $('.sPopupWrapper').hide();
          });  
-          
+
       });
+
+<!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter37858520 = new Ya.Metrika({ id:37858520, clickmap:true, trackLinks:true, accurateTrackBounce:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/37858520" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
       
   </script>
 
