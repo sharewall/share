@@ -253,9 +253,6 @@
     .sLandWhy{
         margin-bottom: 0px;
     }
-    .sPopupWrapper-Modal{
-        left: 15%;
-    }
     .s936TextAlign-C{
         text-align: center;
     }
@@ -468,7 +465,6 @@
     .sSettings-Field-Edit > div{
         width: 171px;
     }
-   /*24/05/2016*/ 
     .s735Width-10P{
         width: 10%!important;
     }
@@ -561,8 +557,8 @@
         width: 90%;
     }
     .sPopupWrapper-Modal{
-        left: 5%!important;
         width: 430px!important;
+        margin-left: -215px!important;
     }
     .sPopupWrapper-Modal [data-form]{
         margin-left: 0px;
@@ -574,6 +570,29 @@
         font-size: 20px;
     }
     
+}
+
+@media only screen and (max-width:431px) {
+
+    .sPopupWrapper-Modal > [data-modal="close"]{
+        left: 385px!important;
+    }
+
+    .sPopupWrapper-Modal [data-form]{
+        width: 390px;
+        background-size: contain;
+    }
+    
+    .sPopupWrapper-Modal input[type="text"]:not(.sAuthForm-Input), .sPopupWrapper-Modal input[type="password"], .sPopupWrapper-Modal input[type="email"]{
+        background-size: contain;
+        width: 300px;
+    }
+
+    .sPopupWrapper-Modal{
+        width: 400px!important;
+        margin-left: -200px!important;
+    }
+
 }
 
 @media only screen and (max-width:401px) {
