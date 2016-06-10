@@ -163,7 +163,9 @@
         $('.sInputWebmasterSearch').val('');
     
         $('#add_files').change(function(){
+
             $files = $(this.files);
+
             if($files.length > 0){
               $('.sFilesCounter').text($files.length).show();
               $('.sFilesReset').show();  
@@ -171,7 +173,8 @@
               $('.sFilesCounter').text(0).hide();
               $('.sFilesReset').hide();
             }
-            //console.log($files);
+
+            /*console.log($files);*/
             
             $label = $('#fileformlabel');
             $label.text('');
@@ -189,6 +192,7 @@
             });
             
             $label.text($label.text().slice(0,-2));
+
         }).change();
         
         $('.sFilesReset').click(function(){
@@ -196,7 +200,7 @@
         });
         
         $('.sChatSubmitBtn[data-event="submit"]').click(function(){
-            //console.log($('form#createChat').serialize());
+            /*console.log($('form#createChat').serialize());*/
             $('form#createChat').find('input[type="submit"]').click();
         });
         

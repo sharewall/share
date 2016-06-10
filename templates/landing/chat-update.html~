@@ -93,7 +93,11 @@
         </div>
         <div>
             <span>{{ chat.showCreateDate }}</span>
-            <span>{{ chat.showDepartment }}</span>
+            {% if user.is_staff %}
+              <span>{{ chat.user.pk }}</span>
+            {% else %}
+              <span>{{ chat.showDepartment }}</span>
+            {% endif %}
             <span>{{ chat.showStatus }}</span>
         </div>
       </div>
@@ -199,6 +203,7 @@
               $('.sFilesCounter').text(0).hide();
               $('.sFilesReset').hide();
             }
+
             //console.log($files);
             
             $label = $('#fileformlabel');
@@ -212,6 +217,8 @@
                   $('.sFilesReset').click();
                   return false;
               }
+
+              //console.log($.inArray(f.type, allowed_types));
              
               $label.text($label.text().concat(f.name+', '));
             });

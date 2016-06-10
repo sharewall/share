@@ -131,21 +131,25 @@ def chat_update(request, pk):
     if request.method == 'POST':
 
         #TODO: validate
-        name = request.POST.get('name', request.user.username)
+        name = request.POST.get('username', request.user.username)
         email = request.POST.get('email', request.user.email)
         text = request.POST.get('text','')
 
         try:
             if request.user.is_staff:
-                chat = Chat.objects.get(pk=pk).select_related('user')
+                chat = Chat.objects.get(pk=pk)
+
             else:
                 chat = Chat.objects.get(pk=pk, user=request.user)
 
             chatMessage = ChatMessage.objects.create(user=request.user, chat=chat, name=name, email=email, text=text)
+
             for f in request.FILES.getlist('files'):
                 ChatMessageFile.objects.create(user=request.user, chat_message=chatMessage, file_store=f, file_name=f.name[-100:])
+
         except:
-            pass
+            #return JsonResponse({'name':name,'email':email,'text':text, 'pk':pk})
+            return HttpResponse('Ошибка! Напишите тикет в службу поддержки')
 
         return HttpResponseRedirect(reverse('chat-update', args=[pk]))
     
@@ -158,6 +162,7 @@ def chat_update(request, pk):
         header = 'Тикет #%s'%str(pk)+' (%s)'%chat.header
 
         tempChatMessages = ChatMessage.objects.filter(chat=chat)
+
         for message in tempChatMessages:
             files = ChatMessageFile.objects.filter(chat_message=message)
             chatMessages.append({'message': message, 'files': files})

@@ -203,6 +203,7 @@
               $('.sFilesCounter').text(0).hide();
               $('.sFilesReset').hide();
             }
+
             //console.log($files);
             
             $label = $('#fileformlabel');
@@ -216,6 +217,8 @@
                   $('.sFilesReset').click();
                   return false;
               }
+
+              //console.log($.inArray(f.type, allowed_types));
              
               $label.text($label.text().concat(f.name+', '));
             });
