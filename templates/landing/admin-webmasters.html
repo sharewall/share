@@ -26,6 +26,17 @@
           </div>
           
           <div class="sTableAreas" style="margin-bottom:40px; /*max-height: 680px; overflow-y: auto;*/">
+
+            <div class="sPos-Rel sFloat-L sChatShowCount">
+              <span>Найдено {{ all_cabinets.count }}</span>
+            </div>
+            <div class="sPos-Rel sFloat-R sPager">
+                <span style="vertical-align: bottom; line-height: 35px;">Страница 1 из 1</span>
+                <span class="sRoute" data-route="b"></span>
+                <span class="sRoute" data-route="f"></span>
+            </div>
+            <div class="sClear-Both"></div>
+
             <div class="sTableAreasFieldName">
                 <div class="sTableAreasField s1200Width-5P" style="width:54px; text-align:center;"><span class="s1200Pad-0"  style="padding:0 10px 0 10px; text-align:center;">ID</span>
                 </div>
@@ -77,41 +88,114 @@
 
   {% block footer_script %}
   <script>
-    function eventSearch(){
-        $('form#SearchWebmaster').submit();
-    }
-    function eventChangeStatus(e){
-        $this = $(e);
 
-        $.ajax({ 
-          url: "/admin/change-status/", 
-          method: "get", 
-          data: {"id": $this.data('id'), "status": $this.data('status')}, 
-          beforeSend: function(){
-            $('.sBusyOverlay2').show();
-          },
-          success: function(response){ 
-            console.log(response); 
+      var _page_current = 0;
+      var _page_count = 0;
+      var _page_divider = 30;
+      var _lpd;
 
-            if (response.answer == 'ok'){
-              if(response.status == 'false'){
-                $this.data('status','true');
-                $this.text('Разбанить');
-                $this.closest('.sTableAreasCell').css('color','red');
+      function eventSearch(){
+          $('form#SearchWebmaster').submit();
+      }
+
+      function eventChangeStatus(e){
+          $this = $(e);
+
+          $.ajax({ 
+            url: "/admin/change-status/", 
+            method: "get", 
+            data: {"id": $this.data('id'), "status": $this.data('status')}, 
+            beforeSend: function(){
+              $('.sBusyOverlay2').show();
+            },
+            success: function(response){ 
+              console.log(response); 
+
+              if (response.answer == 'ok'){
+                if(response.status == 'false'){
+                  $this.data('status','true');
+                  $this.text('Разбанить');
+                  $this.closest('.sTableAreasCell').css('color','red');
+                }
+                else if(response.status == 'true'){
+                  $this.data('status','false');
+                  $this.text('Забанить');
+                  $this.closest('.sTableAreasCell').css('color','#32353c');
+                }
               }
-              else if(response.status == 'true'){
-                $this.data('status','false');
-                $this.text('Забанить');
-                $this.closest('.sTableAreasCell').css('color','#32353c');
-              }
+
+            },
+            complete: function(){
+              $('.sBusyOverlay2').hide();
             }
 
-          },
-          complete: function(){
-            $('.sBusyOverlay2').hide();
-          }
+          });
+      }
 
-        });
-    }
+      function fillPages(lpdLength){
+
+        $('.sChatShowCount > span').text('Найдено '+lpdLength);
+
+        $('.sRoute[data-route="b"]').data('num', 0).css('cursor', 'pointer');
+        $('.sRoute[data-route="f"]').data('num', _page_divider).css('cursor', 'pointer');
+
+        if(lpdLength <= 0){
+          _page_count = 1;
+        }
+        else if((lpdLength/_page_divider)%1===0){
+          _page_count = parseInt(lpdLength/_page_divider);
+        }
+        else{
+          _page_count = parseInt(lpdLength/_page_divider+1);
+        }
+
+        $('.sTableAreas').children('.sTableAreasCell').hide().slice(0, _page_divider).show();
+
+        _page_current = 1;
+
+        $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
+
+      }
+      
+      fillPages({{ all_cabinets.count }});
+
+      $('.sRoute[data-route="b"]').click(function(){ 
+        if(_page_current > 1){
+          $prev = $(this); 
+          $next = $('.sRoute[data-route="f"]'); 
+
+          var prev_num = $prev.data('num');
+
+          $next.data('num', prev_num);
+          $prev.data('num', parseInt(prev_num - _page_divider));
+
+          $tableCell = $('.sTableAreas > .sTableAreasCell'); 
+          $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
+
+          _page_current -= 1;
+
+          $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
+        }
+      });
+
+      $('.sRoute[data-route="f"]').click(function(){ 
+        if(_page_current < _page_count){
+          $next = $(this); 
+          $prev = $('.sRoute[data-route="b"]'); 
+
+          var next_num = $next.data('num');
+
+          $prev.data('num', next_num);
+          $next.data('num', parseInt(next_num + _page_divider));
+
+          $tableCell = $('.sTableAreas > .sTableAreasCell'); 
+          $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
+
+          _page_current += 1;
+
+          $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
+        }
+      });
+
   </script>
   {% endblock %}

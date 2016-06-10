@@ -298,7 +298,7 @@
                   var prev_num = $prev.data('num');
 
                   $next.data('num', prev_num);
-                  $prev.data('num', parseInt(prev_num - 14));
+                  $prev.data('num', parseInt(prev_num - _page_divider));
 
                   $tableCell = $('.sTableAreas > .sTableAreasCell'); 
                   $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
@@ -317,7 +317,7 @@
                   var next_num = $next.data('num');
 
                   $prev.data('num', next_num);
-                  $next.data('num', parseInt(next_num + 14));
+                  $next.data('num', parseInt(next_num + _page_divider));
 
                   $tableCell = $('.sTableAreas > .sTableAreasCell'); 
                   $tableCell.hide().slice($prev.data('num'), $next.data('num')).show(); 
@@ -352,6 +352,7 @@
               $('.sTableAreas').children('.sTableAreasCell').hide().slice(0, _page_divider).show();
 
               _page_current = 1;
+
               $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
 
              }

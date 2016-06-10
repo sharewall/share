@@ -330,8 +330,6 @@
 
              function sortPageDetail(by){
 
-                $('.sAlertMessageWrapper').text('Сортировка страниц...').fadeIn('slow');
-
                 $('.sTableAreasCell').remove();
                 $('[data-detail="true"]').remove();
 
@@ -354,9 +352,8 @@
               $('.sTableAreas').children('.sTableAreasCell').hide().slice(0, _page_divider).show();
 
               _page_current = 1;
-              $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
 
-              $('.sAlertMessageWrapper').text('').fadeOut('slow');
+              $('.sPager > span:not(.sRoute):eq(0)').text('Страница '+_page_current+' из '+_page_count);
 
              }
 

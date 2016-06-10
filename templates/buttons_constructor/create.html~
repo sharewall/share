@@ -52,13 +52,11 @@
                           {% endfor %}
                        </select>
                    </div>
-                   {% if areas.count = 0 %}
-                   <a style="right: -160px; position: relative; bottom: 28px; color: rgb(255, 174, 0); text-decoration: underline dotted rgb(255, 174, 0) ! important;" class="" href="/webmaster-area/?create">Необходимо cоздать площадку!</a>
-                   {% endif %}
                    <span onclick="formSubmit()" id="SaveConfig" class="sSaveConfig" >Сохранить конфигурацию</span>
                   <div style="clear:both;"></div>
               </div>
               {% if areas.count = 0 %}
+                <a style="font: 800 24px Roboto; right: -160px; position: relative; bottom: 28px; color: red; text-decoration: underline dotted red ! important;" href="/webmaster-area/?create">Необходимо cоздать площадку!</a>
                 <div class="sStepPad sFloat-L sDisabled">
               {% else %}
                 <div data-show="btn" class="sStepPad sFloat-L">
@@ -485,13 +483,13 @@
           $('form input[type="submit"]').click();
         }
             
-        function copyToClipboard(element="#sCodeHere") {
+        /*function copyToClipboard(element="#sCodeHere") {
           var $temp = $("<input>");
           $("body").append($temp);
           $temp.val($(element).text()).select();
           document.execCommand("copy");
           $temp.remove();
-        }
+        }*/
 
         function setSize(e){
             $this = $(e);
