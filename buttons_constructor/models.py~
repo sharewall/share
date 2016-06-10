@@ -22,6 +22,7 @@ class BtnsImages(models.Model):
 class AdvertBtnImage(models.Model):
     name = models.CharField('name image', max_length=100)
     path = models.CharField('path to image', max_length=200)
+
     bg_position = models.CharField('background position big', max_length=100, default='background-position: -370px 0px;')
     bg_position_med = models.CharField('background position medium', max_length=100, default='background-position: -280px 0px;')
     bg_position_sml = models.CharField('background position small', max_length=100, default='background-position: -190px 0px;')
@@ -60,7 +61,7 @@ class Advert(models.Model):
 
     show_counter = models.IntegerField('show counter', default=0)
     click_counter = models.IntegerField('click counter', default=0)
-    money = models.FloatField('earned money', default=0.0)
+    money_counter = models.FloatField('earned money in rub', default=0.0)
 
     def __str__(self):
         return str('PK: %s' % self.pk)

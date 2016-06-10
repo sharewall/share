@@ -95,6 +95,7 @@ class ChatMessage(models.Model):
 class ChatMessageFile(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="related_user", related_name="chat_message_file")
     chat_message = models.ForeignKey(ChatMessage, on_delete=models.CASCADE, verbose_name="related_chat_message", related_name="chat_message_file")
+
     file_store = models.FileField(upload_to=generate_filename)
     file_name = models.CharField('file_name', max_length=100, blank=True, default='file')
     

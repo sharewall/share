@@ -8,6 +8,7 @@ def generate_filename(self, filename):
 
 class CabinetWebmasterModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="related user", related_name="cabinet_webmaster")
+
     wmr = models.CharField("wmr", max_length=100, null=True, blank=True, default="")
     mobile_phone = models.CharField("mobile phone", max_length=200, blank=True, default="")
     skype = models.CharField("skype", max_length=200, blank=True, default="")

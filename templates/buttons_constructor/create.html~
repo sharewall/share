@@ -91,7 +91,7 @@
                     
                     <span>Тип разрешённой рекламы</span>
                     <div class="sAdvertAllowWrapper" style="margin-bottom: 0px;">
-                      <span data-value="TIZ">Тизеры</span>
+                      <span data-value="TIZ" style="pointer-events:none;">Тизеры</span>
                       <span class="sActive" data-value="MED">Медийная</span>  
                     </div>
                     
@@ -574,11 +574,13 @@
               $('#sharewallContainer').css('background', color);
               $('#sharewallContainer-Adv').css('background', color);
               $('#sColorPickWrapper').show();
+              $('#add_background_color').click();
             }
             else{
               $('#sharewallContainer').css('background', 'none');
               $('#sharewallContainer-Adv').css('background', 'none');
               $('#sColorPickWrapper').hide();
+              $('.cp-color-picker').hide();
             }
         }
         var lastLocation = "HO";    

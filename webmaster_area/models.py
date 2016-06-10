@@ -12,8 +12,10 @@ class AreaCategory(models.Model):
 
 class WebmasterAreaModel(models.Model):
     buttons_constructor = models.ForeignKey(ButtonsConstructorModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related_buttons_constructor', related_name='webmaster_area')
+
     name_area = models.CharField(max_length=200, default='name area', verbose_name='name area')
     url = models.URLField('url', null=False, blank=False, default='')
+
     NORMAL = 'NORM'
     ADULT = 'ADUL'
     AD_TYPES_CHOICES=(
@@ -21,6 +23,7 @@ class WebmasterAreaModel(models.Model):
         (ADULT,'Для взрослых'),
     )
     ad_type = models.CharField("ad_type", max_length=4, choices=AD_TYPES_CHOICES, default=NORMAL)
+
     area_cat_list = AreaCategory.objects.all()
     AREA_CAT_DEFAULT = ''
     for a in area_cat_list:
@@ -73,12 +76,12 @@ class AreaToday(models.Model):
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
 
-    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
     # Adv
-    today_money = models.FloatField("today money in rub", default=0.0)
     today_show_counter = models.IntegerField('today show counter', default=0)
     today_click_counter = models.IntegerField('today click counter', default=0)
+    today_money = models.FloatField("today money in rub", default=0.0)
     
     db_table = 'AreaToday'
     
@@ -99,6 +102,7 @@ class AreaToday(models.Model):
 
 class PageDetail(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related webmaster_area', related_name='page_detail')
+
     title = models.CharField(max_length=512, default='', verbose_name='page title')
     url = models.URLField('page url', null=False, blank=False, default='')
 
@@ -125,7 +129,9 @@ class PageDetail(models.Model):
 
 class PageToday(models.Model):
     page_detail = models.ForeignKey(PageDetail, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='related_page_detail', related_name='page_today')
+
     date = models.DateField('date', auto_now_add=True)
+
     sn_list = SocialNetworks.objects.all()
     SOCIAL_DEFAULT = ''
     COUNTER_DEFAULT = ''
@@ -135,8 +141,14 @@ class PageToday(models.Model):
             COUNTER_DEFAULT += '0,'
     SOCIAL_DEFAULT = SOCIAL_DEFAULT[:-1]
     COUNTER_DEFAULT = COUNTER_DEFAULT[:-1]
-    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+
     today_share_counter = models.CharField("today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    today_social_counter = models.CharField("today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    # Adv
+    today_show_counter = models.IntegerField('today show counter', default=0)
+    today_click_counter = models.IntegerField('today click counter', default=0)
+    today_money = models.FloatField("today money in rub", default=0.0)
+
     db_table = 'PageToday'
     
     def __str__(self):
