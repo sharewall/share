@@ -149,7 +149,37 @@ class PageToday(models.Model):
     today_click_counter = models.IntegerField('today click counter', default=0)
     today_money = models.FloatField("today money in rub", default=0.0)
 
+    # Default
+    default_today_share_counter = models.CharField("default today share counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    default_today_social_counter = models.CharField("default today social counter(%s)"%SOCIAL_DEFAULT, max_length=300, default=COUNTER_DEFAULT)
+    # Adv
+    default_today_show_counter = models.IntegerField('default today show counter', default=0)
+    default_today_click_counter = models.IntegerField('default today click counter', default=0)
+    default_today_money = models.FloatField("default today money in rub", default=0.0)
+
+    def getOddShare(self):
+        r = ''
+
+        for i1, i2 in zip(self.today_share_counter.split(','), self.default_today_share_counter.split(',')):
+            r += str(int(i1)-int(i2)) + ','
+
+        r = r[:-1]
+        return str(r)
+
+    getOddShare.allow_tags = True
+
+    def getOddSocial(self):
+        r = ''
+
+        for i1, i2 in zip(self.today_social_counter.split(','), self.default_today_social_counter.split(',')):
+            r += str(int(i1)-int(i2)) + ','
+
+        r = r[:-1]
+        return str(r)
+
+    getOddSocial.allow_tags = True
+
     db_table = 'PageToday'
     
     def __str__(self):
-        return str("Page title: %s" % self.page_detail.title + ", page url: %s" % self.page_detail.url + " <<== %s" % self.page_detail)
+        return str("PageToday <- Page detail: %s" % self.page_detail)

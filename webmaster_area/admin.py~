@@ -42,8 +42,10 @@ class PageDetailAdmin(admin.ModelAdmin):
     getWMAreaID.admin_order_field = 'webmaster_area__id'
 
 class PageTodayAdmin(admin.ModelAdmin):
-    list_display=('id','getPageDetailID', 'date', 'today_share_counter', 'today_social_counter')
+    list_display=('id','getPageDetailID', 'date', 'getOddShare', 'getOddSocial', 'today_share_counter', 'default_today_share_counter', 'today_social_counter', 'default_today_social_counter', 'today_show_counter', 'default_today_show_counter', 'today_click_counter', 'default_today_click_counter', 'today_money', 'default_today_money')
     search_fields=['id', 'page_detail__id', 'date']
+    fields=('id', 'getPageDetailID', 'date', ('getOddShare', 'getOddSocial'), ('today_share_counter', 'default_today_share_counter'), ('today_social_counter', 'default_today_social_counter') )
+    readonly_fields=('id', 'getPageDetailID', 'date', 'getOddShare', 'getOddSocial')
 
     def getPageDetailID(self, obj):
         if obj.page_detail:

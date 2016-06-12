@@ -61,10 +61,10 @@
               {% else %}
                 <div data-show="btn" class="sStepPad sFloat-L">
               {% endif %}
-                <div class="sActive" id="Step-1"><span>Шаг 1</span><span class="sActive"></span>   
+                <div class="sActive" data-step="1"><span>Шаг 1</span><span class="sActive"></span>   
                 </div>
-                <div id="Step-2"><span>Шаг 2</span><span data-sneedsubmit="true"></span></div>
-                <div id="Step-3"><span>Шаг 3</span><span></span></div>
+                <div data-step="2"><span>Шаг 2</span><span data-sneedsubmit="true"></span></div>
+                <div data-step="3"><span>Шаг 3</span><span></span></div>
               </div>
 
               <div data-show="adv" class="sAdvertWrapper">
@@ -91,7 +91,7 @@
                     
                     <span>Тип разрешённой рекламы</span>
                     <div class="sAdvertAllowWrapper" style="margin-bottom: 0px;">
-                      <span data-value="TIZ" style="pointer-events:none;">Тизеры</span>
+                      <span data-value="TIZ" class="sDisabled">Тизеры</span>
                       <span class="sActive" data-value="MED">Медийная</span>  
                     </div>
                     
@@ -154,7 +154,7 @@
               {% else %}
                 <div data-show="btn" class="sFormPad sFloat-R">
               {% endif %}
-                  <div class="sFormPad-Wrapper">
+                  <div class="sFormPad-Wrapper" data-step="1">
                       <div class="sDescription">
                           <p>1. Настройте вид и параметры кнопок</p>
                           <p>2. Скопируйте и установите полученный код в HTML-вёрстку сайте туда, где хотите разместисть кнопки</p>               
@@ -203,7 +203,7 @@
                       </div>
                   </div>   
                   
-                  <div class="sFormPad-Wrapper sHideAndSeek">
+                  <div class="sFormPad-Wrapper sHideAndSeek" data-step="2">
                       <div class="sDescription">
                           <p class="Step-2">Предпросмотр</p>        
                       </div>      
@@ -273,7 +273,7 @@
                       </div>
                   </div>   
                   
-                  <div class="sFormPad-Wrapper sHideAndSeek">
+                  <div class="sFormPad-Wrapper sHideAndSeek" data-step="3">
                       <div class="sDescription2">Код для копирования</div>     
                        <div class="sDescription2 sDescription2-Short">Дополнительно*</div>
                       <div class="sCopyCodeWrapper sFloat-L">
@@ -348,11 +348,24 @@
             $("#sharewallContainer-Adv").find('a[data-share-sn='+sn+']').toggle();
             });
             
-            $('div.sNext > span[data-next]').click(function(){ $cStep = $('.sStepPad > div.sActive').next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
+            //
+            $('.sStepPad > [data-step]').click(function(){
+                $this = $(this);
+                var step = $this.data('step');
+
+                $('.sStepPad > [data-step]').removeClass('sActive').find('span:nth-child(2)').removeClass('sActive');
+                $('.sFormPad > [data-step]').removeClass('sHideAndSeek');
+
+                $this.addClass('sActive').find('span:nth-child(2)').addClass('sActive');
+                $('.sFormPad > [data-step="'+step+'"]').addClass('sHideAndSeek');
+            });
+            //
+            $('div.sNext > span[data-next]').click(function(){ 
+                $cStep = $('.sStepPad > div.sActive').next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').next('div').toggleClass('sHideAndSeek').prev('div').toggleClass('sHideAndSeek'); 
-            //StepForward($cStep);
             });  
-            $('div.sNext > span[data-prev]').click(function(){ $cStep = $('.sStepPad > div.sActive').prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
+            $('div.sNext > span[data-prev]').click(function(){ 
+                $cStep = $('.sStepPad > div.sActive').prev('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive').parent().next('div').toggleClass('sActive').find('span:nth-child(2)').toggleClass('sActive');
             $('div.sFormPad > div.sFormPad-Wrapper:not(.sHideAndSeek)').prev('div').toggleClass('sHideAndSeek').next('div').toggleClass('sHideAndSeek');       
             });  
             

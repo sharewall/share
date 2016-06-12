@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
-from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday, PageToday
 from webmaster_area.forms import WebmasterAreaForm, AreaCategory
 from buttons_constructor.models import BtnsImages, AdvertBtnImage, Advert, SocialNetworks, ButtonsConstructorModel
 from cabinet_webmaster.models import CabinetWebmasterModel
@@ -99,56 +99,99 @@ def statistic(request):
 
 def updateServer(request):
     answer = "Answer= "
+
     areas = WebmasterAreaModel.objects.all()
 
     for area in areas:
         answer = answer + area.name_area + ": "
-        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
-        # TODO: If we collect page_today, need move update to checkconfig, because better way
-        # Need create area_today to update stats.
-        # Move to checkconfig() area_today, created = AreaToday.objects.get_or_create(webmaster_area=wma_object, date=datetime.date.today())
-        if area_per_day_list.last():
-            last_day = area_per_day_list.last()
+        last_day, created = AreaToday.objects.get_or_create(webmaster_area=area, date=datetime.date.today())
 
-            if datetime.datetime.now().date() == last_day.date:
-                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+        # TODO: Create updateTime and check if areaToday update time > 30 minutes
+        if datetime.datetime.now().date() == last_day.date:
+            page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
 
-                last_day.today_social_counter = ''
-                temp_all_social_counters = [0,0,0,0,0,0,0,0]
+            last_day.today_share_counter = ''
+            temp_all_share_counters = [0,0,0,0,0,0,0,0]
 
-                last_day.today_share_counter = ''
-                temp_all_share_counters = [0,0,0,0,0,0,0,0]
+            last_day.today_social_counter = ''
+            temp_all_social_counters = [0,0,0,0,0,0,0,0]
+            #
+            last_day.today_show_counter = 0
+            last_day.today_click_counter = 0
+            last_day.today_money = 0.0
 
-                for pd in page_detail_list:
-                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
-                    index=0
+            for page_detail in page_detail_list:
+                page_today_share_counter = '0,0,0,0,0,0,0,0'
+                page_today_social_counter = '0,0,0,0,0,0,0,0'
+                #
+                page_today_show_counter = 0
+                page_today_click_counter = 0
+                page_today_money = 0.0
 
-                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
-                    index2=0
+                try:
+                    page_today = PageToday.objects.get(
+                        page_detail=page_detail, 
+                        date=datetime.date.today()
+                        )
 
-                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
-                        temp_all_social_counters[index]=(i+i2)
-                        index+=1
+                    page_today_share_counter = page_today.getOddShare()
+                    page_today_social_counter = page_today.getOddSocial()
+                    #
+                    page_today_show_counter = page_today.today_show_counter
+                    page_today_click_counter = page_today.today_click_counter
+                    page_today_money = page_today.today_money
 
-                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
-                        temp_all_share_counters[index2]=(i+i2)
-                        index2+=1
+                except:
+                    try:
+                        yesterday = datetime.date.today() + datetime.timedelta(days=-1)
 
-                for i in temp_all_social_counters:
-                    last_day.today_social_counter += str(i) + ','
+                        page_today = PageToday.objects.get(
+                            page_detail=page_detail, 
+                            date=yesterday
+                            )
 
-                for i in temp_all_share_counters:
-                    last_day.today_share_counter += str(i) + ','
+                        page_today_share_counter = page_today.getOddShare()
+                        page_today_social_counter = page_today.getOddSocial()
+                        #
+                        page_today_show_counter = page_today.today_show_counter
+                        page_today_click_counter = page_today.today_click_counter
+                        page_today_money = page_today.today_money
 
-                last_day.today_social_counter = last_day.today_social_counter[:-1]
-                answer = answer + last_day.today_social_counter + "; "
+                    except:
+                        pass
 
-                last_day.today_share_counter = last_day.today_share_counter[:-1]
-                answer = answer + last_day.today_share_counter + ". "
+                temp_share_counter = [int(s) for s in page_today_share_counter.split(',')]
+                index2=0
 
-                last_day.save()
+                temp_social_counter = [int(s) for s in page_today_social_counter.split(',')]
+                index=0
 
+                for i,i2 in zip(temp_all_share_counters, temp_share_counter):
+                    temp_all_share_counters[index2]=(i+i2)
+                    index2+=1
+
+                for i,i2 in zip(temp_all_social_counters, temp_social_counter):
+                    temp_all_social_counters[index]=(i+i2)
+                    index+=1
+
+                last_day.today_show_counter += page_today_show_counter
+                last_day.today_click_counter += page_today_click_counter
+                last_day.today_money += page_today_money
+
+            for i in temp_all_share_counters:
+                last_day.today_share_counter += str(i) + ','
+
+            for i in temp_all_social_counters:
+                last_day.today_social_counter += str(i) + ','
+
+            last_day.today_share_counter = last_day.today_share_counter[:-1]
+            answer = answer + last_day.today_share_counter + ". "
+
+            last_day.today_social_counter = last_day.today_social_counter[:-1]
+            answer = answer + last_day.today_social_counter + "; "
+
+            last_day.save()
 
     return HttpResponse(answer)
 
@@ -201,17 +244,21 @@ def detailmain(request):
         request_dateRange = request.GET.get('daterange').split(' - ')
         dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
         dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+
     except:
         temp_areaTodayList = None
 
         if for_1 and area_first is not None:
             temp_first_area_today = AreaToday.objects.filter(webmaster_area=area_first)
+
             if temp_first_area_today.first():
                 dates_range_start = temp_first_area_today.date
+
             else:
                 dates_range_start = datetime.datetime.now().date()
 
             dates_range_end = datetime.datetime.now().date()
+
         elif not isEmpty:
             #temp_areaTodayList = AreaToday.objects.filter(Q(webmaster_area=areas.first()) and Q(webmaster_area=areas.last()))#and last for correct date range
             temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
@@ -221,6 +268,7 @@ def detailmain(request):
             dates_range_start = temp_areaToday.date#.strftime("%d.%m.%Y")
 
             dates_range_end = datetime.datetime.now().date()
+
         else:
             dates_range_start = datetime.datetime.now().date()
             dates_range_end = datetime.datetime.now().date()
@@ -241,50 +289,12 @@ def detailmain(request):
 
         if for_1:
             area_per_day_list = AreaToday.objects.all()#.select_related('webmaster_area')
+
         elif dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])
+
         else:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
-
-        if not for_1 and area_per_day_list.last():
-            last_day = area_per_day_list.last()
-
-            #TODO: need update Adv
-            if datetime.datetime.now().date() == last_day.date:
-                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
-
-                last_day.today_social_counter = ''
-                temp_all_social_counters = [0,0,0,0,0,0,0,0]
-
-                last_day.today_share_counter = ''
-                temp_all_share_counters = [0,0,0,0,0,0,0,0]
-
-                for pd in page_detail_list:
-                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
-                    index=0
-
-                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
-                    index2=0
-
-                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
-                        temp_all_social_counters[index]=(i+i2)
-                        index+=1
-
-                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
-                        temp_all_share_counters[index2]=(i+i2)
-                        index2+=1
-
-                for i in temp_all_social_counters:
-                    last_day.today_social_counter += str(i) + ','
-
-                for i in temp_all_share_counters:
-                    last_day.today_share_counter += str(i) + ','
-
-                last_day.today_social_counter = last_day.today_social_counter[:-1]
-
-                last_day.today_share_counter = last_day.today_share_counter[:-1]
-
-                last_day.save()
 
         for a in area_per_day_list:
             temp_areaPDay_date = a.date.strftime("%d.%m")
@@ -456,12 +466,14 @@ def detailadvert(request, name):
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+
         except:
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
                 temp_areaToday = area_per_day_list.last()
                 dates_range_end = temp_areaToday.date
+
             else:
                 dates_range_start = datetime.datetime.now().date()
                 dates_range_end = datetime.datetime.now().date()
@@ -532,48 +544,28 @@ def detailsocial(request, name):
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.GET.get('wmid'), name_area=name)
         elif request.user.is_staff and request.session.get('profile', False):
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+
         else:
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+
     except:
         area = None
 
-    #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
-
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
-
-        if area_per_day_list.last():
-            last_day = area_per_day_list.last()
-
-            if datetime.datetime.now().date() == last_day.date:
-                page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
-                last_day.today_social_counter = ''
-                temp_all_social_counters = [0,0,0,0,0,0,0,0]
-
-                for pd in page_detail_list:
-                    temp_social_counter = [int(s) for s in pd.total_social_counter.split(',')]
-                    index=0
-
-                    for i,i2 in zip(temp_all_social_counters, temp_social_counter):
-                        temp_all_social_counters[index]=(i+i2)
-                        index+=1
-
-                for i in temp_all_social_counters:
-                    last_day.today_social_counter += str(i) + ','
-
-                last_day.today_social_counter = last_day.today_social_counter[:-1]
-                last_day.save()
 
         try:
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+
         except:
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
                 temp_areaToday = area_per_day_list.last()
                 dates_range_end = temp_areaToday.date
+
             else:
                 dates_range_start = datetime.datetime.now().date()
                 dates_range_end = datetime.datetime.now().date()
@@ -691,21 +683,22 @@ def detail(request, name):
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.GET.get('wmid'), name_area=name)
         elif request.user.is_staff and request.session.get('profile', False):
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'), name_area=name)
+
         else:
             area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
+
     except:
         area = None
 
-    #area = WebmasterAreaModel.objects.get(buttons_constructor__cabinet_webmaster__user=request.user, name_area=name)
-    
     if area:
         area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
 
         if area_per_day_list.last():
             last_day = area_per_day_list.last()
 
-            #TODO: list_page_detail
+            #TODO: Move PageDetail list to separate method
             page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+
             for pd in page_detail_list:
                 temp_total_share_counter = 0
                 temp_total_social_counter = 0
@@ -724,38 +717,18 @@ def detail(request, name):
                     'traffic_detail':pd.total_social_counter
                     })
 
-            #TODO: move sort to client
-            #sorted(list_page_detail, key=lambda k: k['sharing'], reverse=True)
-
-            if datetime.datetime.now().date() == last_day.date:
-                #page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
-                last_day.today_share_counter = ''
-                temp_all_share_counters = [0,0,0,0,0,0,0,0]
-
-                for pd in page_detail_list:
-                    temp_share_counter = [int(s) for s in pd.total_share_counter.split(',')]
-                    index=0
-
-                    for i,i2 in zip(temp_all_share_counters, temp_share_counter):
-                        temp_all_share_counters[index]=(i+i2)
-                        index+=1
-
-                for i in temp_all_share_counters:
-                    last_day.today_share_counter += str(i) + ','
-
-                last_day.today_share_counter = last_day.today_share_counter[:-1]
-                last_day.save()
-
         try:
             request_dateRange = request.GET.get('daterange').split(' - ')
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
+
         except:
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
                 temp_areaToday = area_per_day_list.last()
                 dates_range_end = temp_areaToday.date
+
             else:
                 dates_range_start = datetime.datetime.now().date()
                 dates_range_end = datetime.datetime.now().date()
@@ -852,7 +825,7 @@ def update(request, pk):
     request_instance = None
     profile_user = None
 
-    answer = "Ошибка! Повторите запрос позже"
+    answer = "Ошибка! Ваш браузер устарел и не поддерживает HTML5. Установите другой браузер"
     code = '100'
 
     if request.user.is_staff and request.session.get('profile', False):
@@ -902,7 +875,7 @@ def update(request, pk):
 def create(request):
 
     if request.method == 'POST':
-        answer = "100"
+        answer = "Ошибка!"
         code = '100'
         profile_user = None
 
@@ -932,7 +905,7 @@ def create(request):
 
             all_wma_urls_list.append(area.url)
 
-        answer = "Ошибка! Повторите запрос снова"
+        answer = "Ошибка! Ваш браузер устарел и не поддерживает HTML5. Установите другой браузер"
         isNameAreaAlreadyExist = request_post_data.get('name_area','') in user_wma_names_list
         isUrlAreaAlreadyExist = urlparse(request_post_data.get('url','')).netloc in all_wma_urls_list
 
@@ -978,7 +951,9 @@ def setcounterprivate(url):
             {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
             {'tw': 'twitter'},
             {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
-            {'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            #{'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            {'https://clients6.google.com/rpc': '"count": ([0-9]+)'},
+            #{'gp': 'gp'},
             {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
             {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
             {'lj': 'lj'}
@@ -988,24 +963,139 @@ def setcounterprivate(url):
             for u,m in d.items():
                 try:
                     val(u)
+
                 except:
                     snc += '0,'
+
                 else:
                     try:
-                        timeout = 2.0
+                        if(u == 'https://clients6.google.com/rpc'):
+                            pool = urllib3.PoolManager()
+                            data = '[{\
+                            "method":"pos.plusones.get",\
+                            "id":"p",\
+                            "params":{\
+                                    "nolog":true,\
+                                    "id":"%s",\
+                                    "source":"widget",\
+                                    "userId":"@viewer",\
+                                    "groupId":"@self"\
+                                    },\
+                            "jsonrpc":"2.0",\
+                            "key":"p",\
+                            "apiVersion":"v1"\
+                            }]'%(url)
 
-                        response = requests.get(u, timeout=timeout)
-                        re_result = re.findall(m, response.text)
+                            r = pool.urlopen(
+                                'POST', 
+                                url, 
+                                headers={'Content-Type':'application/json'}, 
+                                body=data
+                                )
+
+                            re_result = re.findall(m, r.data.decode('utf-8'))
+
+                        else:
+                            timeout = 2.0
+
+                            response = requests.get(u, timeout=timeout)
+
+                            re_result = re.findall(m, response.text)
                         
                         if len(re_result) > 0:
                             snc += re_result[0] + ','
+
                         else:
                             snc += '0,'
+
                     except requests.Timeout as err:
-                        #return HttpResponse(err)
-                        return '-1'
+                        return '-2'
+
                     except:
-                        return '-1'
+                        return '-3'
+
+        snc = snc[:-1]
+        return snc
+
+    return '-1'
+
+def setcounterprivateTest(url):
+    snc = ''
+    val = URLValidator()
+
+    try:
+        val(url)
+    except:
+        return '-1'
+
+    if url:
+        share_count_methods = [
+            {'http://vk.com/share.php?act=count&url='+url: 'count\([0-9]+, ([0-9]+)\)'},
+            {'https://api.facebook.com/method/fql.query?format=json&query=SELECT%20share_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27': 'share_count":([0-9])+'},
+            {'tw': 'twitter'},
+            {'https://connect.ok.ru/dk?st.cmd=extLike&ref='+url: 'ODKL.updateCount\(.*,\'([0-9])+\''},
+            #{'http://free.sharedcount.com/url?url='+url+'&apikey=e02e2352f161d72d0466e71ee4fc812dfe321e32': '"GooglePlusOne":([0-9]+)'},
+            {'https://clients6.google.com/rpc': '"count": ([0-9]+)'},
+            #{'gp': 'gp'},
+            {'http://connect.mail.ru/share_count?url_list='+url: '"shares":([0-9]+)'},
+            {'https://www.linkedin.com/countserv/count/share?url='+url: '"count":([0-9]+)'},
+            {'lj': 'lj'}
+        ]
+
+        for d in share_count_methods:
+            for u,m in d.items():
+                try:
+                    val(u)
+
+                except:
+                    snc += '0,'
+
+                else:
+                    try:
+                        if(u == 'https://clients6.google.com/rpc'):
+                            pool = urllib3.PoolManager()
+                            data = '[{\
+                            "method":"pos.plusones.get",\
+                            "id":"p",\
+                            "params":{\
+                                    "nolog":true,\
+                                    "id":"%s",\
+                                    "source":"widget",\
+                                    "userId":"@viewer",\
+                                    "groupId":"@self"\
+                                    },\
+                            "jsonrpc":"2.0",\
+                            "key":"p",\
+                            "apiVersion":"v1"\
+                            }]'%(url)
+
+                            r = pool.urlopen(
+                                'POST', 
+                                u, 
+                                headers={'Content-Type':'application/json'}, 
+                                body=data
+                                )
+
+                            re_result = re.findall(m, r.data.decode('utf-8'))
+
+                        else:
+                            timeout = 2.0
+
+                            response = requests.get(u, timeout=timeout)
+
+                            re_result = re.findall(m, response.text)
+                        
+                        if len(re_result) > 0:
+                            snc += re_result[0] + ','
+
+                        else:
+                            snc += '0,'
+
+                    except requests.Timeout as err:
+                        return '-2 %s'%(u)
+
+                    except:
+                        return '-3 %s <-- %s'%(u, data, r.data)
 
         snc = snc[:-1]
         return snc
@@ -1018,16 +1108,10 @@ def getAdvert(request, cook):
 
     wma_object = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(url=parsed_referer).last()
 
+    request_url = request_referer.lower()
+
     if wma_object:
         answer = {}
-
-        #TODO: create new areaToday
-        '''
-        try:
-            wma_today = AreaToday.objects.get(webmaster_area=wma_object, date=datetime.date.today())
-        except:
-            wma_today = AreaToday.objects.create(webmaster_area=wma_object, date=datetime.date.today())
-        '''
 
         try:
             advert = Advert.objects.get(buttons_constructor__pk = wma_object.buttons_constructor.pk)
@@ -1040,11 +1124,6 @@ def getAdvert(request, cook):
 
                 banner_w = advert.get_ad_allow_display().split('x')[0]
                 banner_h = advert.get_ad_allow_display().split('x')[1]
-
-                try:
-                    area_today = AreaToday.objects.filter(webmaster_area=wma_object).last()
-                except:
-                    area_today = None
 
                 request_ip = request.META.get('REMOTE_ADDR', '')
                 request_userAgent = request.META.get('HTTP_USER_AGENT', '')
@@ -1087,14 +1166,13 @@ def getAdvert(request, cook):
                 )
 
                 advert_response = r.data.decode('utf-8')
-                #return HttpResponse('sharewallAdvResponse('+advert_response+');')
+
                 try:
-                    #raise error if bad request
                     advert_json = json.loads(advert_response)
-                    #return HttpResponse('sharewallAdvResponse('+advert_json+');')
                     advert_json_adm = advert_json['seatbid'][0]['bid'][0]['adm']
                     advert_json_price = advert_json['seatbid'][0]['bid'][0]['price']
                     advert_json_nurl = advert_json['seatbid'][0]['bid'][0]['nurl']
+
                 except:
                     return HttpResponse('console.log("Sharewall advert no bid: '+str(advert_response)+'");')
 
@@ -1105,29 +1183,44 @@ def getAdvert(request, cook):
 
                 r = pool.urlopen('GET', nurl_url)
 
-                if area_today:
-                    adv_money = float((advert_json_price / 1000) * 0.15)
-                    webmaster_money = float((advert_json_price / 1000) * 0.85)
+                adv_money = float((advert_json_price / 1000) * 0.15)
+                webmaster_money = float((advert_json_price / 1000) * 0.85)
 
-                    # Update advert
-                    advert.show_counter += 1
-                    advert.money_counter += adv_money
-                    advert.save()
+                # Update advert
+                advert.show_counter += 1
+                advert.money_counter += adv_money
+                advert.save()
 
-                    # Update area_today
-                    area_today.today_show_counter += 1
-                    area_today.today_money += webmaster_money
-                    area_today.save()
+                #
+                # PageDetail
+                page_detail, created = PageDetail.objects.get_or_create(
+                    webmaster_area=wma_object, 
+                    url=request_url, 
+                    defaults={'title': 'adv title'},
+                    )
 
-                    try:
-                        cabinet = advert.cabinet_webmaster
-                        cabinet.money += webmaster_money
-                        cabinet.save()
-                    except:
-                        return HttpResponse('bad cabinet')
+                # PageToday
+                page_today, page_created = PageToday.objects.get_or_create(
+                    page_detail=page_detail, 
+                    date=datetime.date.today()
+                    )
+
+                # Update PageToday
+                page_today.today_show_counter += 1
+                page_today.today_money += webmaster_money
+                page_today.save()
+
+                try:
+                    cabinet = advert.cabinet_webmaster
+                    cabinet.money += webmaster_money
+                    cabinet.save()
+
+                except:
+                    return HttpResponse('bad cabinet')
 
                 answer = {
                     'adm': advert_json_adm,
+                    'price': advert_json_price
                     #'nurl_response': r.data.decode('utf-8'),
                     #'nurl_url': nurl_url,
                     #'request_ip': request_ip,
@@ -1138,9 +1231,6 @@ def getAdvert(request, cook):
                     #'data': data,
                     #'advert': advert_response,
                     #'advert_json': advert_json,
-                    #'advert_json_adm': advert_json['seatbid'][0]['bid'][0]['adm'],
-                    #'advert_json_price': advert_json_price,
-                    #'advert_json_nurl': advert_json['seatbid'][0]['bid'][0]['nurl'],
                     }
 
                 return HttpResponse('sharewallAdvResponse('+json.dumps(answer)+');')
@@ -1162,7 +1252,7 @@ def checkconfig(request):
 
         history_rr = request.GET.get('rr', 'none rr')
 
-        request_url = request_referer.lower() # request_url = request.GET.get('url', 'none url')
+        request_url = request_referer.lower()
 
         request_title = request.GET.get('title', 'Title')
 
@@ -1197,14 +1287,17 @@ def checkconfig(request):
                 )
 
             page_detail.title = request_title
+
             old_snc = page_detail.total_share_counter
 
             request_sn = request.GET.get("sn", False)
+
             if request_sn:
                 index_fix_share = list_sn_shortcuts.index(request_sn)
             
             # Update share counter
-            if not snc_server == '-1':
+            snc_server_errors = ['-1', '-2', '-3']
+            if not snc_server in snc_server_errors:
                 snc = snc_server
 
                 old_share_counter = [int(s) for s in old_snc.split(',')]
@@ -1224,8 +1317,10 @@ def checkconfig(request):
                 snc = snc[:-1]
 
                 answer += 'console.log("Success snc_server: '+snc+'");'
+
+            # snc_server timeout exception
             else:
-                # Fix snc_server not response
+                # Fix snc_server timeout
                 snc = old_snc
 
                 if request_sn:
@@ -1263,37 +1358,31 @@ def checkconfig(request):
             else:
                 answer += 'console.log("'+str(page_detail) + ' updated!");' 
 
-            # Update areatoday
-            # Better way to update area today!?
+            # Update PageToday
+            page_today, page_created = PageToday.objects.get_or_create(
+                page_detail=page_detail, 
+                date=datetime.date.today(),
+                defaults={
+                    'default_today_share_counter': page_detail.total_share_counter,
+                    'default_today_social_counter': page_detail.total_social_counter
+                    }
+                )
+
+            page_today.today_share_counter = page_detail.total_share_counter
+            page_today.today_social_counter = page_detail.total_social_counter
+
+            page_today.save()
+
+            if page_created:
+                answer += 'console.log("'+str(page_today) + ' created!");' 
+            else:
+                answer += 'console.log("'+str(page_today) + ' updated!");' 
+
+            # Create areaToday
             area_today, created = AreaToday.objects.get_or_create(webmaster_area=wma_object, date=datetime.date.today())
-            # Disable page_today
-            # Total counters in page_detail now work like today counters! They do not collect digits for all time, but update every time then call
 
-            # Change logic from updateServer(), for each area_today separate, we need today_page_counter
-            '''
-            area_today_social_counter_int = [int(s) for s in area_today.today_social_counter.split(',')]
-            area_today_share_counter_int = [int(s) for s in area_today.today_share_counter.split(',')]
+            # TODO: Update areaToday, create updateTime in model
 
-            page_detail_social_counter_int = [int(s) for s in page_detail.total_social_counter.split(',')]
-            page_detail_share_counter_int = [int(s) for s in page_detail.total_share_counter.split(',')]
-
-            index_social, index_share = [0,0]
-
-            for i,i2 in zip(area_today_social_counter_int, page_detail_social_counter_int):
-                area_today_social_counter_int[index_social] = (i + i2)
-                index_social += 1
-
-            for i,i2 in zip(area_today_share_counter_int, page_detail_share_counter_int):
-                area_today_share_counter_int[index_share] = (i + i2)
-                index_share += 1
-
-            for i,i2 in zip(area_today_social_counter_int, area_today_share_counter_int):
-                area_today.today_social_counter += str(i) + ','
-                area_today.today_share_counter += str(i2) + ','
-
-            area_today.today_social_counter = area_today.today_social_counter[:-1]
-            area_today.today_share_counter = area_today.today_share_counter[:-1]
-            '''
 
         except:
             answer += 'console.log("Server page_detail error!");' 
@@ -1310,7 +1399,8 @@ def checkconfig(request):
 
 def setcounter(request):
     url = request.GET.get("url")
-    snc_server = setcounterprivate(url)
+    #snc_server = setcounterprivate(url)
+    snc_server = setcounterprivateTest(url)
 
     return HttpResponse(snc_server)
 
@@ -1320,6 +1410,9 @@ def getconfig(request):
     parsed_referer = urlparse(request_referer).netloc
 
     wma_object = WebmasterAreaModel.objects.select_related('buttons_constructor').filter(url=parsed_referer).last()
+
+    request_url = request_referer.lower()
+
     if wma_object:
 
         list_sn = SocialNetworks.objects.all()
@@ -1488,11 +1581,12 @@ def getconfig(request):
             # Page detail
             page_detail, created = PageDetail.objects.get_or_create(
                 webmaster_area=wma_object, 
-                url=request_referer, 
-                defaults={'title': 'Title'},
+                url=request_url, 
+                defaults={'title': 'btnconstruct title'},
                 )
 
             temp_share_counter = 0
+
             for s in page_detail.total_share_counter.split(','):
                 temp_share_counter += int(s)
 

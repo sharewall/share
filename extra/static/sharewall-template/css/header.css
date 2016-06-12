@@ -670,6 +670,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-bottom: 20px;
     line-height: 47px;
     border-radius: 2px;
+    cursor: pointer;
 }
 .sStepPad > div > span:nth-child(1){
     padding-left: 18px;
