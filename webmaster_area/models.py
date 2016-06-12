@@ -91,15 +91,6 @@ class AreaToday(models.Model):
         else:
             return str("Without webmaster_area")
 
-    def save(self, *args, **kwargs):
-        #self.webmaster_area.total_share_counter = self.today_share_counter
-        #cab_pk = self.webmaster_area.buttons_constructor.cabinet_webmaster.pk #.money = self.today_money
-        #cabinet_webmaster = CabinetWebmasterModel.objects.get(pk=cab_pk)
-        #cabinet_webmaster = self.money
-        #cabinet_webmaster.save()
-        #self.webmaster_area.buttons_constructor.cabinet_webmaster.money.save()
-        super(AreaToday, self).save(*args, **kwargs)
-
 class PageDetail(models.Model):
     webmaster_area = models.ForeignKey(WebmasterAreaModel, on_delete=models.CASCADE, blank=True, null=True, verbose_name='related webmaster_area', related_name='page_detail')
 
@@ -161,7 +152,12 @@ class PageToday(models.Model):
         r = ''
 
         for i1, i2 in zip(self.today_share_counter.split(','), self.default_today_share_counter.split(',')):
-            r += str(int(i1)-int(i2)) + ','
+            if int(i1)-int(i2) < 0:
+                r += str(0) + ','
+
+            else:
+                r += str(int(i1)-int(i2)) + ','
+            #r += str(int(i1)-int(i2)) + ','
 
         r = r[:-1]
         return str(r)
@@ -172,7 +168,12 @@ class PageToday(models.Model):
         r = ''
 
         for i1, i2 in zip(self.today_social_counter.split(','), self.default_today_social_counter.split(',')):
-            r += str(int(i1)-int(i2)) + ','
+            if int(i1)-int(i2) < 0:
+                r += str(0) + ','
+
+            else:
+                r += str(int(i1)-int(i2)) + ','
+            #r += str(int(i1)-int(i2)) + ','
 
         r = r[:-1]
         return str(r)

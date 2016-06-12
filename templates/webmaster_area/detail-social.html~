@@ -41,11 +41,11 @@
                         </div>
                         <div class="sTableAreasField s936Width-10P" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">МойМир@Mail.ru</span>
                         </div>
-                        <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">LinkedIn</span>
                         </div>
-                        <div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">LiveJournal</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">LiveJournal</span>
                         </div>
-                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">Всего</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">Всего</span>
                         </div>
                     </div>
                       
@@ -64,11 +64,11 @@
                         </div>
                         <div class="sTableAreasField s936Width-10P" style="width:154px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.ma }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.li }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:94px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.li }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.lj }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:115px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.lj }}</span>
                         </div>
-                        <div class="sTableAreasField" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.all }}</span>
+                        <div class="sTableAreasField s936Width-10P" style="width:80px;"><span style="padding:0 20px 0 20px; text-align:center;">{{ statistic.all }}</span>
                         </div>
                     </div>
                 </div>

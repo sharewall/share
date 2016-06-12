@@ -1,5 +1,5 @@
-import datetime, json, os, re, sys, requests
-import urllib.request, uuid, urllib3, json
+import datetime, json, os, re, sys, requests, urllib.request, uuid, urllib3, json, operator
+from functools import reduce
 from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -228,10 +228,9 @@ def detailmain(request):
     temp_area_per_day_statistic = []
 
     if request.user.is_staff and request.GET.get('for', False) and request.GET.get('for') == '1':
-        #areas = WebmasterAreaModel.objects.all()
         for_1 = True
         area_first = WebmasterAreaModel.objects.first()
-        #statistic['money'] = CabinetWebmasterModel.objects.aggregate(Sum('money')).get('money__sum', 0)
+
     elif request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
     else:
@@ -260,7 +259,6 @@ def detailmain(request):
             dates_range_end = datetime.datetime.now().date()
 
         elif not isEmpty:
-            #temp_areaTodayList = AreaToday.objects.filter(Q(webmaster_area=areas.first()) and Q(webmaster_area=areas.last()))#and last for correct date range
             temp_areaTodayList = AreaToday.objects.filter(webmaster_area=areas.first())
 
         if temp_areaTodayList is not None and temp_areaTodayList.first():
@@ -691,38 +689,18 @@ def detail(request, name):
         area = None
 
     if area:
-        area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
-
-        if area_per_day_list.last():
-            last_day = area_per_day_list.last()
-
-            #TODO: Move PageDetail list to separate method
-            page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
-
-            for pd in page_detail_list:
-                temp_total_share_counter = 0
-                temp_total_social_counter = 0
-
-                for s in pd.total_share_counter.split(','):
-                    temp_total_share_counter += int(s)
-                for s in pd.total_social_counter.split(','):
-                    temp_total_social_counter += int(s)
-
-                list_page_detail.append({
-                    'title':pd.title,
-                    'url':pd.url,
-                    'sharing':temp_total_share_counter,
-                    'traffic':temp_total_social_counter,
-                    'sharing_detail':pd.total_share_counter,
-                    'traffic_detail':pd.total_social_counter
-                    })
 
         try:
             request_dateRange = request.GET.get('daterange').split(' - ')
+
             dates_range_start = datetime.datetime.strptime(request_dateRange[0], "%d.%m.%Y").date()
             dates_range_end = datetime.datetime.strptime(request_dateRange[1], "%d.%m.%Y").date()
 
+            area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))
+
         except:
+            area_per_day_list = AreaToday.objects.filter(webmaster_area=area)
+
             if area_per_day_list.first():
                 temp_areaToday = area_per_day_list.first()
                 dates_range_start = temp_areaToday.date
@@ -733,8 +711,41 @@ def detail(request, name):
                 dates_range_start = datetime.datetime.now().date()
                 dates_range_end = datetime.datetime.now().date()
 
-        if dates_range_start and dates_range_end:
-            area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))
+        #TODO: Move PageDetail list to separate method
+        page_detail_list = PageDetail.objects.filter(webmaster_area=area)            
+        #query = reduce(operator.and_, (Q(page_detail=pd) for pd in page_detail_list))
+        #page_today_list = PageToday.objects.filter(query)
+
+        for pd in page_detail_list:
+            #page_today_list = PageToday.objects.filter(
+            #    page_detail=pd,
+            #    date__range=(dates_range_start, dates_range_end)
+            #    )
+
+            temp_total_share_counter = 0
+            temp_total_social_counter = 0
+
+            #for page_today in page_today_list:
+            #    page_today_share_counter = page_today.getOddShare()
+            #    page_today_social_counter = page_today.getOddSocial()
+
+            page_today_share_counter = pd.total_share_counter
+            page_today_social_counter = pd.total_social_counter
+
+            for s in page_today_share_counter.split(','):
+                temp_total_share_counter += int(s)
+
+            for s in page_today_social_counter.split(','):
+                temp_total_social_counter += int(s)
+
+            list_page_detail.append({
+                'title':pd.title,
+                'url':pd.url,
+                'sharing':temp_total_share_counter,
+                'traffic':temp_total_social_counter,
+                'sharing_detail':page_today_share_counter,
+                'traffic_detail':page_today_social_counter
+                })
 
         for a in area_per_day_list:
             dates.append(a.date.strftime("%d.%m"))

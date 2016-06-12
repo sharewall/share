@@ -151,14 +151,7 @@
                 ]
             });
 
-            //console.log({{ todayFB|safe }});
-            //console.log({{ dates|safe }});
-            //console.log({{ statistic|safe }});
-            //console.log({{ list_page_detail|safe }});
-
             try{
-              //window.parent.list_page_detail = {{ list_page_detail|safe }};
-              //console.log(window.parent.list_page_detail);
               window.parent.fillPages({{ list_page_detail|safe }});
             }
             finally{
