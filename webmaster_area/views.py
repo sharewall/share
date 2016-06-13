@@ -143,6 +143,8 @@ def updateServer(request):
                     page_today_money = page_today.today_money
 
                 except:
+                    pass
+                    '''
                     try:
                         yesterday = datetime.date.today() + datetime.timedelta(days=-1)
 
@@ -160,6 +162,7 @@ def updateServer(request):
 
                     except:
                         pass
+                    '''
 
                 temp_share_counter = [int(s) for s in page_today_share_counter.split(',')]
                 index2=0

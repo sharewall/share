@@ -578,43 +578,37 @@ def detailsocial(request, name):
 
             temp = int(a.today_social_counter.split(',')[0])
             todayVK.append(temp)
-            if temp > statistic['vk']:
-                statistic['vk'] = temp
+            #if temp > statistic['vk']:
+            #    statistic['vk'] = temp
+            statistic['vk'] += temp
 
             temp = int(a.today_social_counter.split(',')[1])
             todayFB.append(temp)
-            if temp > statistic['fb']:
-                statistic['fb'] = temp
+            statistic['fb'] += temp
 
             temp = int(a.today_social_counter.split(',')[2])
             todayTW.append(temp)
-            if temp > statistic['tw']:
-                statistic['tw'] = temp
+            statistic['tw'] += temp
 
             temp = int(a.today_social_counter.split(',')[3])
             todayOD.append(temp)
-            if temp > statistic['od']:
-                statistic['od'] = temp
+            statistic['od'] += temp
 
             temp = int(a.today_social_counter.split(',')[4])
             todayGP.append(temp)
-            if temp > statistic['gp']:
-                statistic['gp'] = temp
+            statistic['gp'] += temp
 
             temp = int(a.today_social_counter.split(',')[5])
             todayMA.append(temp)
-            if temp > statistic['ma']:
-                statistic['ma'] = temp
+            statistic['ma'] += temp
 
             temp = int(a.today_social_counter.split(',')[6])
             todayLI.append(temp)
-            if temp > statistic['li']:
-                statistic['li'] = temp
+            statistic['li'] += temp
 
             temp = int(a.today_social_counter.split(',')[7])
             todayLJ.append(temp)
-            if temp > statistic['lj']:
-                statistic['lj'] = temp
+            statistic['lj'] += temp
 
         statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
 
