@@ -3,6 +3,10 @@ from django.db import models
 from buttons_constructor.models import ButtonsConstructorModel, SocialNetworks
 from cabinet_webmaster.models import CabinetWebmasterModel
 
+class Faq(models.Model):
+    header = models.CharField("header", max_length=200, null=False, blank=False, default=" ")
+    text = models.TextField("text", blank=True, default=" ")
+
 class AreaCategory(models.Model):
     name = models.CharField("name", max_length=200)
     db_table = "AreaCategory"

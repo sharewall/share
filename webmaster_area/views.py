@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
-from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday, PageToday
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaToday, PageToday, Faq
 from webmaster_area.forms import WebmasterAreaForm, AreaCategory
 from buttons_constructor.models import BtnsImages, AdvertBtnImage, Advert, SocialNetworks, ButtonsConstructorModel
 from cabinet_webmaster.models import CabinetWebmasterModel
@@ -71,6 +71,20 @@ def deleteCategory(request):
 
     else:
         return HttpResponse('bad id')
+
+@login_required
+def faq(request):
+    template_name = 'webmaster_area/faq.html'
+    title = 'Вопросы и ответы'
+    header = title
+
+    faq = Faq.objects.all()
+
+    return render(request, template_name,
+    {
+        'page': { 'title': title, 'header': header },
+        'faq': faq
+    })
 
 @login_required
 def statistic(request):

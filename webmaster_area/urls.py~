@@ -17,5 +17,7 @@ urlpatterns = [
     url(r'^getadvert/(?P<cook>[^/]+)/$', views.getAdvert, name='webmaster-area-getAdvert'),
     url(r'^detail-error/$', views.detail_error, name='webmaster-area-detail-error'),
     url(r'^thu-may/555/update-server/$', views.updateServer, name='webmaster-area-update-server'),
+    url(r'^delete-category/$', views.deleteCategory, name='webmaster-area-delete-category'),
+    url(r'^add-category/$', views.addCategory, name='webmaster-area-add-category'),
 ]
 

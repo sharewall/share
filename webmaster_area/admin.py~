@@ -1,5 +1,5 @@
 from django.contrib import admin
-from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaCategory, AreaToday, PageToday
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaCategory, AreaToday, PageToday, Faq
 
 admin.actions.delete_selected.short_description = "Удалить"
 
@@ -12,6 +12,10 @@ class WebmasterAreaModelAdmin(admin.ModelAdmin):
         return str(obj.buttons_constructor.id)
     getBtnConstructID.short_description = 'relatedBtnConstructID'
     getBtnConstructID.admin_order_field = 'buttons_constructor__id'
+
+class FaqAdmin(admin.ModelAdmin):
+    list_display=('id','header', 'text')
+    search_fields=['id', 'header', 'text']
 
 class AreaCategoryAdmin(admin.ModelAdmin):
     list_display=('id','name')
@@ -44,7 +48,7 @@ class PageDetailAdmin(admin.ModelAdmin):
 class PageTodayAdmin(admin.ModelAdmin):
     list_display=('id','getPageDetailID', 'date', 'getOddShare', 'getOddSocial', 'today_share_counter', 'default_today_share_counter', 'today_social_counter', 'default_today_social_counter', 'today_show_counter', 'default_today_show_counter', 'today_click_counter', 'default_today_click_counter', 'today_money', 'default_today_money')
     search_fields=['id', 'page_detail__id', 'date']
-    fields=('id', 'getPageDetailID', 'date', ('getOddShare', 'getOddSocial'), ('today_share_counter', 'default_today_share_counter'), ('today_social_counter', 'default_today_social_counter') )
+    fields=('id', 'getPageDetailID', 'date', ('getOddShare', 'getOddSocial'), ('today_share_counter', 'default_today_share_counter'), ('today_social_counter', 'default_today_social_counter'), ('today_show_counter','default_today_show_counter'), ('today_click_counter','default_today_click_counter'), ('today_money','default_today_money') )
     readonly_fields=('id', 'getPageDetailID', 'date', 'getOddShare', 'getOddSocial')
 
     def getPageDetailID(self, obj):

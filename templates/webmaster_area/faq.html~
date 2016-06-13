@@ -1,0 +1,53 @@
+  {% extends "skeleton.html" %}
+
+  {% block title %}{{ page.title }}{% endblock %}
+
+	{% block content %}
+
+  <div class="sContent-PB">
+      <div class="sContainer sMargin-Auto">
+
+          <div class="sH1Wrapper">
+              <h1 class="sH1 sFloat-L">{{ page.header }}</h1>
+              <div class="sClear-Both"></div>
+          </div>        
+          <div class="sLine"></div>
+
+          <div style="margin-top:20px;">
+              <div class="sFaqHeader">
+                <span data-image></span>
+                <span data-question>Вопрос?</span>
+              </div>
+              
+              <div class="sFaqBody">
+                <p>Текст...</p>
+              </div>
+          </div>
+          <div style="margin-top:20px;">
+              <div class="sFaqHeader">
+                <span data-image></span>
+                <span data-question>Вопрос?</span>
+              </div>
+              
+              <div class="sFaqBody">
+                <p>Текст...</p>
+              </div>
+          </div>
+      
+          <div style="height:50px"></div>    
+      </div>
+  </div>
+
+	{% endblock %}
+
+  {% block footer_script %}
+
+        <script>
+          $(function(){
+             $('.sFaqHeader').click(function(){
+                $(this).next('.sFaqBody').toggle(); 
+             }); 
+          });
+        </script>
+
+  {% endblock %}

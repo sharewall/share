@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^thu-may/555/update-server/$', views.updateServer, name='webmaster-area-update-server'),
     url(r'^delete-category/$', views.deleteCategory, name='webmaster-area-delete-category'),
     url(r'^add-category/$', views.addCategory, name='webmaster-area-add-category'),
+    url(r'^faq/$', views.faq, name='webmaster-area-faq'),
 ]
 

@@ -73,6 +73,17 @@ def deleteCategory(request):
         return HttpResponse('bad id')
 
 @login_required
+def faq(request):
+    template_name = 'webmaster_area/faq.html'
+    title = 'Вопросы и ответы'
+    header = title
+
+    return render(request, template_name,
+    {
+        'page': { 'title': title, 'header': header }
+    })
+
+@login_required
 def statistic(request):
     template_name = 'webmaster_area/statistic.html'
     title = 'Статистика'
@@ -143,6 +154,8 @@ def updateServer(request):
                     page_today_money = page_today.today_money
 
                 except:
+                    pass
+                    '''
                     try:
                         yesterday = datetime.date.today() + datetime.timedelta(days=-1)
 
@@ -160,6 +173,7 @@ def updateServer(request):
 
                     except:
                         pass
+                    '''
 
                 temp_share_counter = [int(s) for s in page_today_share_counter.split(',')]
                 index2=0

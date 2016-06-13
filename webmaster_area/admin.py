@@ -1,5 +1,5 @@
 from django.contrib import admin
-from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaCategory, AreaToday, PageToday
+from webmaster_area.models import WebmasterAreaModel, PageDetail, AreaCategory, AreaToday, PageToday, Faq
 
 admin.actions.delete_selected.short_description = "Удалить"
 
@@ -12,6 +12,10 @@ class WebmasterAreaModelAdmin(admin.ModelAdmin):
         return str(obj.buttons_constructor.id)
     getBtnConstructID.short_description = 'relatedBtnConstructID'
     getBtnConstructID.admin_order_field = 'buttons_constructor__id'
+
+class FaqAdmin(admin.ModelAdmin):
+    list_display=('id','header', 'text')
+    search_fields=['id', 'header', 'text']
 
 class AreaCategoryAdmin(admin.ModelAdmin):
     list_display=('id','name')
@@ -60,3 +64,4 @@ admin.site.register(PageDetail, PageDetailAdmin)
 admin.site.register(AreaCategory, AreaCategoryAdmin)
 admin.site.register(AreaToday, AreaTodayAdmin)
 admin.site.register(PageToday, PageTodayAdmin)
+admin.site.register(Faq, FaqAdmin)

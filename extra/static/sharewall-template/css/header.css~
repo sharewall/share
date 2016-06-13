@@ -670,6 +670,7 @@ input.sInputH:checked ~ .sWmMenu > a, input.sInputH:checked ~ .sMenu-Dd > a{
     margin-bottom: 20px;
     line-height: 47px;
     border-radius: 2px;
+    cursor: pointer;
 }
 .sStepPad > div > span:nth-child(1){
     padding-left: 18px;
@@ -2489,4 +2490,40 @@ span[data-submit]{
 }
 .sBalanceStatus[data-status="accept"]{
     
+}
+.sLine{
+    height: 1px;
+    background: #8f8f8f;
+}
+.sFaqHeader{
+    height: 48px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    height: auto;
+    overflow: auto;
+}
+.sFaqHeader > span{
+    display: inline-block;
+}
+.sFaqHeader > [data-image]{
+    background: url(../images/data-image-faq.png);
+    height: 28px;
+    width: 28px;
+    vertical-align: middle;
+    margin: 10px;
+}
+.sFaqHeader > [data-question]{
+    color: #32353c;
+    font: 400 15px / 48px Roboto;
+    text-decoration: underline;
+}
+.sFaqBody{
+    display: none;
+}
+.sFaqBody > p{
+    color: #22383d;
+    font: 400 17px / 22px Roboto-Light;
+    margin-top: 37px;
+    margin-left: 43px;
+    margin-bottom: 60px;
 }
