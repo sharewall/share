@@ -330,14 +330,13 @@ def detailmain(request):
 
                     temp_area_per_day_statistic[temp_index]['share'] += temp_today_share_counter
                     temp_area_per_day_statistic[temp_index]['social'] += temp_today_social_counter
-
                     #Adv
                     temp_area_per_day_statistic[temp_index]['shows'] += temp_today_shows_counter
                     temp_area_per_day_statistic[temp_index]['clicks'] += temp_today_clicks_counter
                     temp_area_per_day_statistic[temp_index]['money'] += temp_today_money_counter
+
                 except:
                     temp_area_per_day_statistic.append({
-                        #'pk' : a.webmaster_area.pk,
                         'date' : a.date,
                         'share' : temp_today_share_counter,
                         'social' : temp_today_social_counter,
@@ -346,21 +345,19 @@ def detailmain(request):
                         'clicks': temp_today_clicks_counter,
                         'money': temp_today_money_counter
                     })
-            else:
-                if temp_today_share_counter > temp_statistic['shares']:
-                    temp_statistic['shares'] = temp_today_share_counter
 
-                if temp_today_social_counter > temp_statistic['socials']:
-                    temp_statistic['socials'] = temp_today_social_counter
+            else:
+                #if temp_today_share_counter > temp_statistic['shares']:
+                #    temp_statistic['shares'] = temp_today_share_counter
+
+                #if temp_today_social_counter > temp_statistic['socials']:
+                #    temp_statistic['socials'] = temp_today_social_counter
+                temp_statistic['shares'] += temp_today_share_counter
+                temp_statistic['socials'] += temp_today_social_counter
 
                 #Adv
-                #if temp_today_shows_counter > temp_statistic['shows']:
                 temp_statistic['shows'] += temp_today_shows_counter
-
-                #if temp_today_clicks_counter > temp_statistic['clicks']:
                 temp_statistic['clicks'] += temp_today_clicks_counter
-
-                #if temp_today_money_counter > temp_statistic['money']:
                 temp_statistic['money'] += temp_today_money_counter
 
             if not temp_areaPDay_date in dates:
@@ -371,6 +368,7 @@ def detailmain(request):
                 shows.append(temp_today_shows_counter)
                 clicks.append(temp_today_clicks_counter)
                 money.append(temp_today_money_counter)
+
             else:
                 shares[dates.index(temp_areaPDay_date)] += temp_today_share_counter
                 socials[dates.index(temp_areaPDay_date)] += temp_today_social_counter
@@ -387,16 +385,20 @@ def detailmain(request):
             statistic['shows'] += temp_statistic['shows']
             statistic['clicks'] += temp_statistic['clicks']
             statistic['money'] += temp_statistic['money']
+
         else:
             shows = []
             clicks = []
             money = []
 
             for share, social, showsT, clicksT, moneyT in [[ t['share'], t['social'], t['shows'], t['clicks'], t['money'] ] for t in temp_area_per_day_statistic]:
-                if share > statistic['shares']:
-                    statistic['shares'] = share
-                if social > statistic['socials']:
-                    statistic['socials'] = social
+                #if share > statistic['shares']:
+                #    statistic['shares'] = share
+                #if social > statistic['socials']:
+                #    statistic['socials'] = social
+
+                statistic['shares'] += share
+                statistic['socials'] += social
                 #Adv
                 shows.append(showsT)
                 clicks.append(clicksT)
@@ -576,43 +578,37 @@ def detailsocial(request, name):
 
             temp = int(a.today_social_counter.split(',')[0])
             todayVK.append(temp)
-            if temp > statistic['vk']:
-                statistic['vk'] = temp
+            #if temp > statistic['vk']:
+            #    statistic['vk'] = temp
+            statistic['vk'] += temp
 
             temp = int(a.today_social_counter.split(',')[1])
             todayFB.append(temp)
-            if temp > statistic['fb']:
-                statistic['fb'] = temp
+            statistic['fb'] += temp
 
             temp = int(a.today_social_counter.split(',')[2])
             todayTW.append(temp)
-            if temp > statistic['tw']:
-                statistic['tw'] = temp
+            statistic['tw'] += temp
 
             temp = int(a.today_social_counter.split(',')[3])
             todayOD.append(temp)
-            if temp > statistic['od']:
-                statistic['od'] = temp
+            statistic['od'] += temp
 
             temp = int(a.today_social_counter.split(',')[4])
             todayGP.append(temp)
-            if temp > statistic['gp']:
-                statistic['gp'] = temp
+            statistic['gp'] += temp
 
             temp = int(a.today_social_counter.split(',')[5])
             todayMA.append(temp)
-            if temp > statistic['ma']:
-                statistic['ma'] = temp
+            statistic['ma'] += temp
 
             temp = int(a.today_social_counter.split(',')[6])
             todayLI.append(temp)
-            if temp > statistic['li']:
-                statistic['li'] = temp
+            statistic['li'] += temp
 
             temp = int(a.today_social_counter.split(',')[7])
             todayLJ.append(temp)
-            if temp > statistic['lj']:
-                statistic['lj'] = temp
+            statistic['lj'] += temp
 
         statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
 
@@ -752,43 +748,44 @@ def detail(request, name):
 
             temp = int(a.today_share_counter.split(',')[0])
             todayVK.append(temp)
-            if temp > statistic['vk']:
-                statistic['vk'] = temp
+            #if temp > statistic['vk']:
+            #    statistic['vk'] = temp
+            statistic['vk'] += temp
 
             temp = int(a.today_share_counter.split(',')[1])
             todayFB.append(temp)
-            if temp > statistic['fb']:
-                statistic['fb'] = temp
+            #if temp > statistic['fb']:
+            statistic['fb'] += temp
 
             temp = int(a.today_share_counter.split(',')[2])
             todayTW.append(temp)
-            if temp > statistic['tw']:
-                statistic['tw'] = temp
+            #if temp > statistic['tw']:
+            statistic['tw'] += temp
 
             temp = int(a.today_share_counter.split(',')[3])
             todayOD.append(temp)
-            if temp > statistic['od']:
-                statistic['od'] = temp
+            #if temp > statistic['od']:
+            statistic['od'] += temp
 
             temp = int(a.today_share_counter.split(',')[4])
             todayGP.append(temp)
-            if temp > statistic['gp']:
-                statistic['gp'] = temp
+            #if temp > statistic['gp']:
+            statistic['gp'] += temp
 
             temp = int(a.today_share_counter.split(',')[5])
             todayMA.append(temp)
-            if temp > statistic['ma']:
-                statistic['ma'] = temp
+            #if temp > statistic['ma']:
+            statistic['ma'] += temp
 
             temp = int(a.today_share_counter.split(',')[6])
             todayLI.append(temp)
-            if temp > statistic['li']:
-                statistic['li'] = temp
+            #if temp > statistic['li']:
+            statistic['li'] += temp
 
             temp = int(a.today_share_counter.split(',')[7])
             todayLJ.append(temp)
-            if temp > statistic['lj']:
-                statistic['lj'] = temp
+            #if temp > statistic['lj']:
+            statistic['lj'] += temp
 
         statistic['all'] = statistic['vk'] + statistic['fb'] + statistic['tw'] + statistic['od'] + statistic['gp'] + statistic['ma'] + statistic['li'] + statistic['lj']
 
