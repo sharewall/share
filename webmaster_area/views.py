@@ -93,21 +93,28 @@ def statistic(request):
     header = 'Статистика'
     areas = None
     users_data = []
+    users_data_with_area = []
 
     if request.user.is_staff:
-        #users = User.objects.all()
         users_data = sorted(list(User.objects.values_list('pk', 'username')))
-        #for u in users:
-        #    users_data[u[0]]=u[1]
+
+        # with area
+        areas_list = WebmasterAreaModel.objects.select_related('buttons_constructor__cabinet_webmaster__user').values_list('buttons_constructor__cabinet_webmaster__user__pk')
+
+        for pk, username in users_data:
+            for user_pk in areas_list:
+                if pk == user_pk[0]:
+                    users_data_with_area.append((pk,username))
+
+        users_data_with_area = sorted(list(set(users_data_with_area)))
 
     if request.user.is_staff and request.session.get('profile', False):
         areas = WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user__pk__exact=request.session.get('profile').get('pk'))
 
     return render(request, template_name,
     {
-        'users_data': users_data,
+        'users_data': users_data_with_area,
         'areas': areas if areas is not None else WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
-        #'areas': WebmasterAreaModel.objects.filter(buttons_constructor__cabinet_webmaster__user=request.user),
         'page': { 'title': title, 'header': header }
     })
 
@@ -303,7 +310,7 @@ def detailmain(request):
         temp_statistic['money'] = temp_statistic.get('money', 0)
 
         if for_1:
-            area_per_day_list = AreaToday.objects.all()#.select_related('webmaster_area')
+            area_per_day_list = AreaToday.objects.filter(date__range=(dates_range_start, dates_range_end))
 
         elif dates_range_start and dates_range_end:
             area_per_day_list = AreaToday.objects.filter(webmaster_area=area, date__range=(dates_range_start, dates_range_end))#["2016-04-11", "2016-04-12"])

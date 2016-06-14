@@ -493,12 +493,13 @@ def login(request):
             socials += temp_socials 
             # Adv
             money += float(a.today_money)
-            money += float(3.837 * sites)
+            #money += float(3.837 * sites)
 
         '''
         if request.user.is_authenticated() and request.user.username == 'landing':
             django_logout(request)
         '''
+        money = 849
 
         return render(request, template_name,
         {

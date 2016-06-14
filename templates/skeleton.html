@@ -107,7 +107,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                      <a href="{% url "webmaster-area-faq" %}" class="sVAlign-50p">FAQ</a>
+                      <a href="{% url "webmaster-area-faq" %}" class="sVAlign-50p" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>                
 
@@ -133,7 +133,7 @@
                       </a>
 
                       {% if not user.is_staff or user.is_staff and request.session.profile and not request.session.profile.is_staff %}
-                        <a href="{% url "webmaster-area-faq" %}">FAQ</a>
+                        <a href="{% url "webmaster-area-faq" %}" style="display:none;">FAQ</a>
                       {% endif %}
                   </div>
               </div>

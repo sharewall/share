@@ -89,7 +89,7 @@ def landing(request):
             money += float(a.today_money)
             #money += float(3.837 * sites)
 
-        money = 849
+        money = 1049
 
         return render(request, template_name,
         {
@@ -499,7 +499,7 @@ def login(request):
         if request.user.is_authenticated() and request.user.username == 'landing':
             django_logout(request)
         '''
-        money = 849
+        money = 1049
 
         return render(request, template_name,
         {
